@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>Resources/usb.png</file>
+        <file>Resources/wireless.png</file>
+        <file>Resources/pspha-logo.png</file>
+        <file>Resources/usb-on.png</file>
+        <file>Resources/wireless-on.png</file>
+        <file>Resources/marker.png</file>
+        <file>Resources/map_pointer.png</file>
+        <file>Resources/alt_marker.png</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>map.qml</file>
+        <file>tape_altimeter.qml</file>
+    </qresource>
+</RCC>
