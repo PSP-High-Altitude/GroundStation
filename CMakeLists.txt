@@ -17,26 +17,27 @@ find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickWidgets)
 
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        serial.cpp
-        serial.h
-        map.cpp
-        map.h
-        clock.cpp
-        clock.h
-        connection_status.cpp
-        connection_status.h
-        data_table.cpp
-        data_table.h
-        mainwindow.ui
-        resources.qrc
-        tape_altimeter.cpp
-        tape_altimeter.h
-        groundstation.rc
-        console.h
-        console.cpp
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    serial.cpp
+    serial.h
+    map.cpp
+    map.h
+    clock.cpp
+    clock.h
+    connection_status.cpp
+    connection_status.h
+    data_table.cpp
+    data_table.h
+    mainwindow.ui
+    resources.qrc
+    tape_altimeter.cpp
+    tape_altimeter.h
+    groundstation.rc
+    console.h
+    console.cpp
+    keys.h
 )
 
 # set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO")
