@@ -36,7 +36,7 @@ void Console::add_message(QString text)
     {
         list->takeItem(0);
     }
-    if(autoscroll->isChecked())
+    if(autoscroll->isChecked() && this->isVisible())
     {
         list->scrollToItem(list->item(list->count()-1));
     }

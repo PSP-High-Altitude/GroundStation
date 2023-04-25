@@ -110,7 +110,7 @@ void Serial::read_messages(SensorData* sens, GpsData* gps)
                     char* msg = (char*) malloc(msg_len + 1);
                     memcpy(msg, read_buf + ridx, msg_len);
                     msg[msg_len] = '\0';
-                    //qDebug() << msg;
+
                     QString* msg_str = new QString(msg);
                     QStringList value_list = msg_str->replace('\n', ',').split(u',');
                     sens->accel.accelX = value_list.value(0).toFloat();
@@ -146,16 +146,14 @@ void Serial::read_messages(SensorData* sens, GpsData* gps)
                     ridx += 5;
                     read_len -= 5;
 
-                    //read_buf[MAX_READ - 1] = '\0';
-                    //qDebug() << read_buf + ridx;
-
                     char* msg = (char*) malloc(msg_len + 1);
                     memcpy(msg, read_buf + ridx, msg_len);
                     msg[msg_len] = '\0';
+
                     QString* msg_str = new QString(msg);
                     QStringList value_list = msg_str->replace('\n', ',').split(u',');
-                    gps->fix_valid = value_list.value(12).toUInt();
-                    gps->num_sats = value_list.value(11).toUInt();
+                    gps->fix_valid = value_list.value(15).toUInt();
+                    gps->num_sats = value_list.value(14).toUInt();
 
                     gps->year = value_list.value(0).toUInt();
                     gps->month = value_list.value(1).toUInt();
@@ -173,6 +171,10 @@ void Serial::read_messages(SensorData* sens, GpsData* gps)
 
                         gps->accuracy_horiz = value_list.value(9).toFloat();
                         gps->accuracy_vertical = value_list.value(10).toFloat();
+
+                        gps->vel_north = value_list.value(11).toFloat();
+                        gps->vel_east = value_list.value(12).toFloat();
+                        gps->vel_down = value_list.value(13).toFloat();
                     }
 
                     ridx += msg_len;
