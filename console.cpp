@@ -38,7 +38,7 @@ void Console::add_message(QString text)
     }
     if(autoscroll->isChecked())
     {
-        list->scrollToBottom();
+        list->scrollToItem(list->item(list->count()-1));
     }
 }
 

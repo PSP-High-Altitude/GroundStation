@@ -86,14 +86,14 @@ void SensorTable::update_table(SensorData* sens, GpsData* gps)
     sprintf_s(value_str, "%.6f g", sens->accel.accelZ);
     this->setCellWidget(2, 1, new TableLabel(value_str));
 
-    sprintf_s(value_str, "%.6f deg/s", sens->gyro.gyroX);
+    sprintf_s(value_str, "%.6f °/s", sens->gyro.gyroX);
     this->setCellWidget(3, 1, new TableLabel(value_str));
-    sprintf_s(value_str, "%.6f deg/s", sens->gyro.gyroY);
+    sprintf_s(value_str, "%.6f °/s", sens->gyro.gyroY);
     this->setCellWidget(4, 1, new TableLabel(value_str));
-    sprintf_s(value_str, "%.6f deg/s", sens->gyro.gyroZ);
+    sprintf_s(value_str, "%.6f °/s", sens->gyro.gyroZ);
     this->setCellWidget(5, 1, new TableLabel(value_str));
 
-    sprintf_s(value_str, "%.6f deg C", sens->baro.temperature);
+    sprintf_s(value_str, "%.6f °C", sens->baro.temperature);
     this->setCellWidget(6, 1, new TableLabel(value_str));
     sprintf_s(value_str, "%.6f mbar", sens->baro.pressure);
     this->setCellWidget(7, 1, new TableLabel(value_str));
@@ -117,9 +117,9 @@ void SensorTable::update_table(SensorData* sens, GpsData* gps)
               gps->hour, gps->min, gps->sec);
     this->setCellWidget(0, 3, new TableLabel(value_str));
 
-    sprintf_s(value_str, "%.6f °", gps->lat);
+    sprintf_s(value_str, "%.6f°", gps->lat);
     this->setCellWidget(1, 3, new TableLabel(value_str));
-    sprintf_s(value_str, "%.6f °", gps->lon);
+    sprintf_s(value_str, "%.6f°", gps->lon);
     this->setCellWidget(2, 3, new TableLabel(value_str));
     sprintf_s(value_str, "%.6f m", gps->height_msl);
     this->setCellWidget(3, 3, new TableLabel(value_str));

@@ -4,8 +4,6 @@
 
 #include <QMainWindow>
 #include <QLabel>
-#include "clock.h"
-#include "connection_status.h"
 #include "data_table.h"
 #include "serial.h"
 #include <QQmlApplicationEngine>

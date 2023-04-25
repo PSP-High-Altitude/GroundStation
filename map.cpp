@@ -15,10 +15,11 @@ Map::Map(QWidget* window, QQmlApplicationEngine* engine)
     QQuickWindow *qmlWindow = qobject_cast<QQuickWindow*>(engine->rootObjects().at(0));
     this->view = qmlWindow;
     qmlWindow->hide();
-    QWidget *container = QWidget::createWindowContainer(qmlWindow, window);
-    container->setMinimumSize(400,400);
-    container->setContentsMargins(0, 0, 0, 0);
     QWidget *placeholder = window->findChild<QWidget*>("widget_map");
+    QWidget *container = QWidget::createWindowContainer(qmlWindow, window);
+    container->setMaximumSize(placeholder->maximumSize());
+    container->setMinimumSize(placeholder->minimumSize());
+    container->setContentsMargins(0, 0, 0, 0);
     QVBoxLayout *layout = window->findChild<QVBoxLayout*>("map_layout");
     layout->replaceWidget(placeholder, container);
     container->setObjectName("widget_map");

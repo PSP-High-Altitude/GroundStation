@@ -17,6 +17,9 @@
 #include "tape_altimeter.h"
 #include "console.h"
 #include <QPalette>
+#include "clock.h"
+#include "connection_status.h"
+#include <QStackedWidget>
 
 SensorData sens;
 GpsData gps;
@@ -63,6 +66,7 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     connect(open_telem, &QPushButton::clicked, this, &MainWindow::open_telem);
 
     QPushButton *toggle_console = this->findChild<QPushButton*>("toggle_console");
+    toggle_console->raise();
     Console *console = new Console(this);
     connect(toggle_console, &QPushButton::clicked, console, [console, toggle_console]{
         if(console->isVisible())
