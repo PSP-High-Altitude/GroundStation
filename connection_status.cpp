@@ -1,6 +1,9 @@
 
 #include "connection_status.h"
 #include <QGridLayout>
+#include <QPalette>
+#include "QDebug"
+#include <QByteArray>
 
 UsbLabel::UsbLabel(QWidget* window)
 {
@@ -67,42 +70,44 @@ WirelessLabel::~WirelessLabel()
     delete off_map;
 }
 
-ConnectedDeviceLabel::ConnectedDeviceLabel(Serial* serial, QWidget* window, UsbLabel* usb, WirelessLabel* wireless)
+ConnectedDeviceLabel::ConnectedDeviceLabel(QWidget* window, UsbLabel* usb, WirelessLabel* wireless)
 {
-    this->serial = serial;
     this->usb = usb;
     this->wireless = wireless;
     this->setMaximumHeight(40);
     this->setMinimumWidth(100);
+    QLabel *placeholder = window->findChild<QLabel*>("label_connection");
     QFont font("Franklin Gothic Demi", 13);
-    QPalette palette;
-    palette.setColor(QPalette::WindowText, Qt::white);
-    this->setPalette(palette);
+    QPalette p = placeholder->palette();
+    p.setColor(QPalette::Inactive, QPalette::WindowText, p.color(QPalette::Active, QPalette::WindowText));
+    this->setPalette(p);
     this->setFont(font);
-    QLabel *label_connection = window->findChild<QLabel*>("label_connection");
     QGridLayout *layout = window->findChild<QGridLayout*>("connection_layout");
-    layout->replaceWidget(label_connection, this);
-    label_connection->deleteLater();
+    layout->replaceWidget(placeholder, this);
+    placeholder->deleteLater();
     this->setObjectName("label_connection");
+
+    this->setText("No device connected!");
+    usb->set_off();
 }
 
-void ConnectedDeviceLabel::update_connected_device()
+void ConnectedDeviceLabel::show_device(QString dev, QString port)
 {
-    char port_str[50];
-    int port_num = serial->port_connected;
+    char label_text[100];
 
-    switch(serial->device_connected)
-    {
-    case DEVICE_NONE:
-        this->setText("No device connected!");
-        usb->set_off();
-        break;
-    case DEVICE_PAL9K31:
-        sprintf(port_str, "PAL 9K31 (COM%d)", port_num);
-        this->setText(QString(port_str));
-        usb->set_on();
-        break;
-    }
+    QByteArray device_name_ba = dev.toLocal8Bit();
+    const char* device_name = device_name_ba.data();
+    QByteArray port_name_ba = port.toLocal8Bit();
+    const char* port_name = port_name_ba.data();
+    snprintf(label_text, 100, "%s (%s)", device_name, port_name);
+    this->setText(QString(label_text));
+    usb->set_on();
+}
+
+void ConnectedDeviceLabel::unshow_device()
+{
+    this->setText("No device connected!");
+    usb->set_off();
 }
 
 ConnectedDeviceLabel::~ConnectedDeviceLabel() {}

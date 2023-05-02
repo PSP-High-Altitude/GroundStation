@@ -1,7 +1,7 @@
-
 #include "clock.h"
 #include <QWidget>
 #include <QGridLayout>
+#include <QTime>
 
 Clock::Clock(QWidget* window)
 {
@@ -23,15 +23,7 @@ Clock::~Clock() {}
 
 void Clock::update_clock()
 {
-    std::time_t time = std::time(0);
-    std::tm* now = std::localtime(&time);
-    char label_str[12];
-    if(now->tm_hour == 0) {
-        sprintf_s(label_str, "12:%.2d:%.2d AM", now->tm_min, now->tm_sec);
-    } else if (now->tm_hour < 12) {
-        sprintf_s(label_str, "%d:%.2d:%.2d AM", now->tm_hour, now->tm_min, now->tm_sec);
-    } else {
-        sprintf_s(label_str, "%d:%.2d:%.2d PM", now->tm_hour % 12, now->tm_min, now->tm_sec);
-    }
+    QTime time = QTime::currentTime();
+    QString label_str = time.toString("hh:mm:ss AP");
     this->setText(QString(label_str));
 }

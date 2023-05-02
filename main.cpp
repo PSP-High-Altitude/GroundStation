@@ -1,18 +1,21 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QFontDatabase>
-#include "serial.h"
+#include "qabstracteventdispatcher.h"
+#include "native_event_filter.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     Q_INIT_RESOURCE(resources);
 
-    Serial serial;
     QQmlApplicationEngine map_engine(&a);
     QQmlApplicationEngine alt_engine(&a);
 
-    MainWindow w(&map_engine, &alt_engine, &serial);
+    MainWindow w(&map_engine, &alt_engine);
+    NativeEventFilter *filter = new NativeEventFilter(&w);
+    QAbstractEventDispatcher::instance()->installNativeEventFilter(filter);
+
     w.show();
 
     return a.exec();

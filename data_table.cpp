@@ -8,6 +8,7 @@
 #include <QAbstractItemModel>
 #include <QVBoxLayout>
 #include <QPalette>
+#include <qdebug.h>
 
 TableLabel::TableLabel(const QString text, Qt::Alignment alignment = Qt::AlignCenter)
 {
@@ -15,9 +16,8 @@ TableLabel::TableLabel(const QString text, Qt::Alignment alignment = Qt::AlignCe
     this->setAlignment(alignment);
 }
 
-SensorTable::SensorTable(Serial* serial, QWidget* window, QObject *parent)
+SensorTable::SensorTable(QWidget* window, QObject *parent)
 {
-    this->serial = serial;
     QTableWidget *placeholder = window->findChild<QTableWidget*>("table_sensor");
     QVBoxLayout *layout = window->findChild<QVBoxLayout*>("table_layout");
     layout->replaceWidget(placeholder, this);

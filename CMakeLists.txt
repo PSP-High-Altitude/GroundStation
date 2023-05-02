@@ -20,8 +20,14 @@ set(PROJECT_SOURCES
     main.cpp
     mainwindow.cpp
     mainwindow.h
-    serial.cpp
-    serial.h
+    serial/serial.cpp
+    serial/serial.h
+    serial/devices/serial_device.cpp
+    serial/devices/serial_device.h
+    serial/devices/pal_9k31.cpp
+    serial/devices/pal_9k31.h
+    serial/parsers/pal_parser.cpp
+    serial/parsers/pal_parser.h
     map.cpp
     map.h
     clock.cpp
@@ -38,6 +44,8 @@ set(PROJECT_SOURCES
     console.h
     console.cpp
     keys.h
+    native_event_filter.h
+    native_event_filter.cpp
 )
 
 # set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO")

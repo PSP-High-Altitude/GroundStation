@@ -4,7 +4,7 @@
 
 #include <QLabel>
 #include <QWidget>
-#include "serial.h"
+#include "serial/devices/serial_device.h"
 
 class WirelessLabel : public QLabel
 
@@ -50,16 +50,16 @@ class ConnectedDeviceLabel : public QLabel
     Q_OBJECT
 
 public:
-    ConnectedDeviceLabel(Serial* serial, QWidget* window, UsbLabel* usb, WirelessLabel* wireless);
+    ConnectedDeviceLabel(QWidget* window, UsbLabel* usb, WirelessLabel* wireless);
     ~ConnectedDeviceLabel();
 
 public slots:
-    void update_connected_device();
+    void show_device(QString dev, QString port);
+    void unshow_device();
 
 private:
     UsbLabel* usb;
     WirelessLabel* wireless;
-    Serial* serial;
 };
 
 #endif // CONNECTION_STATUS_H
