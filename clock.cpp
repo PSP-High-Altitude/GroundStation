@@ -2,6 +2,8 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QTime>
+#include <unistd.h>
+#include <qdebug.h>
 
 Clock::Clock(QWidget* window)
 {
@@ -17,13 +19,27 @@ Clock::Clock(QWidget* window)
     layout->replaceWidget(clock_placeholder, this);
     clock_placeholder->deleteLater();
     this->setObjectName("label_clock");
+
+    clock_tmr = new QTimer(this);
+    clock_tmr->setSingleShot(true);
+    connect(clock_tmr, &QTimer::timeout, this, &Clock::update_clock);
+    time = QTime::currentTime();
+    usleep(1000000 - 1000*time.msec());
+    clock_tmr->start(1000);
+    QString label_str = time.toString("h:mm:ss AP");
+    this->setText(QString(label_str));
 }
 
-Clock::~Clock() {}
+Clock::~Clock()
+{
+    delete clock_tmr;
+}
 
 void Clock::update_clock()
 {
-    QTime time = QTime::currentTime();
-    QString label_str = time.toString("hh:mm:ss AP");
+    time = QTime::currentTime();
+    clock_tmr->start(1000 - time.msec());
+    qDebug() << time.msec();
+    QString label_str = time.toString("h:mm:ss AP");
     this->setText(QString(label_str));
 }

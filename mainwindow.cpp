@@ -33,9 +33,6 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     this->alt_engine = alt_engine;
 
     Clock *clock = new Clock(this);
-    clock_tmr = new QTimer(this);
-    connect(clock_tmr, &QTimer::timeout, clock, &Clock::update_clock);
-    clock_tmr->start(500);
 
     UsbLabel *usb = new UsbLabel(this);
     WirelessLabel *wireless = new WirelessLabel(this);
