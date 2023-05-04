@@ -31,7 +31,12 @@ void Serial::init()
                 active_device->connect();
                 connect(active_device, &SerialDevice::done_message, &Serial::instance(), &Serial::done_message, Qt::QueuedConnection);
                 connect(active_device, &SerialDevice::write_log, &Serial::instance(), &Serial::write_log, Qt::QueuedConnection);
-                emit instance().active_device_connected(active_device->name, active_device->port_name);
+                emit instance().device_connected(active_device->name, active_device->port_name);
+                emit instance().set_active(active_device->name, active_device->port_name);
+            }
+            else
+            {
+                emit instance().device_connected(active_device->name, active_device->port_name);
             }
         }
     }
@@ -53,7 +58,12 @@ void Serial::add_device(int vid, int pid)
                 active_device->connect();
                 connect(active_device, &SerialDevice::done_message, &Serial::instance(), &Serial::done_message, Qt::QueuedConnection);
                 connect(active_device, &SerialDevice::write_log, &Serial::instance(), &Serial::write_log, Qt::QueuedConnection);
-                emit instance().active_device_connected(active_device->name, active_device->port_name);
+                emit instance().device_connected(active_device->name, active_device->port_name);
+                emit instance().set_active(active_device->name, active_device->port_name);
+            }
+            else
+            {
+                emit instance().device_connected(active_device->name, active_device->port_name);
             }
         }
     }
@@ -68,10 +78,25 @@ void Serial::remove_device(int vid, int pid)
             if(*active_device == *device)
             {
                 active_device = nullptr;
-                emit instance().active_device_disconnected();
+                emit instance().device_disconnected(device->name, device->port_name);
             }
             devices->removeAll(device);
             delete device;
+        }
+    }
+}
+
+void Serial::change_device(QString port)
+{
+    for(SerialDevice* device : *devices)
+    {
+        if(device->port_name.compare(port) == 0)
+        {
+            if(*active_device != *device)
+            {
+                active_device = device;
+                emit instance().set_active(active_device->name, active_device->port_name);
+            }
         }
     }
 }

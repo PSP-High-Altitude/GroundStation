@@ -39,7 +39,6 @@ void Clock::update_clock()
 {
     time = QTime::currentTime();
     clock_tmr->start(1000 - time.msec());
-    qDebug() << time.msec();
     QString label_str = time.toString("h:mm:ss AP");
     this->setText(QString(label_str));
 }

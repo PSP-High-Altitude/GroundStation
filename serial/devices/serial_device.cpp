@@ -37,3 +37,8 @@ bool SerialDevice::operator== (const SerialDevice& other)
 {
     return (this->port_name.compare(other.port_name) == 0);
 }
+
+bool SerialDevice::operator!= (const SerialDevice& other)
+{
+    return (this->port_name.compare(other.port_name));
+}

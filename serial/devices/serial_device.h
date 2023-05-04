@@ -20,6 +20,7 @@ public:
     SerialDevice(QObject *parent = nullptr);
     ~SerialDevice();
     bool operator== (const SerialDevice& other);
+    bool operator!= (const SerialDevice& other);
 
     virtual void get_data(SensorData* sens, GpsData* gps, StatusData* status);
     virtual void connect();

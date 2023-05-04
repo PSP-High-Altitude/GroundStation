@@ -30,13 +30,14 @@ public slots:
     static void remove_device(int vid, int pid);
     static void init();
     static void read_messages();
+    static void change_device(QString port);
 
 signals:
     void done_message();
     void write_log(QString text);
-    void active_device_connected(QString dev_name, QString dev_por);
-    void active_device_disconnected();
-
+    void device_connected(QString dev_name, QString dev_port);
+    void device_disconnected(QString dev_name, QString dev_port);
+    void set_active(QString dev_name, QString dev_port);
 };
 
 

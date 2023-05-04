@@ -52,8 +52,9 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     Serial::stat = &stat;
 
     connect(serial_msg_tmr, &QTimer::timeout, &Serial::instance(), &Serial::read_messages);
-    connect(&Serial::instance(), &Serial::active_device_connected, connected_device, &ConnectedDeviceLabel::show_device);
-    connect(&Serial::instance(), &Serial::active_device_disconnected, connected_device, &ConnectedDeviceLabel::unshow_device);
+    connect(&Serial::instance(), &Serial::device_connected, connected_device, &ConnectedDeviceLabel::add_device);
+    connect(&Serial::instance(), &Serial::device_disconnected, connected_device, &ConnectedDeviceLabel::remove_device);
+    connect(&Serial::instance(), &Serial::set_active, connected_device, &ConnectedDeviceLabel::set_active_device);
     connect(&Serial::instance(), &Serial::done_message, sensor_table, [this]{ sensor_table->update_table(&sens, &gps); });
     connect(&Serial::instance(), &Serial::done_message, map, [this]{ map->update_position(&gps); });
     connect(&Serial::instance(), &Serial::done_message, altimeter, [this]{ altimeter->update_ticks(&gps); });
@@ -89,8 +90,6 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
 MainWindow::~MainWindow()
 {
     serial_msg_tmr->stop();
-    clock_tmr->stop();
-    delete clock_tmr;
     delete serial_msg_tmr;
     delete sensor_table;
     delete ui;

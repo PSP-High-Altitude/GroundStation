@@ -37,7 +37,6 @@ private:
     QQmlApplicationEngine* alt_engine;
     Map *map;
     QTimer *serial_msg_tmr;
-    QTimer *clock_tmr;
     QNetworkAccessManager *net_mgr;
     SensorData sens;
     GpsData gps;
