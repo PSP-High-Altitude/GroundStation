@@ -13,8 +13,8 @@ public:
     bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *) override;
 
 signals:
-    void comport_added(int vid, int pid);
-    void comport_removed(int vid, int pid);
+    void comport_added(int vid, int pid, QString desc);
+    void comport_removed(int vid, int pid, QString desc, QString port);
 
 private:
     bool first_paint;

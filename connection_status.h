@@ -65,6 +65,7 @@ signals:
     void change_device(QString port);
 
 private:
+    QString previous_text;
     QMap<QString, QString> devices;
     UsbLabel* usb;
     WirelessLabel* wireless;

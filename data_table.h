@@ -13,6 +13,7 @@ class SensorTable : public QTableWidget
 
 public:
     SensorTable(QWidget* window, QObject *parent = nullptr);
+    void showEvent(QShowEvent *event) override;
 
 public slots:
     void update_table(SensorData* sens, GpsData* gps);

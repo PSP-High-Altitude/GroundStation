@@ -12,7 +12,6 @@ SerialDevice::~SerialDevice() {}
 
 void SerialDevice::connect()
 {
-    qDebug() << "here";
     this->port->open(QIODevice::ReadWrite);
 }
 

@@ -33,8 +33,6 @@ SensorTable::SensorTable(QWidget* window, QObject *parent)
     this->verticalHeader()->setVisible(false);
     this->setColumnWidth(0, 150);
     this->setColumnWidth(2, 150);
-    this->setColumnWidth(1, 136);
-    this->setColumnWidth(3, 136);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
 
@@ -73,6 +71,7 @@ SensorTable::SensorTable(QWidget* window, QObject *parent)
 
     this->setCellWidget(10, 2, new TableLabel("Num Sats:"));
     this->setCellWidget(11, 2, new TableLabel("Fix Validity:"));
+
 }
 
 void SensorTable::update_table(SensorData* sens, GpsData* gps)
@@ -154,6 +153,11 @@ void SensorTable::update_table(SensorData* sens, GpsData* gps)
 
 void SensorTable::resize_columns()
 {
-    this->setColumnWidth(1, (this->width()-300)/2);
-    this->setColumnWidth(3, (this->width()-300)/2);
+    this->setColumnWidth(1, (this->width()-302)/2);
+    this->setColumnWidth(3, (this->width()-302)/2);
+}
+
+void SensorTable::showEvent(QShowEvent *event)
+{
+    this->resize_columns();
 }

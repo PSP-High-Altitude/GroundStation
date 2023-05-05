@@ -90,11 +90,18 @@ ConnectedDeviceLabel::ConnectedDeviceLabel(QWidget* window, UsbLabel* usb, Wirel
     placeholder->deleteLater();
     this->setObjectName("combo_connection");
     this->setCurrentText("No device connected!");
+    this->previous_text = "No device connected!";
     usb->set_off();
     wireless->set_off();
 
     connect(this, &ConnectedDeviceLabel::currentTextChanged, this, [this]{
-        emit change_device(devices.key(this->currentText()));
+        if(previous_text.compare("No device connected!") == 0 && this->currentText().compare("No device connected!"))
+        {
+            //qDebug() << this->currentText();
+            this->removeItem(this->findText("No device connected!"));
+        }
+        previous_text = this->currentText();
+        emit change_device(devices.key(this->currentText(), "~"));
     });
     connect(this, &ConnectedDeviceLabel::change_device, &Serial::instance(), &Serial::change_device);
 }
@@ -117,13 +124,14 @@ void ConnectedDeviceLabel::add_device(QString dev, QString port)
 void ConnectedDeviceLabel::remove_device(QString dev, QString port)
 {
     int idx = this->findText(devices[port]);
-    this->removeItem(idx);
     if(this->currentText().compare(devices[port]) == 0)
     {
-        this->blockSignals(true);
-        this->setCurrentText("No device connected!");
-        this->blockSignals(false);
+        this->insertItem(0, QString("No device connected!"));
+        idx++;
+        this->setCurrentIndex(0);
     }
+    this->removeItem(idx);
+    devices.remove(port);
     usb->set_off();
 }
 

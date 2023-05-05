@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
     serial/devices/serial_device.h
     serial/devices/pal_9k31.cpp
     serial/devices/pal_9k31.h
+    serial/devices/generic_serial.cpp
+    serial/devices/generic_serial.h
     serial/parsers/pal_parser.cpp
     serial/parsers/pal_parser.h
     map.cpp
@@ -78,6 +80,7 @@ target_link_libraries(GroundStation PRIVATE Qt6::SerialPort)
 target_link_libraries(GroundStation PRIVATE Qt6::Qml)
 target_link_libraries(GroundStation PRIVATE Qt6::Quick)
 target_link_libraries(GroundStation PRIVATE Qt6::QuickWidgets)
+target_link_libraries(GroundStation PRIVATE setupapi)
 
 set_target_properties(GroundStation PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
