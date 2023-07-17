@@ -1,4 +1,5 @@
 #include "serial.h"
+#include "devices/hab_tracker.h"
 #include "qdebug.h"
 #include <QtSerialPort/QSerialPortInfo>
 #include <QList>
@@ -56,14 +57,32 @@ void Serial::init()
             active_device.get()->connect();
             connect(active_device.get(), &SerialDevice::done_message, &Serial::instance(), &Serial::done_message, Qt::QueuedConnection);
             connect(active_device.get(), &SerialDevice::write_log, &Serial::instance(), &Serial::write_log, Qt::QueuedConnection);
-            emit instance().device_connected(new_device->name, new_device->port_name);
-            emit instance().set_active(new_device->name, new_device->port_name);
+            emit instance().device_connected(new_device->name, new_device->port_name, new_device->get_type(), new_device->uid);
+            emit instance().set_active(new_device->name, new_device->port_name, new_device->get_type(), new_device->uid);
         }
         else
         {
-            emit instance().device_connected(new_device->name, new_device->port_name);
+            emit instance().device_connected(new_device->name, new_device->port_name, new_device->get_type(), new_device->uid);
         }
     }
+
+    SerialDevice* hab_tracker = new HabTracker();
+    QSharedPointer<SerialDevice> new_ptr = QSharedPointer<SerialDevice>(hab_tracker);
+    devices->append(new_ptr);
+    if(active_device.isNull())
+    {
+        active_device = new_ptr;
+        active_device.get()->connect();
+        connect(active_device.get(), &SerialDevice::done_message, &Serial::instance(), &Serial::done_message, Qt::QueuedConnection);
+        connect(active_device.get(), &SerialDevice::write_log, &Serial::instance(), &Serial::write_log, Qt::QueuedConnection);
+        emit instance().device_connected(hab_tracker->name, hab_tracker->port_name, hab_tracker->get_type(), hab_tracker->uid);
+        emit instance().set_active(hab_tracker->name, hab_tracker->port_name, hab_tracker->get_type(), hab_tracker->uid);
+    }
+    else
+    {
+        emit instance().device_connected(hab_tracker->name, hab_tracker->port_name, hab_tracker->get_type(), hab_tracker->uid);
+    }
+
 }
 
 void Serial::add_device(int vid, int pid, QString desc)
@@ -104,12 +123,12 @@ void Serial::add_device(int vid, int pid, QString desc)
             active_device.get()->connect();
             connect(active_device.get(), &SerialDevice::done_message, &Serial::instance(), &Serial::done_message, Qt::QueuedConnection);
             connect(active_device.get(), &SerialDevice::write_log, &Serial::instance(), &Serial::write_log, Qt::QueuedConnection);
-            emit instance().device_connected(new_device->name, new_device->port_name);
-            emit instance().set_active(new_device->name, new_device->port_name);
+            emit instance().device_connected(new_device->name, new_device->port_name, new_device->get_type(), new_device->uid);
+            emit instance().set_active(new_device->name, new_device->port_name, new_device->get_type(), new_device->uid);
         }
         else
         {
-            emit instance().device_connected(new_device->name, new_device->port_name);
+            emit instance().device_connected(new_device->name, new_device->port_name, new_device->get_type(), new_device->uid);
         }
     }
 }
@@ -127,9 +146,10 @@ void Serial::remove_device(int vid, int pid, QString desc, QString port)
                 active_device.get()->disconnect();
                 active_device.clear();
             }
-            emit instance().device_disconnected(device.get()->name, device.get()->port_name);
+            emit instance().device_disconnected(device.get()->name, device.get()->port_name, device->get_type(), device->uid);
             devices->removeAll(device);
             device.clear();
+            break;
         }
     }
 }
@@ -171,7 +191,7 @@ void Serial::read_messages()
     copy = active_device;
     if(!copy.isNull())
     {
-        if(!copy->port->isOpen())
+        if((copy->type == SERIAL_USB && !copy->port->isOpen()) || (copy->type == SERIAL_UDP && !copy->socket->isOpen()))
         {
             copy->connect();
         }

@@ -5,6 +5,7 @@
 #include "QDebug"
 #include <QByteArray>
 #include "serial/serial.h"
+#include "serial/devices/serial_device.h"
 
 UsbLabel::UsbLabel(QWidget* window)
 {
@@ -97,16 +98,25 @@ ConnectedDeviceLabel::ConnectedDeviceLabel(QWidget* window, UsbLabel* usb, Wirel
     connect(this, &ConnectedDeviceLabel::currentTextChanged, this, [this]{
         if(previous_text.compare("No device connected!") == 0 && this->currentText().compare("No device connected!"))
         {
-            //qDebug() << this->currentText();
             this->removeItem(this->findText("No device connected!"));
         }
         previous_text = this->currentText();
-        emit change_device(devices.key(this->currentText(), "~"));
+        this->usb->set_off();
+        this->wireless->set_off();
+        if(types.value(devices.key(this->currentText())) == SERIAL_USB)
+        {
+            this->usb->set_on();
+        }
+        else
+        {
+            this->wireless->set_on();
+        }
+        emit change_device(devices.key(this->currentText(), "~"), uids.value(devices.key(this->currentText())));
     });
     connect(this, &ConnectedDeviceLabel::change_device, &Serial::instance(), &Serial::change_device);
 }
 
-void ConnectedDeviceLabel::add_device(QString dev, QString port)
+void ConnectedDeviceLabel::add_device(QString dev, QString port, serial_type_t type, int uid)
 {
     char label_text[100];
 
@@ -117,11 +127,12 @@ void ConnectedDeviceLabel::add_device(QString dev, QString port)
     snprintf(label_text, 100, "%s (%s)", device_name, port_name);
 
     devices[port] = label_text;
+    types[port] = type;
+    uids[port] = uid;
     this->addItem(label_text);
-    usb->set_on();
 }
 
-void ConnectedDeviceLabel::remove_device(QString dev, QString port)
+void ConnectedDeviceLabel::remove_device(QString dev, QString port, serial_type_t type, int uid)
 {
     int idx = this->findText(devices[port]);
     if(this->currentText().compare(devices[port]) == 0)
@@ -131,11 +142,12 @@ void ConnectedDeviceLabel::remove_device(QString dev, QString port)
         this->setCurrentIndex(0);
     }
     this->removeItem(idx);
+    types.remove(port);
+    uids.remove(port);
     devices.remove(port);
-    usb->set_off();
 }
 
-void ConnectedDeviceLabel::set_active_device(QString dev, QString port)
+void ConnectedDeviceLabel::set_active_device(QString dev, QString port, serial_type_t type, int uid)
 {
     this->setCurrentText(devices[port]);
 }

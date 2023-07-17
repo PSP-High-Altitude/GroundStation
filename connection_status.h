@@ -8,7 +8,6 @@
 #include "qcombobox.h"
 #include "serial/devices/serial_device.h"
 
-
 class WirelessLabel : public QLabel
 
 {
@@ -57,16 +56,18 @@ public:
     ~ConnectedDeviceLabel();
 
 public slots:
-    void add_device(QString dev, QString port);
-    void remove_device(QString dev, QString port);
-    void set_active_device(QString dev, QString port);
+    void add_device(QString dev, QString port, serial_type_t type, int uid);
+    void remove_device(QString dev, QString port, serial_type_t type, int uid);
+    void set_active_device(QString dev, QString port, serial_type_t type, int uid);
 
 signals:
-    void change_device(QString port);
+    void change_device(QString port, int uid);
 
 private:
     QString previous_text;
     QMap<QString, QString> devices;
+    QMap<QString, serial_type_t> types;
+    QMap<QString, int> uids;
     UsbLabel* usb;
     WirelessLabel* wireless;
 };

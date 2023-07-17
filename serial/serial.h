@@ -36,9 +36,9 @@ public slots:
 signals:
     void done_message();
     void write_log(QString text);
-    void device_connected(QString dev_name, QString dev_port);
-    void device_disconnected(QString dev_name, QString dev_port);
-    void set_active(QString dev_name, QString dev_port);
+    void device_connected(QString dev_name, QString dev_port, serial_type_t type, int uid);
+    void device_disconnected(QString dev_name, QString dev_port, serial_type_t type, int uid);
+    void set_active(QString dev_name, QString dev_port, serial_type_t type, int uid);
 
 };
 

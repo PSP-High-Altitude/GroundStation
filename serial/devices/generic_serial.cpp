@@ -4,6 +4,8 @@
 
 GenericSerial::GenericSerial(QSerialPortInfo port_info, QString name, int vid, int pid)
 {
+    this->uid = 1;
+    this->type = SERIAL_USB;
     this->port = new QSerialPort(port_info);
     this->name = name;
     this->vid = vid;
@@ -43,4 +45,9 @@ int GenericSerial::get_pid()
 int GenericSerial::get_vid()
 {
     return vid;
+}
+
+serial_type_t GenericSerial::get_type()
+{
+    return SerialDevice::type;
 }

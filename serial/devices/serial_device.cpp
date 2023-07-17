@@ -6,18 +6,20 @@ public:
     static SerialDevice* active_device;
 };
 
-SerialDevice::SerialDevice(QObject *parent) {}
+SerialDevice::SerialDevice(QObject *parent) {
+    uid = 0;
+}
 
 SerialDevice::~SerialDevice() {}
 
 void SerialDevice::connect()
 {
-    this->port->open(QIODevice::ReadWrite);
+
 }
 
 void SerialDevice::disconnect()
 {
-    this->port->close();
+
 }
 
 int SerialDevice::get_pid()
@@ -28,6 +30,26 @@ int SerialDevice::get_pid()
 int SerialDevice::get_vid()
 {
     return SerialDevice::vid;
+}
+
+QString SerialDevice::get_ip()
+{
+    return SerialDevice::ip;
+}
+
+int SerialDevice::get_iport()
+{
+    return SerialDevice::iport;
+}
+
+int SerialDevice::get_uid()
+{
+    return SerialDevice::uid;
+}
+
+serial_type_t SerialDevice::get_type()
+{
+    return SerialDevice::type;
 }
 
 void SerialDevice::get_data(SensorData* sens, GpsData* gps, StatusData* status) {}

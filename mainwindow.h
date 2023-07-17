@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
-#include "data_table.h"
+#include "data_table/data_table.h"
 #include "serial/serial.h"
 #include <QQmlApplicationEngine>
 #include "map.h"

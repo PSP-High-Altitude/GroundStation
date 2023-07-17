@@ -13,6 +13,7 @@ public:
     void connect() override;
     int get_pid() override;
     int get_vid() override;
+    serial_type_t get_type() override;
 
     const static int pid = 0x5740;
     const static int vid = 0x0483;

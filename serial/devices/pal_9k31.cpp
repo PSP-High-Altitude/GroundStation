@@ -3,6 +3,8 @@
 
 pal9k31::pal9k31(QSerialPortInfo port_info)
 {
+    this->uid = 2;
+    this->type = SERIAL_USB;
     this->port = new QSerialPort(port_info);
     this->name = "PAL 9K31";
     this->port_name = port_info.portName();
@@ -42,4 +44,9 @@ int pal9k31::get_pid()
 int pal9k31::get_vid()
 {
     return pal9k31::vid;
+}
+
+serial_type_t pal9k31::get_type()
+{
+    return SerialDevice::type;
 }

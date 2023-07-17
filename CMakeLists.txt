@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 project(GroundStation VERSION 0.1 LANGUAGES CXX)
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -15,6 +16,7 @@ find_package(Qt6 REQUIRED COMPONENTS SerialPort)
 find_package(Qt6 REQUIRED COMPONENTS Qml)
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickWidgets)
+find_package(Qt6 REQUIRED COMPONENTS Network)
 
 set(PROJECT_SOURCES
     main.cpp
@@ -26,18 +28,26 @@ set(PROJECT_SOURCES
     serial/devices/serial_device.h
     serial/devices/pal_9k31.cpp
     serial/devices/pal_9k31.h
+    serial/devices/hab_tracker.cpp
+    serial/devices/hab_tracker.h
     serial/devices/generic_serial.cpp
     serial/devices/generic_serial.h
     serial/parsers/pal_parser.cpp
     serial/parsers/pal_parser.h
+    serial/parsers/hab_parser.cpp
+    serial/parsers/hab_parser.h
     map.cpp
     map.h
     clock.cpp
     clock.h
     connection_status.cpp
     connection_status.h
-    data_table.cpp
-    data_table.h
+    data_table/data_table.cpp
+    data_table/data_table.h
+    data_table/hab_table.cpp
+    data_table/hab_table.h
+    data_table/pal_table.cpp
+    data_table/pal_table.h
     mainwindow.ui
     resources.qrc
     tape_altimeter.cpp
@@ -81,6 +91,8 @@ target_link_libraries(GroundStation PRIVATE Qt6::Qml)
 target_link_libraries(GroundStation PRIVATE Qt6::Quick)
 target_link_libraries(GroundStation PRIVATE Qt6::QuickWidgets)
 target_link_libraries(GroundStation PRIVATE setupapi)
+target_link_libraries(GroundStation PRIVATE Qt6::Network)
+
 
 set_target_properties(GroundStation PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

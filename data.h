@@ -33,6 +33,10 @@ typedef struct {
 } BaroData;
 
 typedef struct {
+    float temperature;  // degC
+} TempProbe;
+
+typedef struct {
     float accelX;  // linear acceleration sensor x-axis in g
     float accelY;  // linear acceleration sensor y-axis in g
     float accelZ;  // linear acceleration sensor z-axis in g
@@ -56,6 +60,7 @@ typedef struct {
     Gyro gyro;
     Mag mag;
     BaroData baro;
+    TempProbe temp;
 } SensorData;
 
 typedef struct {
