@@ -9,7 +9,7 @@ class PalTable : public GenericTable
 public:
     PalTable(SensorTable* table, QObject *parent = nullptr);
     ~PalTable();
-    void update_table(SensorData* sens, GpsData* gps) override;
+    void update_table(SensorData* sens, GpsData* gps, StatusData* status) override;
 
 private:
     SensorTable* table;

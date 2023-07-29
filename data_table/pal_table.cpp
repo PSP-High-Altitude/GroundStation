@@ -42,7 +42,7 @@ PalTable::PalTable(SensorTable* table, QObject *parent) : GenericTable(table, pa
 
 PalTable::~PalTable() {}
 
-void PalTable::update_table(SensorData* sens, GpsData* gps)
+void PalTable::update_table(SensorData* sens, GpsData* gps, StatusData* status)
 {
     char value_str[64];
 

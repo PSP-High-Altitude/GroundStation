@@ -57,7 +57,7 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     connect(&Serial::instance(), &Serial::set_active, connected_device, &ConnectedDeviceLabel::set_active_device);
     connect(&Serial::instance(), &Serial::set_active, sensor_table, [this](QString dev_name, QString dev_port, serial_type_t type, int uid){ sensor_table->make_table(uid); });
     connect(connected_device, &ConnectedDeviceLabel::change_device, sensor_table, [this](QString dev_port, int uid){ sensor_table->make_table(uid); });
-    connect(&Serial::instance(), &Serial::done_message, sensor_table, [this]{ sensor_table->update_table(&sens, &gps); });
+    connect(&Serial::instance(), &Serial::done_message, sensor_table, [this]{ sensor_table->update_table(&sens, &gps, &stat); });
     connect(&Serial::instance(), &Serial::done_message, map, [this]{ map->update_position(&gps); });
     connect(&Serial::instance(), &Serial::done_message, altimeter, [this]{ altimeter->update_ticks(&gps); });
 

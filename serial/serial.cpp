@@ -5,6 +5,7 @@
 #include <QList>
 #include <windows.h>
 #include "devices/pal_9k31.h"
+#include "devices/hab_tracker_lora.h"
 #include "devices/generic_serial.h"
 
 QSharedPointer<SerialDevice> copy;
@@ -20,21 +21,34 @@ Serial& Serial::instance()
     return m_instance;
 }
 
+SerialDevice* match_device(QSerialPortInfo port, int vid, int pid, QString desc)
+{
+    SerialDevice* new_device;
+    if(port.vendorIdentifier() == pal9k31::vid && port.productIdentifier() == pal9k31::pid &&
+        vid == port.vendorIdentifier() && port.productIdentifier() == pid)
+    {
+        new_device = new pal9k31(port);
+    }
+    else if(port.vendorIdentifier() == HabTrackerLora::vid && port.productIdentifier() == HabTrackerLora::pid &&
+             vid == port.vendorIdentifier() && port.productIdentifier() == pid)
+    {
+        new_device = new HabTrackerLora(port);
+    }
+    else
+    {
+        new_device = new GenericSerial(port, desc, vid, pid);
+    }
+
+    return new_device;
+}
+
 void Serial::init()
 {
     QList<QSerialPortInfo> ports = QSerialPortInfo::availablePorts();
     for(const QSerialPortInfo &port : ports)
     {
         bool is_device_new = true;
-        SerialDevice* new_device;
-        if(port.vendorIdentifier() == pal9k31::vid && port.productIdentifier() == pal9k31::pid)
-        {
-            new_device = new pal9k31(port);
-        }
-        else
-        {
-            new_device = new GenericSerial(port, port.description(), port.vendorIdentifier(), port.productIdentifier());
-        }
+        SerialDevice* new_device = match_device(port, port.vendorIdentifier(), port.productIdentifier(), port.description());
 
         for(const QSharedPointer<SerialDevice> &device : *devices)
         {
@@ -91,16 +105,7 @@ void Serial::add_device(int vid, int pid, QString desc)
     for(const QSerialPortInfo &port : ports)
     {
         bool is_device_new = true;
-        SerialDevice* new_device;
-        if(port.vendorIdentifier() == pal9k31::vid && port.productIdentifier() == pal9k31::pid &&
-           vid == port.vendorIdentifier() && port.productIdentifier() == pid)
-        {
-            new_device = new pal9k31(port);
-        }
-        else
-        {
-            new_device = new GenericSerial(port, desc, vid, pid);
-        }
+        SerialDevice* new_device = match_device(port, vid, pid, desc);
 
         for(const QSharedPointer<SerialDevice> &device : *devices)
         {

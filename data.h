@@ -67,6 +67,7 @@ typedef struct {
     uint8_t error_code; // error code 0-255 (0 for OK)
     float bat_voltage;  // battery voltage
     float bat_percent;  // battery percentage
+    float rssi;         // received signal strength indication
 } StatusData;
 
 #endif // DATA_H

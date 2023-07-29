@@ -30,6 +30,8 @@ set(PROJECT_SOURCES
     serial/devices/pal_9k31.h
     serial/devices/hab_tracker.cpp
     serial/devices/hab_tracker.h
+    serial/devices/hab_tracker_lora.cpp
+    serial/devices/hab_tracker_lora.h
     serial/devices/generic_serial.cpp
     serial/devices/generic_serial.h
     serial/parsers/pal_parser.cpp

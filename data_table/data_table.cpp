@@ -18,7 +18,7 @@ GenericTable::GenericTable(SensorTable* table, QObject *parent)
 
 GenericTable::~GenericTable() {}
 
-void GenericTable::update_table(SensorData* sens, GpsData* gps) {}
+void GenericTable::update_table(SensorData* sens, GpsData* gps, StatusData* status) {}
 
 TableLabel::TableLabel(const QString text, Qt::Alignment alignment)
 {
@@ -46,10 +46,19 @@ SensorTable::SensorTable(QWidget* window, QObject *parent)
     this->setColumnWidth(2, 150);
     this->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->setSelectionMode(QAbstractItemView::SingleSelection);
+    current_uid = 0;
 }
 
 void SensorTable::make_table(int uid)
 {
+    if(uid == current_uid)
+    {
+        return;
+    }
+    else
+    {
+        current_uid = uid;
+    }
     while(!table.isNull())
     {
         table.clear();
@@ -75,11 +84,11 @@ void SensorTable::make_table(int uid)
     }
 }
 
-void SensorTable::update_table(SensorData* sens, GpsData* gps)
+void SensorTable::update_table(SensorData* sens, GpsData* gps, StatusData* status)
 {
     if(!table.isNull())
     {
-        table.get()->update_table(sens, gps);
+        table.get()->update_table(sens, gps, status);
     }
 }
 

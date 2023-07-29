@@ -15,7 +15,7 @@ class GenericTable : public QObject
 public:
     GenericTable(SensorTable* table, QObject *parent = nullptr);
     ~GenericTable();
-    virtual void update_table(SensorData* sens, GpsData* gps);
+    virtual void update_table(SensorData* sens, GpsData* gps, StatusData* status);
 
 private:
     SensorTable* table;
@@ -31,12 +31,12 @@ public:
 
 public slots:
     void make_table(int uid);
-    void update_table(SensorData* sens, GpsData* gps);
+    void update_table(SensorData* sens, GpsData* gps, StatusData* status);
     void resize_columns();
 
 private:
     QSharedPointer<GenericTable> table;
-
+    int current_uid;
 };
 
 class TableLabel : public QLabel

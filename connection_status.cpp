@@ -103,13 +103,17 @@ ConnectedDeviceLabel::ConnectedDeviceLabel(QWidget* window, UsbLabel* usb, Wirel
         previous_text = this->currentText();
         this->usb->set_off();
         this->wireless->set_off();
-        if(types.value(devices.key(this->currentText())) == SERIAL_USB)
+        switch(uids.value(devices.key(this->currentText())))
         {
+        case 2:
             this->usb->set_on();
-        }
-        else
-        {
+            break;
+        case 3:
             this->wireless->set_on();
+            break;
+        default:
+            this->usb->set_on();
+            break;
         }
         emit change_device(devices.key(this->currentText(), "~"), uids.value(devices.key(this->currentText())));
     });

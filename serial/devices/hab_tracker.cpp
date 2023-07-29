@@ -37,12 +37,19 @@ void HabTracker::get_data(SensorData* sens, GpsData* gps, StatusData* status)
             return;
         }
 
-        char log_str[MAX_READ + 1];
+        unsigned char log_str[MAX_READ + 1];
         memcpy(log_str, read_buf, read_len);
         log_str[read_len] = '\0';
-        emit write_log(QString(log_str));
+        QString log_str_hex = QString("");
+        for(int i = 0; i < read_len; i++)
+        {
+            char byte[6];
+            sprintf(byte, "0x%x ", log_str[i]);
+            log_str_hex.append(byte);
+        }
+        emit write_log(QString(log_str_hex));
 
-        habParser::parse_message(read_buf, read_len, sens, gps, status);
+        habParser::parse_aprs_message(read_buf, read_len, sens, gps, status);
         emit done_message();
     }
 }

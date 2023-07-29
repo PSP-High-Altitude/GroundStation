@@ -9,7 +9,7 @@ class HabTable : public GenericTable
 public:
     HabTable(SensorTable* table, QObject *parent = nullptr);
     ~HabTable();
-    void update_table(SensorData* sens, GpsData* gps) override;
+    void update_table(SensorData* sens, GpsData* gps, StatusData* status) override;
 
 private:
     SensorTable* table;
