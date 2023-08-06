@@ -61,24 +61,35 @@ void habParser::process_aprs(int* ridx, char* read_buf, int* read_len, SensorDat
     *read_len -= msg_len + 2;
     free(msg);
 
-    gps->hour = msg_str.mid(0, 2).toInt();
-    gps->min = msg_str.mid(2, 2).toInt();
-    gps->sec = msg_str.mid(4, 2).toInt();
-    gps->lat = msg_str.mid(7, 2).toFloat();
-    gps->lat += msg_str.mid(9, 5).toFloat() / 60.0F;
-    gps->lat *= msg_str.at(14).toLatin1() == 'N' ? 1.0F : -1.0F;
-    gps->lon = msg_str.mid(16, 3).toFloat();
-    gps->lon += msg_str.mid(19, 5).toFloat() / 60.0F;
-    gps->lon *= msg_str.at(24).toLatin1() == 'E' ? 1.0F : -1.0F;
+    int lat = msg_str.mid(7, 2).toInt();
+    int lat_min = msg_str.mid(9, 2).toInt();
+    int lat_min_dec = msg_str.mid(12, 2).toInt();
+    bool lat_valid = lat && lat_min && lat_min_dec;
 
-    float hdg = msg_str.mid(26, 3).toFloat();
-    float gnd_spd = msg_str.mid(30, 3).toFloat() * TO_MPS;
-    gps->vel_north = gnd_spd * cos(hdg * TO_RAD);
-    gps->vel_east = gnd_spd * sin(hdg * TO_RAD);
+    int lon = msg_str.mid(16, 3).toInt();
+    int lon_min = msg_str.mid(19, 2).toInt();
+    int lon_min_dec = msg_str.mid(22, 2).toInt();
+    bool lon_valid = lon && lon_min && lon_min_dec;
 
-    gps->height_msl = msg_str.mid(36, 6).toFloat() * TO_METERS;
+    gps->fix_valid = lat_valid && lon_valid;
 
-    gps->fix_valid = 1;
+    if(gps->fix_valid)
+    {
+        gps->hour = msg_str.mid(0, 2).toInt();
+        gps->min = msg_str.mid(2, 2).toInt();
+        gps->sec = msg_str.mid(4, 2).toInt();
+        gps->lat = (float) lat + (lat_min / 60.0F) + (lat_min_dec / 6000.0F);
+        gps->lat *= msg_str.at(14).toLatin1() == 'N' ? 1.0F : -1.0F;
+        gps->lon = (float) lon + (lon_min / 60.0F) + (lon_min_dec / 6000.0F);
+        gps->lon *= msg_str.at(24).toLatin1() == 'E' ? 1.0F : -1.0F;
+
+        float hdg = msg_str.mid(26, 3).toFloat();
+        float gnd_spd = msg_str.mid(30, 3).toFloat() * TO_MPS;
+        gps->vel_north = gnd_spd * cos(hdg * TO_RAD);
+        gps->vel_east = gnd_spd * sin(hdg * TO_RAD);
+
+        gps->height_msl = msg_str.mid(36, 6).toFloat() * TO_METERS;
+    }
 
     sens->baro.temperature = msg_str.mid(42, 3).toFloat();
     sens->temp.temperature = msg_str.mid(46, 3).toFloat();
