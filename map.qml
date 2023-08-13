@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Window 2.14
-import QtLocation 5.6
-import QtPositioning 5.6
+import QtLocation 6.5
+import QtPositioning 6.5
 import QtQuick.Controls
 
 Window {
@@ -11,21 +11,25 @@ Window {
 
     Plugin {
         id: mapPlugin
-        name: "osm" // "mapboxgl", "esri", ...
-        // specify plugin parameters if necessary
-        // PluginParameter {
-        //     name:
-        //     value:
-        // }
+        name: "osm"
+
+        PluginParameter {
+            name: "osm.mapping.providersrepository.address"
+            value: "http://tiles.griffinrosseng.com/osm_repository"
+        }
+        PluginParameter {
+            name: "osm.mapping.highdpi_tiles"
+            value: true
+        }
     }
 
     function addMarker(latitude, longitude)
     {
         var Component = Qt.createComponent("qrc:///marker.qml")
         var item = Component.createObject(window, {
-                                              id: marker,
-                                              coordinate: QtPositioning.coordinate(latitude, longitude)
-                                          })
+            id: marker,
+            coordinate: QtPositioning.coordinate(latitude, longitude)
+        })
         map.addMapItem(item)
     }
 
@@ -34,6 +38,7 @@ Window {
         objectName: "map"
         anchors.fill: parent
         plugin: mapPlugin
+        activeMapType: supportedMapTypes[5]
         center {
             latitude: 40.42371
             longitude: -86.921194

@@ -70,6 +70,7 @@ Window {
 
     Image {
         anchors.right: parent.right
+        anchors.rightMargin: 1
         anchors.verticalCenter: parent.verticalCenter
         source: "images/Resources/alt_marker.png"
 
