@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
     MainWindow w(&map_engine, &alt_engine);
     NativeEventFilter *filter = new NativeEventFilter(&w);
     QAbstractEventDispatcher::instance()->installNativeEventFilter(filter);
-
     w.show();
 
     return a.exec();

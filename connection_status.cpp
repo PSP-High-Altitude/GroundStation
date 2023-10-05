@@ -4,8 +4,6 @@
 #include <QPalette>
 #include "QDebug"
 #include <QByteArray>
-#include "serial/serial.h"
-#include "serial/devices/serial_device.h"
 
 UsbLabel::UsbLabel(QWidget* window)
 {
@@ -71,90 +69,3 @@ WirelessLabel::~WirelessLabel()
     delete on_map;
     delete off_map;
 }
-
-ConnectedDeviceLabel::ConnectedDeviceLabel(QWidget* window, UsbLabel* usb, WirelessLabel* wireless)
-{
-    this->usb = usb;
-    this->wireless = wireless;
-    this->devices = QMap<QString, QString>();
-    QComboBox *placeholder = window->findChild<QComboBox*>("combo_connection");
-    this->setMaximumSize(placeholder->maximumSize());
-    this->setMinimumSize(placeholder->minimumSize());
-    this->setFont(placeholder->font());
-    this->setEditable(false);
-    QPalette p = placeholder->palette();
-    p.setColor(QPalette::Inactive, QPalette::Button, p.color(QPalette::Active, QPalette::Button));
-    p.setColor(QPalette::Inactive, QPalette::ButtonText, p.color(QPalette::Active, QPalette::ButtonText));
-    this->setPalette(p);
-    QGridLayout *layout = window->findChild<QGridLayout*>("connection_layout");
-    layout->replaceWidget(placeholder, this);
-    placeholder->deleteLater();
-    this->setObjectName("combo_connection");
-    this->setCurrentText("No device connected!");
-    this->previous_text = "No device connected!";
-    usb->set_off();
-    wireless->set_off();
-
-    connect(this, &ConnectedDeviceLabel::currentTextChanged, this, [this]{
-        if(previous_text.compare("No device connected!") == 0 && this->currentText().compare("No device connected!"))
-        {
-            this->removeItem(this->findText("No device connected!"));
-        }
-        previous_text = this->currentText();
-        this->usb->set_off();
-        this->wireless->set_off();
-        switch(uids.value(devices.key(this->currentText())))
-        {
-        case 2:
-            this->usb->set_on();
-            break;
-        case 3:
-            this->wireless->set_on();
-            break;
-        default:
-            this->usb->set_on();
-            break;
-        }
-        emit change_device(devices.key(this->currentText(), "~"), uids.value(devices.key(this->currentText())));
-    });
-    connect(this, &ConnectedDeviceLabel::change_device, &Serial::instance(), &Serial::change_device);
-}
-
-void ConnectedDeviceLabel::add_device(QString dev, QString port, serial_type_t type, int uid)
-{
-    char label_text[100];
-
-    QByteArray device_name_ba = dev.toLocal8Bit();
-    const char* device_name = device_name_ba.data();
-    QByteArray port_name_ba = port.toLocal8Bit();
-    const char* port_name = port_name_ba.data();
-    snprintf(label_text, 100, "%s (%s)", device_name, port_name);
-
-    devices[port] = label_text;
-    types[port] = type;
-    uids[port] = uid;
-    this->addItem(label_text);
-}
-
-void ConnectedDeviceLabel::remove_device(QString dev, QString port, serial_type_t type, int uid)
-{
-    int idx = this->findText(devices[port]);
-    if(this->currentText().compare(devices[port]) == 0)
-    {
-        this->insertItem(0, QString("No device connected!"));
-        idx++;
-        this->setCurrentIndex(0);
-    }
-    this->removeItem(idx);
-    types.remove(port);
-    uids.remove(port);
-    devices.remove(port);
-}
-
-void ConnectedDeviceLabel::set_active_device(QString dev, QString port, serial_type_t type, int uid)
-{
-    this->setCurrentText(devices[port]);
-}
-
-ConnectedDeviceLabel::~ConnectedDeviceLabel() {}
-

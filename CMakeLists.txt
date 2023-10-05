@@ -20,46 +20,26 @@ find_package(Qt6 REQUIRED COMPONENTS Network)
 
 set(PROJECT_SOURCES
     main.cpp
-    mainwindow.cpp
-    mainwindow.h
-    serial/serial.cpp
-    serial/serial.h
-    serial/devices/serial_device.cpp
-    serial/devices/serial_device.h
-    serial/devices/pal_9k31.cpp
-    serial/devices/pal_9k31.h
-    serial/devices/hab_tracker.cpp
-    serial/devices/hab_tracker.h
-    serial/devices/hab_tracker_lora.cpp
-    serial/devices/hab_tracker_lora.h
-    serial/devices/generic_serial.cpp
-    serial/devices/generic_serial.h
-    serial/parsers/pal_parser.cpp
-    serial/parsers/pal_parser.h
-    serial/parsers/hab_parser.cpp
-    serial/parsers/hab_parser.h
-    map.cpp
-    map.h
-    clock.cpp
-    clock.h
-    connection_status.cpp
-    connection_status.h
-    data_table/data_table.cpp
-    data_table/data_table.h
-    data_table/hab_table.cpp
-    data_table/hab_table.h
-    data_table/pal_table.cpp
-    data_table/pal_table.h
+    mainwindow.cpp mainwindow.h
+    map.cpp map.h
+    clock.cpp clock.h
+    connection_status.cpp connection_status.h
     mainwindow.ui
     resources.qrc
-    tape_altimeter.cpp
-    tape_altimeter.h
+    tape_altimeter.cpp tape_altimeter.h
     groundstation.rc
-    console.h
-    console.cpp
+    console.h console.cpp
     keys.h
-    native_event_filter.h
-    native_event_filter.cpp
+    native_event_filter.h native_event_filter.cpp
+    pspcom/pspcom.h pspcom/pspcom.cpp
+    pspcom/pspcommsg.h
+    serial/serial_device.h serial/serial_device.cpp
+    serial/serial_port.h serial/serial_port.cpp
+    serial/udp_port.h serial/udp_port.cpp
+    device.h device.cpp
+    menus/createdevice.h menus/createdevice.cpp menus/createdevice.ui
+    menus/devicemenu.h menus/devicemenu.cpp menus/devicemenu.ui
+    menus/editdevice.h menus/editdevice.cpp menus/editdevice.ui
 )
 
 # set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO")
@@ -68,6 +48,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GroundStation
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        menus/createpspcom.h menus/createpspcom.cpp menus/createpspcom.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GroundStation APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

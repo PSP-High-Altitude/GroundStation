@@ -3,7 +3,6 @@
 #include "windows.h"
 #include <dwmapi.h>
 #include "dbt.h"
-#include "serial/serial.h"
 #include "setupapi.h"
 #include "errhandlingapi.h"
 #include "unistd.h"
@@ -12,8 +11,8 @@ NativeEventFilter::NativeEventFilter(MainWindow* w)
 {
     this->w = w;
     this->first_paint = true;
-    connect(this, &NativeEventFilter::comport_added, &Serial::instance(), &Serial::add_device);
-    connect(this, &NativeEventFilter::comport_removed, &Serial::instance(), &Serial::remove_device);
+    connect(this, &NativeEventFilter::comport_added, w, &MainWindow::comport_added);
+    connect(this, &NativeEventFilter::comport_removed, w, &MainWindow::comport_removed);
 }
 
 QString get_device_name(wchar_t *dbcc_name)
