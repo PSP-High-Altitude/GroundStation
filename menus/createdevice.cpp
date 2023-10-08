@@ -102,12 +102,21 @@ CreateDevice::CreateDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
 
         // Add device
         Device *device = new Device(device_name->text(), device_id->currentIndex()+1);
+        mw->get_settings()->beginGroup("devices");
+        mw->get_settings()->beginGroup(device->get_name());
+        mw->get_settings()->setValue("id", device->get_id());
         if(port != nullptr)
         {
             Pspcom *pspcom = new Pspcom(port);
             device->add_com_bus(pspcom);
             device->set_tx_bus(pspcom);
+            mw->get_settings()->beginGroup("pspcoms");
+            mw->get_settings()->setValue(port->get_name().append("/bus_type"), port->get_type());
+            mw->get_settings()->setValue(port->get_name().append("/tx"), true);
+            mw->get_settings()->endGroup();
         }
+        mw->get_settings()->endGroup();
+        mw->get_settings()->endGroup();
         mw->add_device(device);
         dm->update_fields();
         clear_fields(this);

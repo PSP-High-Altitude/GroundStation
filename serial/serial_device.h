@@ -6,18 +6,13 @@
 
 #define MAX_READ 4000
 
-typedef enum {
-    SERIAL_USB = 0,
-    SERIAL_UDP = 1,
-} serial_type;
-
 class SerialDevice : public Equatable<SerialDevice>
 {
 
 public:
     SerialDevice(QObject *parent = nullptr);
     ~SerialDevice();
-    serial_type get_type();
+    QString get_type();
     QString get_name();
 
     virtual bool connect()=0;
@@ -31,7 +26,7 @@ public:
 
 protected:
     QString port_name;
-    serial_type type;
+    QString type;
 };
 
 #endif // SERIAL_DEVICE_H

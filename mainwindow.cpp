@@ -18,6 +18,7 @@
 #include "menus/createpspcom.h"
 #include "menus/devicemenu.h"
 #include "menus/editdevice.h"
+#include "serial/udp_port.h"
 #include "utils/search.h"
 #include <QStackedWidget>
 
@@ -33,7 +34,7 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     this->devices = new QList<Device*>();
 
     // Load settings
-    settings = new QSettings();
+    settings = new QSettings("PSP", "Ground Station");
     load_settings();
 
     // Register all serial devices
@@ -192,4 +193,83 @@ QSettings* MainWindow::get_settings()
 
 void MainWindow::load_settings()
 {
+    QStringList groups = settings->childGroups();
+    if(groups.contains("devices"))
+    {
+        // Find all devices
+        settings->beginGroup("devices");
+        for(QString name : settings->childGroups())
+        {
+            settings->beginGroup(name);
+
+            // If device has an ID, register it
+            if(!settings->contains("id"))
+            {
+                settings->endGroup();
+                continue;
+            }
+            uint16_t id = settings->value("id").toUInt();
+            Device *device = new Device(name, id);
+            this->add_device(device);
+
+            QStringList groups = settings->childGroups();
+            if(groups.contains("pspcoms"))
+            {
+                // Find all pspcoms
+                settings->beginGroup("pspcoms");
+                for(QString bus_name : settings->childGroups())
+                {
+                    settings->beginGroup(bus_name);
+
+                    // Check we have the right keys
+                    if(!settings->contains("bus_type") || !settings->contains("tx"))
+                    {
+                        settings->endGroup();
+                        continue;
+                    }
+
+                    Pspcom *pspcom;
+
+                    // Serial case
+                    if(settings->value("bus_type") == "serial")
+                    {
+                        SerialPort *port = new SerialPort(bus_name);
+                        pspcom = new Pspcom(port);
+                        device->add_com_bus(pspcom);
+                    }
+
+                    // UDP case
+                    else if(settings->value("bus_type") == "udp")
+                    {
+                        QStringList name_list = bus_name.split(":");
+                        if(name_list.size() != 2)
+                        {
+                            settings->endGroup();
+                            continue;
+                        }
+                        UdpPort *port = new UdpPort(name_list.at(0), name_list.at(1).toInt());
+                        pspcom = new Pspcom(port);
+                        device->add_com_bus(pspcom);
+                    }
+
+                    // Check if device is the tx bus
+                    if(settings->value("tx").toBool())
+                    {
+                        device->set_tx_bus(pspcom);
+                    }
+
+                    // End group
+                    settings->endGroup();
+                }
+                // End group
+                settings->endGroup();
+            }
+
+            // End group
+            settings->endGroup();
+        }
+
+        // End group
+        settings->endGroup();
+    }
 }

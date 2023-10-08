@@ -3,14 +3,14 @@
 
 SerialPort::SerialPort(QSerialPortInfo port_info)
 {
-    this->type = SERIAL_USB;
+    this->type = "serial";
     this->port = new QSerialPort(port_info);
     this->port_name = port_info.portName();
 }
 
 SerialPort::SerialPort(QString name)
 {
-    this->type = SERIAL_USB;
+    this->type = "serial";
     this->port = new QSerialPort();
     this->port->setPortName(name);
     this->port_name = name;

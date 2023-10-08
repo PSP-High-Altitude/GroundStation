@@ -1,5 +1,6 @@
 #include "menus/devicemenu.h"
 #include "qpushbutton.h"
+#include "serial/udp_port.h"
 #include "ui_devicemenu.h"
 #include "qdebug.h"
 #include "utils/search.h"
@@ -40,6 +41,7 @@ DeviceMenu::DeviceMenu(MainWindow *mw, QWidget *parent) :
             Device* device = new Device(lwi->text(), 0);
             if(contains_deref<Device>(mw->get_devices(), device))
             {
+                mw->get_settings()->remove(QString("devices/").append(device->get_name()));
                 mw->remove_device(device);
             }
             delete device;

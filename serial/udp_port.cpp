@@ -4,7 +4,7 @@
 
 UdpPort::UdpPort(QString ip, int iport)
 {
-    this->type = SERIAL_UDP;
+    this->type = "udp";
     this->port = new QUdpSocket();
     this->port_name = ip.append(":").append(QString::number(iport));
     this->ip = ip;

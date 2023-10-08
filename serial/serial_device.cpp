@@ -19,7 +19,7 @@ bool SerialDevice::operator!= (const SerialDevice& other) const
     return (this->port_name.compare(other.port_name));
 }
 
-serial_type SerialDevice::get_type()
+QString SerialDevice::get_type()
 {
     return this->type;
 }

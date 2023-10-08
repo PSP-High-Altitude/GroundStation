@@ -50,7 +50,7 @@ EditDevice::EditDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
             {
                 return;
             }
-            this->update_fields();
+            this->set_fields();
             this->show();
         }
     });
@@ -83,8 +83,32 @@ EditDevice::EditDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
             }
         }
 
+        // Update Device
+        QSettings *settings = mw->get_settings();
+        settings->beginGroup("devices");
+        settings->remove(current_device->get_name());
         current_device->set_name(device_name->text());
         current_device->set_id(device_id->currentIndex()+1);
+        settings->beginGroup(current_device->get_name());
+        settings->setValue("id", current_device->get_id());
+        settings->beginGroup("pspcoms");
+        for(Pspcom *pspcom : *current_device->get_com_buses())
+        {
+            settings->beginGroup(pspcom->get_bus()->get_name());
+            settings->setValue("bus_type", pspcom->get_bus()->get_type());
+            if(pspcom == current_device->get_tx_bus())
+            {
+                settings->setValue("tx", true);
+            }
+            else
+            {
+                settings->setValue("tx", false);
+            }
+            settings->endGroup();
+        }
+        settings->endGroup();
+        settings->endGroup();
+        settings->endGroup();
         dm->update_fields();
         this->hide();
     });
@@ -104,7 +128,7 @@ EditDevice::EditDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
                 }
             }
         }
-        this->update_fields();
+        this->update_table();
     });
 }
 
@@ -118,12 +142,17 @@ Device* EditDevice::get_current_device()
     return this->current_device;
 }
 
-void EditDevice::update_fields()
+void EditDevice::set_fields()
 {
     QLineEdit *device_name = this->findChild<QLineEdit*>("device_name");
     device_name->setText(this->current_device->get_name());
     QComboBox *device_id = this->findChild<QComboBox*>("device_id");
     device_id->setCurrentIndex(this->current_device->get_id()-1);
+    this->update_table();
+}
+
+void EditDevice::update_table()
+{
     QTableWidget *pspcom_table = this->findChild<QTableWidget*>("pspcom_table");
     pspcom_table->setColumnCount(4);
     pspcom_table->setRowCount(this->current_device->get_com_buses()->count());
@@ -152,7 +181,7 @@ void EditDevice::update_fields()
         }
 
         QTableWidgetItem *bus_id = new QTableWidgetItem(str);
-        QTableWidgetItem *bus_type = new QTableWidgetItem(this->current_device->get_com_buses()->at(i)->get_bus()->get_type() ? "UDP" : "Serial");
+        QTableWidgetItem *bus_type = new QTableWidgetItem(this->current_device->get_com_buses()->at(i)->get_bus()->get_type());
         QTableWidgetItem *bus_name = new QTableWidgetItem(this->current_device->get_com_buses()->at(i)->get_bus()->get_name());
         pspcom_table->setItem(i, 0, bus_id);
         pspcom_table->setItem(i, 1, bus_type);

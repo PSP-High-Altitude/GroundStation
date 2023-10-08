@@ -17,7 +17,8 @@ public:
     ~EditDevice();
 
     Device* get_current_device();
-    void update_fields();
+    void set_fields();
+    void update_table();
 
 private:
     Ui::EditDevice *ui;

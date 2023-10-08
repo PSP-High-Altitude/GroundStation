@@ -110,7 +110,7 @@ CreatePspcom::CreatePspcom(MainWindow *mw, EditDevice *ed, QWidget *parent) :
             Pspcom *pspcom = new Pspcom(port);
             ed->get_current_device()->add_com_bus(pspcom);
         }
-        ed->update_fields();
+        ed->update_table();
         clear_fields(this);
         this->hide();
     });
