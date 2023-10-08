@@ -2,8 +2,6 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-
-#include "mainwindow.h"
 #include <QWidget>
 #include <QListWidget>
 #include <QCheckBox>
@@ -13,7 +11,7 @@ class Console : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Console(MainWindow *window, QWidget *parent = nullptr);
+    explicit Console(QWidget *window, QWidget *parent = nullptr);
     void closeEvent(QCloseEvent *event);
 
 signals:

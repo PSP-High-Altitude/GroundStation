@@ -17,6 +17,16 @@ CreateDevice::CreateDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
     QPalette pal = mw->palette();
     this->setPalette(pal);
 
+    // Setup device id box
+    QComboBox *device_id = this->findChild<QComboBox*>("device_id");
+    device_id->setStyleSheet("combobox-popup: 0;");
+    for(int i = 1; i < 256; i++)
+    {
+        char label_str[5];
+        sprintf_s(label_str, "0x%02x", i);
+        device_id->addItem(QString(label_str));
+    }
+
     // Setup open button
     QPushButton *add = dm->findChild<QPushButton*>("add");
     connect(add, &QPushButton::clicked, this, [this, mw]{
@@ -48,6 +58,7 @@ CreateDevice::CreateDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
     connect(save_and_close, &QPushButton::clicked, this, [this, mw, dm]{
         QRadioButton *serial = this->findChild<QRadioButton*>("serial");
         QLineEdit *device_name = this->findChild<QLineEdit*>("device_name");
+        QComboBox *device_id = this->findChild<QComboBox*>("device_id");
         SerialDevice *port = nullptr;
         if(device_name->text().length() == 0 || device_name->text().length() > 50)
         {
@@ -90,13 +101,14 @@ CreateDevice::CreateDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
         }
 
         // Add device
-        Device *device = new Device(device_name->text());
+        Device *device = new Device(device_name->text(), device_id->currentIndex()+1);
         if(port != nullptr)
         {
             Pspcom *pspcom = new Pspcom(port);
             device->add_com_bus(pspcom);
+            device->set_tx_bus(pspcom);
         }
-        mw->get_devices()->append(device);
+        mw->add_device(device);
         dm->update_fields();
         clear_fields(this);
         this->hide();
@@ -116,6 +128,8 @@ void clear_fields(CreateDevice *widget)
     serial->click();
     QComboBox *serial_port = widget->findChild<QComboBox*>("serial_port");
     serial_port->clear();
+    QComboBox *device_id = widget->findChild<QComboBox*>("device_id");
+    device_id->setCurrentIndex(0);
 }
 
 static SerialPort* find_port(QList<SerialPort*> *ports, QString name)

@@ -10,10 +10,11 @@ class UdpPort : public SerialDevice
 public:
     UdpPort(QString ip, int iport);
 
-    void connect() override;
+    bool connect() override;
     void disconnect() override;
+    bool is_connected() override;
     int available() override;
-    void read(char* buf, int len) override;
+    bool read(char* buf, int len) override;
     void write(char* buf, int len) override;
 
 private:

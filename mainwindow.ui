@@ -261,11 +261,75 @@
       </item>
       <item>
        <layout class="QGridLayout" name="connection_layout">
+        <item row="0" column="3">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="7">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>5</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="2" column="3">
+         <spacer name="verticalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item row="1" column="5">
-         <widget class="QPushButton" name="devices">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>10</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="selected_device">
           <property name="minimumSize">
            <size>
-            <width>100</width>
+            <width>400</width>
             <height>0</height>
            </size>
           </property>
@@ -275,12 +339,24 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Franklin Gothic Medium</family>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
           <property name="text">
-           <string>Devices</string>
+           <string>No Device Selected</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
          </widget>
         </item>
-        <item row="1" column="7">
+        <item row="1" column="6">
          <widget class="QLabel" name="label_usb">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -308,55 +384,7 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="3">
-         <spacer name="verticalSpacer_7">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Expanding</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="6">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>10</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="1" column="8">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>5</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="9">
          <widget class="QLabel" name="label_wireless">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -387,43 +415,11 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>10</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="1" column="10">
-         <spacer name="horizontalSpacer_10">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>10</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="3">
-         <widget class="QLabel" name="connected_device">
+         <widget class="QPushButton" name="devices">
           <property name="minimumSize">
            <size>
-            <width>400</width>
+            <width>100</width>
             <height>0</height>
            </size>
           </property>
@@ -433,25 +429,13 @@
             <height>16777215</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <family>Franklin Gothic Medium</family>
-            <pointsize>20</pointsize>
-           </font>
-          </property>
-          <property name="layoutDirection">
-           <enum>Qt::LeftToRight</enum>
-          </property>
           <property name="text">
-           <string>No Device Connected</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <string>Devices</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="4">
-         <spacer name="horizontalSpacer_5">
+        <item row="1" column="9">
+         <spacer name="horizontalSpacer_10">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -1124,23 +1108,6 @@ background: #434343;
                 <width>100</width>
                 <height>25</height>
                </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton{
-color: #ffffff;
-border: 2px solid #3c3c3c;
-border-radius: 5px;
-background: #3c3c3c;
-}  
-	
-QPushButton:hover {
-background: #3f3f3f;
-}  
-	
-QPushButton:pressed {
-border-style: inset;
-background: #434343;
-}</string>
               </property>
               <property name="text">
                <string>Open Console</string>

@@ -1,35 +1,26 @@
-
 #include "connection_status.h"
 #include <QGridLayout>
 #include <QPalette>
 #include "QDebug"
 #include <QByteArray>
 
-UsbLabel::UsbLabel(QWidget* window)
+UsbLabel::UsbLabel(QWidget* window, QWidget *parent)
 {
+    this->label = window->findChild<QLabel*>("label_wireless");
+    this->label->setScaledContents(true);
     this->on_map = new QPixmap(":/images/Resources/usb-on.png");
     this->off_map = new QPixmap(":/images/Resources/usb.png");
     this->set_off();
-    this->setScaledContents(true);
-    QSize *maxSize = new QSize(20, 40);
-    this->setMaximumSize(*maxSize);
-    delete maxSize;
-    QLabel *label_usb = window->findChild<QLabel*>("label_usb");
-    QGridLayout *layout = window->findChild<QGridLayout*>("connection_layout");
-    layout->replaceWidget(label_usb, this);
-    label_usb->deleteLater();
-    this->setObjectName("label_usb");
-
 }
 
 void UsbLabel::set_off()
 {
-    this->setPixmap(*off_map);
+    this->label->setPixmap(*off_map);
 }
 
 void UsbLabel::set_on()
 {
-    this->setPixmap(*on_map);
+    this->label->setPixmap(*on_map);
 }
 
 UsbLabel::~UsbLabel()
@@ -38,30 +29,23 @@ UsbLabel::~UsbLabel()
     delete off_map;
 }
 
-WirelessLabel::WirelessLabel(QWidget* window)
+WirelessLabel::WirelessLabel(QWidget* window, QWidget *parent)
 {
+    this->label = window->findChild<QLabel*>("label_wireless");
+    this->label->setScaledContents(true);
     this->on_map = new QPixmap(":/images/Resources/wireless-on.png");
     this->off_map = new QPixmap(":/images/Resources/wireless.png");
     this->set_off();
-    this->setScaledContents(true);
-    QSize *maxSize = new QSize(30, 30);
-    this->setMaximumSize(*maxSize);
-    delete maxSize;
-    QLabel *label_wireless = window->findChild<QLabel*>("label_wireless");
-    QGridLayout *layout = window->findChild<QGridLayout*>("connection_layout");
-    layout->replaceWidget(label_wireless, this);
-    label_wireless->deleteLater();
-    this->setObjectName("label_wireless");
 }
 
 void WirelessLabel::set_off()
 {
-    this->setPixmap(*off_map);
+    this->label->setPixmap(*off_map);
 }
 
 void WirelessLabel::set_on()
 {
-    this->setPixmap(*on_map);
+    this->label->setPixmap(*on_map);
 }
 
 WirelessLabel::~WirelessLabel()
@@ -69,3 +53,22 @@ WirelessLabel::~WirelessLabel()
     delete on_map;
     delete off_map;
 }
+
+SelectedDevice::SelectedDevice(QWidget* window, QWidget *parent)
+{
+    this->label = window->findChild<QLabel*>("selected_device");
+}
+
+void SelectedDevice::set_device(Device* device)
+{
+    if(device == nullptr)
+    {
+        this->label->setText("No Device Selected");
+    }
+    else
+    {
+        this->label->setText(device->get_name());
+    }
+}
+
+SelectedDevice::~SelectedDevice() {}

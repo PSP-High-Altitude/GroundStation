@@ -12,14 +12,13 @@
 #include "connection_status.h"
 #include <QWindow>
 #include <QtQuick/QQuickWindow>
-#include "console.h"
 #include <QPalette>
 #include "clock.h"
-#include "connection_status.h"
 #include "menus/createdevice.h"
 #include "menus/createpspcom.h"
 #include "menus/devicemenu.h"
 #include "menus/editdevice.h"
+#include "utils/search.h"
 #include <QStackedWidget>
 
 MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine* alt_engine, QWidget *parent)
@@ -33,6 +32,10 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     this->serial_ports = new QList<SerialPort*>();
     this->devices = new QList<Device*>();
 
+    // Load settings
+    settings = new QSettings();
+    load_settings();
+
     // Register all serial devices
     for(QSerialPortInfo port: QSerialPortInfo::availablePorts())
     {
@@ -40,14 +43,16 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
         serial_ports->append(p);
     }
 
-    // Device Label
-    QLabel *conected_dev = this->findChild<QLabel*>("connected_device");
-
     // Device Menus
     DeviceMenu *dev_menu = new DeviceMenu(this);
     CreateDevice *cat_dev = new CreateDevice(this, dev_menu);
     EditDevice *edit_dev = new EditDevice(this, dev_menu);
     CreatePspcom *cat_pspcom = new CreatePspcom(this, edit_dev);
+
+    // Device Label
+    sel_dev_label = new SelectedDevice(this);
+    UsbLabel *usb = new UsbLabel(this);
+    WirelessLabel *wireless = new WirelessLabel(this);
 
     // Set palette
     QPalette p = this->palette();
@@ -56,10 +61,6 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
 
     // Set up clock
     Clock *clock = new Clock(this);
-
-    // Set up connection indicators
-    UsbLabel *usb = new UsbLabel(this);
-    WirelessLabel *wireless = new WirelessLabel(this);
 
     // Set up map, altimeter
     map = new Map(this, map_engine);
@@ -72,22 +73,30 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     // Raw message console
     QPushButton *toggle_console = this->findChild<QPushButton*>("toggle_console");
     toggle_console->raise();
-    Console *console = new Console(this);
-    connect(toggle_console, &QPushButton::clicked, console, [console, toggle_console]{
-        if(console->isVisible())
+    this->console = new Console(this);
+    connect(toggle_console, &QPushButton::clicked, console, [this, toggle_console]{
+        if(this->console->isVisible())
         {
-            console->hide();
+            this->console->hide();
             toggle_console->setText("Open Console");
         }
         else
         {
-            console->show();
+            this->console->show();
             toggle_console->setText("Close Console");
         }
     });
-    connect(console, &Console::closed, toggle_console, [toggle_console]{
+    connect(this->console, &Console::closed, toggle_console, [toggle_console]{
         toggle_console->setText("Open Console");
     });
+
+    Q_UNUSED(dev_menu);
+    Q_UNUSED(cat_dev);
+    Q_UNUSED(edit_dev);
+    Q_UNUSED(cat_pspcom);
+    Q_UNUSED(usb);
+    Q_UNUSED(wireless);
+    Q_UNUSED(clock);
 }
 
 MainWindow::~MainWindow()
@@ -98,7 +107,6 @@ MainWindow::~MainWindow()
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
     QMainWindow::resizeEvent(event);
-    //sensor_table->resize_columns();
 }
 
 void MainWindow::open_telem()
@@ -107,24 +115,24 @@ void MainWindow::open_telem()
     widget->setCurrentIndex(1);
 }
 
-void MainWindow::comport_added(int vid, int pid, QString desc)
+void MainWindow::comport_added(int vid, int pid, QString desc, QString port)
 {
-    for(QSerialPortInfo port: QSerialPortInfo::availablePorts())
+    SerialPort *p = new SerialPort(port);
+    if(port.compare("Unknown Device") != 0 && !contains_deref<SerialPort>(this->serial_ports, p))
     {
-        SerialPort *p = new SerialPort(port);
-        if(!serial_ports->contains(p))
-        {
-            serial_ports->append(p);
-        }
+        this->serial_ports->append(p);
+    }
+    else
+    {
+        delete p;
     }
 }
 
 void MainWindow::comport_removed(int vid, int pid, QString desc, QString port)
 {
-    for(QSerialPortInfo port: QSerialPortInfo::availablePorts())
+    for(SerialPort *p : *this->serial_ports)
     {
-        SerialPort *p = new SerialPort(port);
-        if(serial_ports->contains(p))
+        if(p->get_name().compare(port) == 0)
         {
             serial_ports->removeAll(p);
         }
@@ -143,13 +151,45 @@ QList<Device*>* MainWindow::get_devices()
 
 void MainWindow::add_device(Device *device)
 {
-    if(!this->devices->contains(device))
+    if(!contains_deref<Device>(this->devices, device))
     {
         devices->append(device);
+        connect(device, &Device::received, this, [this](pspcommsg msg, QString msg_str) {
+            this->console->add_message(msg_str);
+        });
     }
 }
 
 void MainWindow::remove_device(Device *device)
 {
-    devices->removeAll(device);
+    remove_deref<Device>(this->devices, device);
+}
+
+Device* MainWindow::get_active_device()
+{
+    return this->active_device;
+}
+
+void MainWindow::set_active_device(Device *device)
+{
+    if(this->active_device == nullptr)
+    {
+        this->active_device = device;
+        device->start();
+        sel_dev_label->set_device(device);
+        return;
+    }
+    this->active_device->stop();
+    this->active_device = device;
+    device->start();
+    sel_dev_label->set_device(device);
+}
+
+QSettings* MainWindow::get_settings()
+{
+    return this->settings;
+}
+
+void MainWindow::load_settings()
+{
 }

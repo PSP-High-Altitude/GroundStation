@@ -88,7 +88,7 @@ bool NativeEventFilter::nativeEventFilter(const QByteArray &eventType, void *mes
         switch(msg->wParam)
         {
         case DBT_DEVICEARRIVAL:
-            emit comport_added(vid, pid, desc);
+            emit comport_added(vid, pid, desc, port);
             break;
         case DBT_DEVICEREMOVECOMPLETE:
             emit comport_removed(vid, pid, desc, port);

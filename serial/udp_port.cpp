@@ -21,12 +21,13 @@ int UdpPort::available()
     return internal_buf.size();
 }
 
-void UdpPort::read(char* buf, int len)
+bool UdpPort::read(char* buf, int len)
 {
     buf = internal_buf.first(len).data();
     internal_buf.remove(0, len);
     internal_buf.squeeze();
     Q_UNUSED(buf);
+    return true;
 }
 
 void UdpPort::write(char* buf, int len)
@@ -34,14 +35,24 @@ void UdpPort::write(char* buf, int len)
     port->write(buf, len);
 }
 
-void UdpPort::connect()
+bool UdpPort::connect()
 {
-    port->bind(QHostAddress(ip), iport);
-    port->open(QIODevice::ReadWrite);
+    if(port->isOpen())
+    {
+        return true;
+    }
+    bool bind_success = port->bind(QHostAddress(ip), iport);
+    bool open_success = port->open(QIODevice::ReadWrite);
     port->setReadBufferSize(MAX_READ);
+    return bind_success && open_success;
 }
 
 void UdpPort::disconnect()
 {
     port->close();
+}
+
+bool UdpPort::is_connected()
+{
+    return port->isOpen();
 }

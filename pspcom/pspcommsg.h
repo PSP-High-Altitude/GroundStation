@@ -4,10 +4,10 @@
 #include <stdint.h>
 
 typedef struct {
-    uint16_t payload_len;
+    uint8_t payload_len;
     uint16_t device_id;
     uint8_t msg_id;
-    uint8_t payload[255];
+    uint8_t payload[256];
 } pspcommsg;
 
 #endif // PSPCOMMSG_H

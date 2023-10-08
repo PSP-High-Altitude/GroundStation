@@ -2,6 +2,7 @@
 #include "qpushbutton.h"
 #include "ui_devicemenu.h"
 #include "qdebug.h"
+#include "utils/search.h"
 
 DeviceMenu::DeviceMenu(MainWindow *mw, QWidget *parent) :
     QWidget(parent),
@@ -14,6 +15,7 @@ DeviceMenu::DeviceMenu(MainWindow *mw, QWidget *parent) :
     QPalette pal = mw->palette();
     this->setPalette(pal);
 
+    // Setup open
     QPushButton *dev_menu = mw->findChild<QPushButton*>("devices");
     connect(dev_menu, &QPushButton::clicked, this, [this, mw]{
         if(!this->isVisible())
@@ -35,15 +37,32 @@ DeviceMenu::DeviceMenu(MainWindow *mw, QWidget *parent) :
         QListWidget *device_list = this->findChild<QListWidget*>("device_list");
         for(QListWidgetItem *lwi : device_list->selectedItems())
         {
+            Device* device = new Device(lwi->text(), 0);
+            if(contains_deref<Device>(mw->get_devices(), device))
+            {
+                mw->remove_device(device);
+            }
+            delete device;
+            this->update_fields();
+        }
+    });
+
+    // Setup use
+    QPushButton *use = this->findChild<QPushButton*>("use");
+    connect(use, &QPushButton::clicked, this, [this, mw]{
+        QListWidget *device_list = this->findChild<QListWidget*>("device_list");
+        if(device_list->selectedItems().size() == 1)
+        {
+            QListWidgetItem *lwi = device_list->selectedItems()[0];
             for(Device *device : *mw->get_devices())
             {
                 if(device->get_name().compare(lwi->text()) == 0)
                 {
-                    mw->get_devices()->removeAll(device);
+                    mw->set_active_device(device);
+                    this->hide();
                     break;
                 }
             }
-            this->update_fields();
         }
     });
 }

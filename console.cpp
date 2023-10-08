@@ -1,4 +1,3 @@
-
 #include "console.h"
 #include <QGridLayout>
 #include <QCheckBox>
@@ -6,7 +5,7 @@
 #include <QHBoxLayout>
 #include <QPalette>
 
-Console::Console(MainWindow *window, QWidget *parent) : QWidget{parent}
+Console::Console(QWidget *window, QWidget *parent) : QWidget{parent}
 {
     QPalette p = window->palette();
     this->setPalette(p);

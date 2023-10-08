@@ -40,6 +40,11 @@ set(PROJECT_SOURCES
     menus/createdevice.h menus/createdevice.cpp menus/createdevice.ui
     menus/devicemenu.h menus/devicemenu.cpp menus/devicemenu.ui
     menus/editdevice.h menus/editdevice.cpp menus/editdevice.ui
+    menus/createpspcom.h menus/createpspcom.cpp menus/createpspcom.ui
+    pspcom/pspcomworker.h pspcom/pspcomworker.cpp
+    pspcom/crc.h pspcom/crc.cpp
+    utils/search.h
+    utils/equatable.h
 )
 
 # set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO")
@@ -48,7 +53,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GroundStation
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        menus/createpspcom.h menus/createpspcom.cpp menus/createpspcom.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GroundStation APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
