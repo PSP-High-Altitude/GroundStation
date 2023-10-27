@@ -2,6 +2,7 @@
 #define DATA_TABLE_H
 
 #include "data_table/data_table_row.h"
+#include "pspcom/pspcommsg.h"
 #include "qwidget.h"
 
 class DataTable
@@ -12,6 +13,8 @@ public:
     QString get_name();
     void set_name(QString name);
     QList<DataTableRow>* get_rows();
+
+    void update_data(pspcommsg msg);
 
     bool operator== (const DataTable& other) const;
     bool operator!= (const DataTable& other) const;

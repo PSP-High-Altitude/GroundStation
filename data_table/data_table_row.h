@@ -1,7 +1,9 @@
 #ifndef DATA_TABLE_ROW_H
 #define DATA_TABLE_ROW_H
 
+#include "qmap.h"
 #include "qstring.h"
+#include "QStringList"
 #include "qlist.h"
 
 class DataTableRow
@@ -38,6 +40,35 @@ const QStringList TABLE_ROW_TYPES = {
 
     "temp",
     "pres",
+
+    "alt_gnd",
+    "alt_msl",
+    "roll",
+    "pitch",
+    "yaw",
+    "lat",
+    "lon",
+};
+
+const QMap<QString, QStringList> TABLE_ROW_UNITS = {
+    {"acc_x", {"g", "m/s^2"}},
+    {"acc_y", {"g", "m/s^2"}},
+    {"acc_z", {"g", "m/s^2"}},
+
+    {"rot_x", {"dps", "rad/s"}},
+    {"rot_y", {"dps", "rad/s"}},
+    {"rot_z", {"dps", "rad/s"}},
+
+    {"temp", {"°C", "°F", "K"}},
+    {"pres", {"mbar", "inHg", "atm"}},
+
+    {"alt_gnd", {"m", "ft"}},
+    {"alt_msl", {"m", "ft"}},
+    {"roll", {"°"}},
+    {"pitch", {"°"}},
+    {"yaw", {"°"}},
+    {"lat", {"°"}},
+    {"lon", {"°"}},
 };
 
 const QList<DataTableRow> DEFAULT_TABLE_ROWS = {

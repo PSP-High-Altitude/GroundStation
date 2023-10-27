@@ -37,14 +37,10 @@ void PspcomWorker::receive_messages()
             state = 4;
             break;
         case 4:
-            msg.device_id += ((uint16_t)(uint8_t) buf[i]) << 8;
+            msg.msg_id = (uint8_t) buf[i];
             state = 5;
             break;
         case 5:
-            msg.msg_id = (uint8_t) buf[i];
-            state = 6;
-            break;
-        case 6:
             if(payload_ptr < msg.payload_len)
             {
                 msg.payload[payload_ptr] = (uint8_t) buf[i];
@@ -53,13 +49,13 @@ void PspcomWorker::receive_messages()
             }
             else
             {
-                state = 7;
+                state = 6;
             }
-        case 7:
+        case 6:
             checksum = (uint8_t) buf[i];
-            state = 8;
+            state = 7;
             break;
-        case 8:
+        case 7:
             checksum += ((uint16_t)(uint8_t) buf[i]) << 8;
             if(crc(CRC16_INIT, msg) == checksum)
             {

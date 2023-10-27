@@ -59,6 +59,7 @@ private:
     QList<Device*> *devices;
     QList<DataTable*> *tables;
     Device *active_device = nullptr;
+    QMetaObject::Connection device_connection;
     DataTable *active_table = nullptr;
     SelectedDevice *sel_dev_label;
     TapeAltimeter *altimeter;

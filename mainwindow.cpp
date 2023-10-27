@@ -158,9 +158,6 @@ void MainWindow::add_device(Device *device)
     if(!contains_deref<Device>(this->devices, device))
     {
         devices->append(device);
-        connect(device, &Device::received, this, [this](pspcommsg msg, QString msg_str) {
-            this->console->add_message(msg_str);
-        });
     }
 }
 
@@ -187,6 +184,14 @@ void MainWindow::set_active_device(Device *device)
     this->active_device = device;
     device->start();
     sel_dev_label->set_device(device);
+    disconnect(device_connection);
+    device_connection = connect(active_device, &Device::received, this, [this](pspcommsg msg, QString msg_str){
+        this->console->add_message(msg_str);
+        if(this->active_table)
+        {
+            this->active_table->update_data(msg);
+        }
+    });
 }
 
 QList<DataTable*>* MainWindow::get_tables()

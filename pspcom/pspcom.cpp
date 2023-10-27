@@ -27,7 +27,7 @@ bool Pspcom::send(pspcommsg msg)
 {
     char tx_buf[265];
     uint16_t checksum = crc(CRC16_INIT, msg);
-    int tx_len = sprintf_s(tx_buf, "!$%c%c%c%c%c%c", msg.payload_len, (uint8_t) msg.device_id, (uint8_t) (msg.device_id >> 8), msg.msg_id, (uint8_t) checksum, (uint8_t) (checksum >> 8));
+    int tx_len = sprintf_s(tx_buf, "!$%c%c%c%c%c", msg.payload_len, msg.device_id, msg.msg_id, (uint8_t) checksum, (uint8_t) (checksum >> 8));
     this->bus->write(tx_buf, tx_len);
     return true;
 }

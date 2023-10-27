@@ -5,7 +5,7 @@
 
 typedef struct {
     uint8_t payload_len;
-    uint16_t device_id;
+    uint8_t device_id;
     uint8_t msg_id;
     uint8_t payload[256];
 } pspcommsg;

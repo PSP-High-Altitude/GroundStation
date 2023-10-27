@@ -56,17 +56,52 @@ DataTableConfig::DataTableConfig(MainWindow *mw, SelectMenu *sm, QWidget *parent
     connect(this_add, &QPushButton::clicked, this, [this]{
         QTableWidget *config_table = this->findChild<QTableWidget*>("config_table");
         config_table->insertRow(config_table->rowCount());
-        QComboBox* box = new QComboBox();
+
+        // Declare combo boxes and fill type options
+        QComboBox* type_box = new QComboBox();
+        QComboBox* unit_box = new QComboBox();
         for(const QString &type : TABLE_ROW_TYPES)
         {
-            box->addItem(type);
+            type_box->addItem(type);
         }
+
+        // Initialize unit box
+        type_box->setCurrentText(TABLE_ROW_TYPES[0]);
+        for(const QString &unit : TABLE_ROW_UNITS[TABLE_ROW_TYPES[0]])
+        {
+            unit_box->addItem(unit);
+        }
+
+        // Cause unit choices to update when the data type is changed
+        connect(type_box, &QComboBox::currentTextChanged, this, [unit_box](const QString &new_text) {
+            unit_box->clear();
+            for(const QString &unit : TABLE_ROW_UNITS[new_text])
+            {
+                unit_box->addItem(unit);
+            }
+        });
         int i = config_table->rowCount()-1;
-        config_table->setCellWidget(i, 0, box);
+        config_table->setCellWidget(i, 0, type_box);
+        config_table->setCellWidget(i, 2, unit_box);
         config_table->setItem(i, 1, new QTableWidgetItem(""));
         config_table->setItem(i, 2, new QTableWidgetItem(""));
         config_table->setItem(i, 3, new QTableWidgetItem("4"));
         config_table->setItem(i, 4, new QTableWidgetItem("0"));
+    });
+
+    // Setup delete
+    QPushButton *delete_but = this->findChild<QPushButton*>("delete_but");
+    connect(delete_but, &QPushButton::clicked, this, [this]{
+        QTableWidget *config_table = this->findChild<QTableWidget*>("config_table");
+        if(config_table->selectedRanges().count() != 1 || config_table->selectedRanges().at(0).rowCount() < 1)
+        {
+            return;
+        }
+        int num_rows = config_table->selectedRanges().at(0).rowCount();
+        for(int i = 0; i < num_rows; i++)
+        {
+            config_table->removeRow(config_table->selectedRanges().at(0).topRow());
+        }
     });
 
     // Setup exit
@@ -84,10 +119,11 @@ DataTableConfig::DataTableConfig(MainWindow *mw, SelectMenu *sm, QWidget *parent
         current_table->get_rows()->clear();
         for(int i = 0; i < config_table->rowCount(); i++)
         {
-            QComboBox* box = qobject_cast<QComboBox*>(config_table->cellWidget(i, 0));
-            QString row_type = box->currentText();
+            QComboBox* type_box = qobject_cast<QComboBox*>(config_table->cellWidget(i, 0));
+            QComboBox* unit_box = qobject_cast<QComboBox*>(config_table->cellWidget(i, 2));
+            QString row_type = type_box->currentText();
             QString row_name = config_table->item(i, 1)->text();
-            QString row_unit = config_table->item(i, 2)->text();
+            QString row_unit = unit_box->currentText();
             int row_places = config_table->item(i, 3)->text().toInt();
             int row_pspcom_id = config_table->item(i, 4)->text().toInt();
             DataTableRow row(row_type, row_name, row_unit, row_places, row_pspcom_id);
@@ -144,6 +180,7 @@ void DataTableConfig::update_fields()
     config_table->setHorizontalHeaderLabels({"Type", "Display Name", "Unit", "Decimal Places", "PSPCOM Sub-device ID"});
     config_table->verticalHeader()->setVisible(false);
     config_table->setItemDelegateForColumn(0, new ComboBoxDelegate());
+    config_table->setItemDelegateForColumn(2, new ComboBoxDelegate());
     QLabel *title = this->findChild<QLabel*>("title");
     if(type == 0)
     {
@@ -163,16 +200,35 @@ void DataTableConfig::update_fields()
         config_table->insertRow(config_table->rowCount());
         DataTableRow row = current_table->get_rows()->at(i);
 
-        QComboBox* box = new QComboBox();
-        for(QString type : TABLE_ROW_TYPES)
+        // Declare combo boxes and fill type options
+        QComboBox* type_box = new QComboBox();
+        QComboBox* unit_box = new QComboBox();
+        for(const QString &type : TABLE_ROW_TYPES)
         {
-            box->addItem(type);
+            type_box->addItem(type);
         }
-        box->setCurrentText(row.get_name());
-        config_table->setCellWidget(i, 0, box);
+
+        // Initialize unit box
+        type_box->setCurrentText(row.get_name());
+        for(const QString &unit : TABLE_ROW_UNITS[row.get_name()])
+        {
+            unit_box->addItem(unit);
+        }
+
+        // Cause unit choices to update when the data type is changed
+        connect(type_box, &QComboBox::currentTextChanged, this, [unit_box](const QString &new_text) {
+            unit_box->clear();
+            for(const QString &unit : TABLE_ROW_UNITS[new_text])
+            {
+                unit_box->addItem(unit);
+            }
+        });
+
+        config_table->setCellWidget(i, 0, type_box);
+        unit_box->setCurrentText(row.get_units());
+        config_table->setCellWidget(i, 2, unit_box);
 
         config_table->setItem(i, 1, new QTableWidgetItem(row.get_display_name()));
-        config_table->setItem(i, 2, new QTableWidgetItem(row.get_units()));
         config_table->setItem(i, 3, new QTableWidgetItem(QString::number(row.get_decimal_places())));
         config_table->setItem(i, 4, new QTableWidgetItem(QString::number(row.get_pspcom_id())));
     }

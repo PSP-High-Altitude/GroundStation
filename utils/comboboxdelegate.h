@@ -3,6 +3,8 @@
 
 #include "QItemDelegate"
 
+// Written primarily by ChatGPT
+
 class ComboBoxDelegate : public QItemDelegate
 {
     Q_OBJECT
