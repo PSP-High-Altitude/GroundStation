@@ -173,6 +173,17 @@ Device* MainWindow::get_active_device()
 
 void MainWindow::set_active_device(Device *device)
 {
+    // Connect incoming messages to recipients
+    disconnect(device_connection);
+    device_connection = connect(device, &Device::received, this, [this](pspcommsg msg, QString msg_str){
+        this->console->add_message(msg_str);
+        if(this->active_table)
+        {
+            this->active_table->update_data(msg);
+        }
+    });
+
+    // Set active device
     if(this->active_device == nullptr)
     {
         this->active_device = device;
@@ -184,14 +195,6 @@ void MainWindow::set_active_device(Device *device)
     this->active_device = device;
     device->start();
     sel_dev_label->set_device(device);
-    disconnect(device_connection);
-    device_connection = connect(active_device, &Device::received, this, [this](pspcommsg msg, QString msg_str){
-        this->console->add_message(msg_str);
-        if(this->active_table)
-        {
-            this->active_table->update_data(msg);
-        }
-    });
 }
 
 QList<DataTable*>* MainWindow::get_tables()
@@ -233,7 +236,9 @@ void MainWindow::set_active_table(DataTable *table)
         DataTableRow row = table->get_rows()->at(i);
         table_widget->insertRow(table_widget->rowCount());
         table_widget->setItem(i, 0, new QTableWidgetItem(row.get_display_name()));
+        table_widget->model()->setData(table_widget->model()->index(i, 0),Qt::AlignCenter,Qt::TextAlignmentRole);
         table_widget->setItem(i, 2, new QTableWidgetItem(row.get_units()));
+        table_widget->model()->setData(table_widget->model()->index(i, 2),Qt::AlignCenter,Qt::TextAlignmentRole);
     }
 }
 

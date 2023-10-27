@@ -81,6 +81,7 @@ void fill_cell(QTableWidget *tw, DataTable *t, QString type, int dev_id, QString
         if(row.get_name() == type && row.get_pspcom_id() == dev_id)
         {
             tw->setItem(i, 1, new QTableWidgetItem(value));
+            tw->model()->setData(tw->model()->index(i, 1),Qt::AlignCenter,Qt::TextAlignmentRole);
         }
     }
 }
@@ -93,6 +94,7 @@ void fill_cell(QTableWidget *tw, DataTable *t, QString type, int dev_id, float v
         {
             value = conv_unit(type, row.get_units(), value);
             tw->setItem(i, 1, new QTableWidgetItem(QString::number(value, 'f', row.get_decimal_places())));
+            tw->model()->setData(tw->model()->index(i, 1),Qt::AlignCenter,Qt::TextAlignmentRole);
         }
     }
 }
@@ -153,11 +155,11 @@ void DataTable::update_data(pspcommsg msg)
 
         // Read y
         float y = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "rot_x", dev_id, y);
+        fill_cell(table_widget, table, "rot_y", dev_id, y);
 
         // Read z
         float z = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "rot_x", dev_id, z);
+        fill_cell(table_widget, table, "rot_z", dev_id, z);
 
         break;
     }

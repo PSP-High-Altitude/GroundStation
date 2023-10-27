@@ -1,7 +1,7 @@
 #include "device.h"
 #include "qdebug.h"
 
-Device::Device(QString name, uint16_t id)
+Device::Device(QString name, uint8_t id)
 {
     this->name = name;
     this->id = id;

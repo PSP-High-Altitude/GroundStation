@@ -9,7 +9,7 @@ class Device : public QObject, public Equatable<Device>
     Q_OBJECT
 
 public:
-    Device(QString name, uint16_t id);
+    Device(QString name, uint8_t id);
     void add_com_bus(Pspcom* bus);
     void remove_com_bus(Pspcom* bus);
     void set_tx_bus(Pspcom* bus);
@@ -33,7 +33,7 @@ private:
     pspcommsg poll_and_wait(pspcommsg tx, uint8_t msg_id, int timeout);
 
     QString name;
-    uint16_t id;
+    uint8_t id;
     QList<Pspcom*> *com_buses;
     Pspcom *tx_bus;
 };

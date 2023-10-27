@@ -63,6 +63,7 @@ void Pspcom::reconnect()
 void Pspcom::start_receiving()
 {
     this->state = PSPCOM_RUNNING;
+    this->disconnect();
     this->reconnect();
     this->worker = new PspcomWorker(this->bus);
     this->worker->moveToThread(&this->thread);
