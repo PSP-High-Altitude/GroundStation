@@ -215,6 +215,21 @@ DataTable* MainWindow::get_active_table()
 void MainWindow::set_active_table(DataTable *table)
 {
     this->active_table = table;
+    QTableWidget *table_widget = this->findChild<QTableWidget*>("data_table");
+    table_widget->clear();
+    table_widget->verticalHeader()->setVisible(false);
+    table_widget->horizontalHeader()->setVisible(false);
+    table_widget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    table_widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    table_widget->setRowCount(0);
+    table_widget->setColumnCount(3);
+    for(int i = 0; i < table->get_rows()->count(); i++)
+    {
+        DataTableRow row = table->get_rows()->at(i);
+        table_widget->insertRow(table_widget->rowCount());
+        table_widget->setItem(i, 0, new QTableWidgetItem(row.get_display_name()));
+        table_widget->setItem(i, 2, new QTableWidgetItem(row.get_units()));
+    }
 }
 
 QSettings* MainWindow::get_settings()

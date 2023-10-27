@@ -57,7 +57,7 @@ DataTableConfig::DataTableConfig(MainWindow *mw, SelectMenu *sm, QWidget *parent
         QTableWidget *config_table = this->findChild<QTableWidget*>("config_table");
         config_table->insertRow(config_table->rowCount());
         QComboBox* box = new QComboBox();
-        for(QString type : TABLE_ROW_TYPES)
+        for(const QString &type : TABLE_ROW_TYPES)
         {
             box->addItem(type);
         }
