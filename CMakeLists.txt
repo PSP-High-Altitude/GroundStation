@@ -38,13 +38,16 @@ set(PROJECT_SOURCES
     serial/udp_port.h serial/udp_port.cpp
     device.h device.cpp
     menus/createdevice.h menus/createdevice.cpp menus/createdevice.ui
-    menus/devicemenu.h menus/devicemenu.cpp menus/devicemenu.ui
+    menus/selectmenu.h menus/selectmenu.cpp menus/selectmenu.ui
     menus/editdevice.h menus/editdevice.cpp menus/editdevice.ui
     menus/createpspcom.h menus/createpspcom.cpp menus/createpspcom.ui
     pspcom/pspcomworker.h pspcom/pspcomworker.cpp
     pspcom/crc.h pspcom/crc.cpp
     utils/search.h
     utils/equatable.h
+    data_table/data_table_row.h data_table/data_table_row.cpp
+    data_table/datatableconfig.h data_table/datatableconfig.cpp data_table/datatableconfig.ui
+    data_table/data_table.h data_table/data_table.cpp
 )
 
 # set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO")
@@ -53,6 +56,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(GroundStation
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        utils/comboboxdelegate.h utils/comboboxdelegate.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GroundStation APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

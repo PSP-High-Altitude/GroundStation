@@ -1,7 +1,7 @@
 #ifndef EDITDEVICE_H
 #define EDITDEVICE_H
 
-#include "devicemenu.h"
+#include "selectmenu.h"
 #include <QWidget>
 
 namespace Ui {
@@ -13,7 +13,7 @@ class EditDevice : public QWidget
     Q_OBJECT
 
 public:
-    explicit EditDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent = nullptr);
+    explicit EditDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent = nullptr);
     ~EditDevice();
 
     Device* get_current_device();

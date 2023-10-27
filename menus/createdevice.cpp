@@ -7,7 +7,7 @@
 void clear_fields(CreateDevice* widget);
 static SerialPort* find_port(QList<SerialPort*> *ports, QString name);
 
-CreateDevice::CreateDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
+CreateDevice::CreateDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CreateDevice)
 {
@@ -29,8 +29,8 @@ CreateDevice::CreateDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
 
     // Setup open button
     QPushButton *add = dm->findChild<QPushButton*>("add");
-    connect(add, &QPushButton::clicked, this, [this, mw]{
-        if(!this->isVisible())
+    connect(add, &QPushButton::clicked, this, [this, mw, dm]{
+        if(!this->isVisible() && dm->get_type() == 0)
         {
             // Clear
             clear_fields(this);

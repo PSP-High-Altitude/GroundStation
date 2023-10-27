@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include <ctime>
 #include <QThread>
 #include <QOverload>
 #include <QtConcurrent/QtConcurrent>
@@ -14,9 +13,10 @@
 #include <QtQuick/QQuickWindow>
 #include <QPalette>
 #include "clock.h"
+#include "data_table/datatableconfig.h"
 #include "menus/createdevice.h"
 #include "menus/createpspcom.h"
-#include "menus/devicemenu.h"
+#include "menus/selectmenu.h"
 #include "menus/editdevice.h"
 #include "serial/udp_port.h"
 #include "utils/search.h"
@@ -32,23 +32,25 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     this->alt_engine = alt_engine;
     this->serial_ports = new QList<SerialPort*>();
     this->devices = new QList<Device*>();
+    this->tables = new QList<DataTable*>();
 
     // Load settings
     settings = new QSettings("PSP", "Ground Station");
     load_settings();
 
     // Register all serial devices
-    for(QSerialPortInfo port: QSerialPortInfo::availablePorts())
+    for(const QSerialPortInfo &port : QSerialPortInfo::availablePorts())
     {
         SerialPort *p = new SerialPort(port);
         serial_ports->append(p);
     }
 
     // Device Menus
-    DeviceMenu *dev_menu = new DeviceMenu(this);
+    SelectMenu *dev_menu = new SelectMenu(this);
     CreateDevice *cat_dev = new CreateDevice(this, dev_menu);
     EditDevice *edit_dev = new EditDevice(this, dev_menu);
     CreatePspcom *cat_pspcom = new CreatePspcom(this, edit_dev);
+    DataTableConfig *table_conf = new DataTableConfig(this, dev_menu);
 
     // Device Label
     sel_dev_label = new SelectedDevice(this);
@@ -95,6 +97,7 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     Q_UNUSED(cat_dev);
     Q_UNUSED(edit_dev);
     Q_UNUSED(cat_pspcom);
+    Q_UNUSED(table_conf);
     Q_UNUSED(usb);
     Q_UNUSED(wireless);
     Q_UNUSED(clock);
@@ -186,6 +189,34 @@ void MainWindow::set_active_device(Device *device)
     sel_dev_label->set_device(device);
 }
 
+QList<DataTable*>* MainWindow::get_tables()
+{
+    return this->tables;
+}
+
+void MainWindow::add_table(DataTable *table)
+{
+    if(!contains_deref<DataTable>(this->tables, table))
+    {
+        tables->append(table);
+    }
+}
+
+void MainWindow::remove_table(DataTable *table)
+{
+    remove_deref<DataTable>(this->tables, table);
+}
+
+DataTable* MainWindow::get_active_table()
+{
+    return this->active_table;
+}
+
+void MainWindow::set_active_table(DataTable *table)
+{
+    this->active_table = table;
+}
+
 QSettings* MainWindow::get_settings()
 {
     return this->settings;
@@ -198,7 +229,7 @@ void MainWindow::load_settings()
     {
         // Find all devices
         settings->beginGroup("devices");
-        for(QString name : settings->childGroups())
+        for(const QString &name : settings->childGroups())
         {
             settings->beginGroup(name);
 
@@ -217,7 +248,7 @@ void MainWindow::load_settings()
             {
                 // Find all pspcoms
                 settings->beginGroup("pspcoms");
-                for(QString bus_name : settings->childGroups())
+                for(const QString &bus_name : settings->childGroups())
                 {
                     settings->beginGroup(bus_name);
 
@@ -267,6 +298,33 @@ void MainWindow::load_settings()
 
             // End group
             settings->endGroup();
+        }
+
+        // End group
+        settings->endGroup();
+    }
+    if(groups.contains("tables"))
+    {
+        // Find all devices
+        settings->beginGroup("tables");
+        for(const QString &table_name : settings->childGroups())
+        {
+            int size = settings->beginReadArray(table_name);
+            QList<DataTableRow> *rows = new QList<DataTableRow>();
+            for(int i = 0; i < size; i++)
+            {
+                settings->setArrayIndex(i);
+                QString row_type = settings->value("name").toString();
+                QString row_name = settings->value("display_name").toString();
+                QString row_unit = settings->value("units").toString();
+                int row_places = settings->value("decimal_places").toInt();
+                int row_pspcom_id = settings->value("pspcom_id").toInt();
+                DataTableRow row(row_type, row_name, row_unit, row_places, row_pspcom_id);
+                rows->append(row);
+            }
+            DataTable *table = new DataTable(this, table_name, rows);
+            this->add_table(table);
+            settings->endArray();
         }
 
         // End group

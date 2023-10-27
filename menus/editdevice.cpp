@@ -10,7 +10,7 @@
 
 SerialPort* find_port(QList<SerialPort*> *ports, QString name);
 
-EditDevice::EditDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
+EditDevice::EditDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::EditDevice)
 {
@@ -33,8 +33,8 @@ EditDevice::EditDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent) :
     // Setup open button
     QPushButton *properties = dm->findChild<QPushButton*>("properties");
     connect(properties, &QPushButton::clicked, this, [this, mw, dm]{
-        QListWidget *device_list = dm->findChild<QListWidget*>("device_list");
-        if(!this->isVisible() && device_list->selectedItems().size() == 1)
+        QListWidget *device_list = dm->findChild<QListWidget*>("select_list");
+        if(!this->isVisible() && dm->get_type() == 0 && device_list->selectedItems().size() == 1)
         {
             QString dev_name = device_list->selectedItems()[0]->text();
             current_device = nullptr;

@@ -25,7 +25,8 @@ void Device::start()
         .device_id = this->id,
         .msg_id = 0x3,
     };
-    qDebug() << this->poll_and_wait(msg, 0x1, 1000).msg_id;
+
+    this->tx_bus->send(msg);
 }
 
 void Device::stop()
@@ -103,36 +104,4 @@ bool Device::operator== (const Device& other) const
 bool Device::operator!= (const Device& other) const
 {
     return (this->name.compare(other.name));
-}
-
-pspcommsg Device::poll_and_wait(pspcommsg tx, uint8_t msg_id, int timeout)
-{
-    pspcommsg ret = {0};
-    if(tx_bus == nullptr)
-    {
-        return ret;
-    }
-    QMetaObject::Connection conn;
-    conn = connect(this, &Device::received, this, [this, msg_id, &ret](pspcommsg msg, QString msg_str) {
-        if(msg.device_id == this->id && msg.msg_id == msg_id)
-        {
-            if(ret.device_id != 0)
-            {
-                ret = msg;
-            }
-        }
-    });
-    this->tx_bus->send(tx);
-    QElapsedTimer timer;
-    timer.start();
-    while(timer.elapsed() < timeout)
-    {
-        if(ret.device_id != 0)
-        {
-            disconnect(conn);
-            return ret;
-        }
-    }
-    disconnect(conn);
-    return ret;
 }

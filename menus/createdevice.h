@@ -2,7 +2,7 @@
 #define CREATEDEVICE_H
 
 #include "mainwindow.h"
-#include "menus/devicemenu.h"
+#include "menus/selectmenu.h"
 #include <QWidget>
 
 namespace Ui {
@@ -14,7 +14,7 @@ class CreateDevice : public QWidget
     Q_OBJECT
 
 public:
-    explicit CreateDevice(MainWindow *mw, DeviceMenu *dm, QWidget *parent = nullptr);
+    explicit CreateDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent = nullptr);
     ~CreateDevice();
 
 private:
