@@ -990,7 +990,8 @@ background: #434343;
                  <string>Open Telemetry</string>
                 </property>
                 <property name="icon">
-                 <iconset theme="computer"/>
+                 <iconset theme="computer">
+                  <normaloff>.</normaloff>.</iconset>
                 </property>
                 <property name="autoDefault">
                  <bool>false</bool>
@@ -1304,7 +1305,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="arm_main">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1330,7 +1331,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="cont_main">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1369,7 +1370,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="arm_drogue">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1395,7 +1396,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_10">
+             <widget class="QLabel" name="cont_drogue">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1434,7 +1435,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_12">
+             <widget class="QLabel" name="arm_aux">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1460,7 +1461,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_14">
+             <widget class="QLabel" name="cont_aux">
               <property name="maximumSize">
                <size>
                 <width>25</width>

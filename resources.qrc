@@ -8,6 +8,8 @@
         <file>Resources/marker.png</file>
         <file>Resources/map_pointer.png</file>
         <file>Resources/alt_marker.png</file>
+        <file>Resources/green_dot.png</file>
+        <file>Resources/red_dot.png</file>
     </qresource>
     <qresource prefix="/">
         <file>map.qml</file>

@@ -35,7 +35,7 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     this->tables = new QList<DataTable*>();
 
     // Load settings
-    settings = new QSettings("PSP", "Ground Station");
+    settings = new QSettings(QSettings::IniFormat, QSettings::SystemScope, "PSP", "Ground Station");
     load_settings();
 
     // Register all serial devices
