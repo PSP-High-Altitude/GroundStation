@@ -17,8 +17,8 @@ public:
     QList<Pspcom *> *get_com_buses();
     QString get_name();
     void set_name(QString name);
-    uint16_t get_id();
-    void set_id(uint16_t id);
+    uint8_t get_id();
+    void set_id(uint8_t id);
 
     void start();
     void stop();

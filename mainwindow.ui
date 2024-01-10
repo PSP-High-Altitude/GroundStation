@@ -1556,7 +1556,7 @@ background: #434343;
             <item>
              <widget class="QPushButton" name="pyros">
               <property name="text">
-               <string>Pyros</string>
+               <string>Test Pyros</string>
               </property>
              </widget>
             </item>

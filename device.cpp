@@ -51,12 +51,12 @@ QString Device::get_name()
     return this->name;
 }
 
-void Device::set_id(uint16_t id)
+void Device::set_id(uint8_t id)
 {
     this->id = id;
 }
 
-uint16_t Device::get_id()
+uint8_t Device::get_id()
 {
     return this->id;
 }

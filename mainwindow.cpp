@@ -16,6 +16,7 @@
 #include "display/datatableconfig.h"
 #include "menus/createdevice.h"
 #include "menus/createpspcom.h"
+#include "menus/pyro_menu.h"
 #include "menus/selectmenu.h"
 #include "menus/editdevice.h"
 #include "serial/udp_port.h"
@@ -52,8 +53,9 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     CreatePspcom *cat_pspcom = new CreatePspcom(this, edit_dev);
     DataTableConfig *table_conf = new DataTableConfig(this, dev_menu);
 
-    // Pyro Status
+    // Pyros
     pyro_stat = new PyroStatus(this);
+    PyroMenu *pyro_menu = new PyroMenu(this);
 
     // Device Label
     sel_dev_label = new SelectedDevice(this);
