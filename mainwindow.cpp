@@ -13,7 +13,7 @@
 #include <QtQuick/QQuickWindow>
 #include <QPalette>
 #include "clock.h"
-#include "data_table/datatableconfig.h"
+#include "display/datatableconfig.h"
 #include "menus/createdevice.h"
 #include "menus/createpspcom.h"
 #include "menus/selectmenu.h"
@@ -51,6 +51,9 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     EditDevice *edit_dev = new EditDevice(this, dev_menu);
     CreatePspcom *cat_pspcom = new CreatePspcom(this, edit_dev);
     DataTableConfig *table_conf = new DataTableConfig(this, dev_menu);
+
+    // Pyro Status
+    pyro_stat = new PyroStatus(this);
 
     // Device Label
     sel_dev_label = new SelectedDevice(this);
@@ -176,10 +179,15 @@ void MainWindow::set_active_device(Device *device)
     // Connect incoming messages to recipients
     disconnect(device_connection);
     device_connection = connect(device, &Device::received, this, [this](pspcommsg msg, QString msg_str){
+        // Add message to the console
         this->console->add_message(msg_str);
         if(this->active_table)
         {
+            // Update data table
             this->active_table->update_data(msg);
+
+            // Update pyro status
+            pyro_stat->update_pyros(msg);
         }
     });
 

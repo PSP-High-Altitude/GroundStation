@@ -1,5 +1,5 @@
 #include "datatableconfig.h"
-#include "data_table/data_table_row.h"
+#include "display/data_table_row.h"
 #include "qcombobox.h"
 #include "ui_datatableconfig.h"
 #include "utils/comboboxdelegate.h"

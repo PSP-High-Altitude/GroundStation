@@ -1304,7 +1304,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_4">
+             <widget class="QLabel" name="arm_main">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1330,7 +1330,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_6">
+             <widget class="QLabel" name="cont_main">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1369,7 +1369,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="arm_drogue">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1395,7 +1395,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_10">
+             <widget class="QLabel" name="cont_drogue">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1434,7 +1434,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_12">
+             <widget class="QLabel" name="arm_aux">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1460,7 +1460,7 @@ background: #434343;
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="label_14">
+             <widget class="QLabel" name="cont_aux">
               <property name="maximumSize">
                <size>
                 <width>25</width>
@@ -1533,20 +1533,47 @@ background: #434343;
            <number>0</number>
           </property>
           <item>
-           <spacer name="verticalSpacer_13">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <property name="topMargin">
+             <number>25</number>
             </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::MinimumExpanding</enum>
+            <property name="bottomMargin">
+             <number>25</number>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>75</height>
-             </size>
-            </property>
-           </spacer>
+            <item>
+             <spacer name="horizontalSpacer_19">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pyros">
+              <property name="text">
+               <string>Pyros</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_20">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QWidget" name="widget_altitude" native="true">

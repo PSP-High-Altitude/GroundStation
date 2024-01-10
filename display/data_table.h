@@ -1,7 +1,7 @@
 #ifndef DATA_TABLE_H
 #define DATA_TABLE_H
 
-#include "data_table/data_table_row.h"
+#include "display/data_table_row.h"
 #include "pspcom/pspcommsg.h"
 #include "qwidget.h"
 

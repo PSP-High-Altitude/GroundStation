@@ -6,8 +6,9 @@
 #include <QQmlApplicationEngine>
 #include "connection_status.h"
 #include "console.h"
-#include "data_table/data_table.h"
+#include "display/data_table.h"
 #include "device.h"
+#include "display/pyro_status.h"
 #include "map.h"
 #include "qsettings.h"
 #include "serial/serial_port.h"
@@ -68,6 +69,7 @@ private:
     QQmlApplicationEngine* alt_engine;
     Map *map;
     QNetworkAccessManager *net_mgr;
+    PyroStatus *pyro_stat;
 };
 
 #endif // MAINWINDOW_H

@@ -45,9 +45,9 @@ set(PROJECT_SOURCES
     pspcom/crc.h pspcom/crc.cpp
     utils/search.h
     utils/equatable.h
-    data_table/data_table_row.h data_table/data_table_row.cpp
-    data_table/datatableconfig.h data_table/datatableconfig.cpp data_table/datatableconfig.ui
-    data_table/data_table.h data_table/data_table.cpp
+    display/data_table_row.h display/data_table_row.cpp
+    display/datatableconfig.h display/datatableconfig.cpp display/datatableconfig.ui
+    display/data_table.h display/data_table.cpp
 )
 
 # set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO")
@@ -57,6 +57,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         utils/comboboxdelegate.h utils/comboboxdelegate.cpp
+        display/pyro_status.h display/pyro_status.cpp
+        menus/pyro_menu.h menus/pyro_menu.cpp menus/pyro_menu.ui
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET GroundStation APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
