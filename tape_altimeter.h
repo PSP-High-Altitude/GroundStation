@@ -8,6 +8,7 @@
 #include <QtQuick/QQuickWindow>
 #include <QNetworkAccessManager>
 #include "data.h"
+#include "pspcom/pspcommsg.h"
 
 #define ALT_TICK_SPACE 50
 #define ALT_HEIGHT 1000
@@ -23,6 +24,7 @@ public:
 public slots:
     void update_ticks(GpsData *gps);
     void update_ground_level(float lat, float lon);
+    void update_altimeter(pspcommsg msg);
 
 private:
     QQuickWindow *view;

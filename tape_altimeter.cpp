@@ -12,6 +12,7 @@
 #include <QJsonArray>
 #include <math.h>
 #include "keys.h"
+#include "utils/misc.h"
 
 struct AltimeterData
 {
@@ -103,6 +104,22 @@ void TapeAltimeter::update_ground_level(float lat, float lon)
     sprintf_s(url, "https://maps.googleapis.com/maps/api/elevation/json?locations=%.7f%%2C%.7f&key=%s", lat, lon, GOOGLE_API_KEY);
     request.setUrl(QUrl(url));
     net_mgr->get(request);
+}
+
+void TapeAltimeter::update_altimeter(pspcommsg msg)
+{
+    if(msg.msg_id == 0x8A)
+    {
+        float lat = bytes_to_float(msg.payload+1);
+        float lon = bytes_to_float(msg.payload+5);
+        float alt = bytes_to_float(msg.payload+9);
+        GpsData gps;
+        gps.lat = lat;
+        gps.lon = lon;
+        gps.height_msl = alt;
+        gps.fix_valid = 1;
+        update_ticks(&gps);
+    }
 }
 
 #include "tape_altimeter.moc"

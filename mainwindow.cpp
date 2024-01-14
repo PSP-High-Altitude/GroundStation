@@ -187,10 +187,14 @@ void MainWindow::set_active_device(Device *device)
         {
             // Update data table
             this->active_table->update_data(msg);
-
-            // Update pyro status
-            pyro_stat->update_pyros(msg);
         }
+
+        // Update pyro status
+        pyro_stat->update_pyros(msg);
+
+        // Update map and altimeter
+        map->update_map(msg);
+        altimeter->update_altimeter(msg);
     });
 
     // Set active device

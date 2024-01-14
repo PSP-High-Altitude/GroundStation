@@ -1,6 +1,7 @@
 
 #include "map.h"
 #include "qobjectdefs.h"
+#include "utils/misc.h"
 #include <QVBoxLayout>
 #include <QtPositioning/QtPositioning>
 #include <QtQuick/QQuickItem>
@@ -37,6 +38,20 @@ void Map::update_position(GpsData *gps)
     {
         QQuickItem* map = view->findChild<QQuickItem*>("map");
         QMetaObject::invokeMethod(map, "setMarker", Qt::DirectConnection, Q_ARG(QVariant, gps->lat), Q_ARG(QVariant, gps->lon));
+    }
+}
+
+void Map::update_map(pspcommsg msg)
+{
+    if(msg.msg_id == 0x8A)
+    {
+        float lat = bytes_to_float(msg.payload+1);
+        float lon = bytes_to_float(msg.payload+5);
+        GpsData gps;
+        gps.lat = lat;
+        gps.lon = lon;
+        gps.fix_valid = 1;
+        update_position(&gps);
     }
 }
 
