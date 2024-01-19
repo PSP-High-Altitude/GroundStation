@@ -51,7 +51,7 @@ Window {
 
             sourceItem: Image {
                 id: marker_img
-                source: "images/Resources/marker.png"
+                source: "../images/Resources/marker.png"
                 sourceSize.width: 32
                 sourceSize.height: 32
             }
@@ -92,7 +92,7 @@ Window {
         text: ""
         onClicked: map.recenter()
         icon {
-            source: "images/Resources/map_pointer.png"
+            source: "../images/Resources/map_pointer.png"
             color: "transparent"
             width: 25
             height: 25

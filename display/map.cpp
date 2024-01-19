@@ -1,4 +1,3 @@
-
 #include "map.h"
 #include "qobjectdefs.h"
 #include "utils/misc.h"
@@ -11,7 +10,7 @@
 
 Map::Map(QWidget* window, QQmlApplicationEngine* engine)
 {
-    engine->load(QUrl(QStringLiteral("qrc:/map.qml")));
+    engine->load(QUrl(QStringLiteral("qrc:/display/map.qml")));
 
     QQuickWindow *qmlWindow = qobject_cast<QQuickWindow*>(engine->rootObjects().at(0));
     this->view = qmlWindow;

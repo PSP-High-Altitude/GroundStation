@@ -21,12 +21,12 @@ find_package(Qt6 REQUIRED COMPONENTS Network)
 set(PROJECT_SOURCES
     main.cpp
     mainwindow.cpp mainwindow.h
-    map.cpp map.h
+    display/map.cpp display/map.h
     clock.cpp clock.h
     connection_status.cpp connection_status.h
     mainwindow.ui
     resources.qrc
-    tape_altimeter.cpp tape_altimeter.h
+    display/tape_altimeter.cpp display/tape_altimeter.h
     groundstation.rc
     console.h console.cpp
     keys.h

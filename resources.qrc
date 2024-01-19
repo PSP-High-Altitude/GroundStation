@@ -12,7 +12,7 @@
         <file>Resources/red_dot.png</file>
     </qresource>
     <qresource prefix="/">
-        <file>map.qml</file>
-        <file>tape_altimeter.qml</file>
+        <file>display/map.qml</file>
+        <file>display/tape_altimeter.qml</file>
     </qresource>
 </RCC>

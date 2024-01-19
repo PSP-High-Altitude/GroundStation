@@ -9,10 +9,10 @@
 #include "display/data_table.h"
 #include "device.h"
 #include "display/pyro_status.h"
-#include "map.h"
+#include "display/map.h"
 #include "qsettings.h"
 #include "serial/serial_port.h"
-#include "tape_altimeter.h"
+#include "display/tape_altimeter.h"
 #include <QNetworkAccessManager>
 
 

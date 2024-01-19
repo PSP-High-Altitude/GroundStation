@@ -29,8 +29,9 @@ Window {
         y: 2
         width: 118
         height: altimeter_window.height - 4
-        color: "#4fd9ff"
-        opacity: 0.5
+        color: "#79BFD2"
+        opacity: 1
+        z: 2
     }
 
     Rectangle {
@@ -41,7 +42,8 @@ Window {
         width: 118
         height: altimeter_window.height - 4
         color: "#47310b"
-        opacity: 0.5
+        opacity: 1
+        z: 1
     }
 
     Repeater {
@@ -54,6 +56,7 @@ Window {
             width: modelData.rect.width
             height: modelData.rect.height
             color: "white"
+            z: 3
 
             Text {
                 id: tick_text
@@ -64,6 +67,7 @@ Window {
                 text: modelData.text
                 color: "white"
                 font.pointSize: 12
+                z: 3
             }
         }
     }
@@ -72,7 +76,8 @@ Window {
         anchors.right: parent.right
         anchors.rightMargin: 1
         anchors.verticalCenter: parent.verticalCenter
-        source: "images/Resources/alt_marker.png"
+        source: "../images/Resources/alt_marker.png"
+        z: 3
 
         Text {
             anchors.right: parent.right
@@ -81,6 +86,7 @@ Window {
             text: current_displayed_altitude + " m"
             color: "white"
             font.pointSize: 14
+            z: 3
         }
     }
 
@@ -141,21 +147,16 @@ Window {
                 var ground_pos = tick_repeater.itemAt(current_max_idx).y + (current_max_alt - ground_alt) * (tick_spacing / vertical_division);
                 sky.y = 2
                 sky.height = ground_pos - 2
-                ground.y = ground_pos
-                ground.height = altimeter_window.height - ground_pos - 2
             }
 
             if(ground_alt < current_min_alt)
             {
                 sky.y = 2
                 sky.height = altimeter_height - 4
-                ground.y = altimeter_height
             }
 
             if(ground_alt > current_max_alt)
             {
-                ground.y = 2
-                ground.height = altimeter_height - 4
                 sky.y = altimeter_height
             }
         }

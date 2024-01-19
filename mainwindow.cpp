@@ -12,7 +12,6 @@
 #include <QWindow>
 #include <QtQuick/QQuickWindow>
 #include <QPalette>
-#include "clock.h"
 #include "display/datatableconfig.h"
 #include "menus/createdevice.h"
 #include "menus/createpspcom.h"

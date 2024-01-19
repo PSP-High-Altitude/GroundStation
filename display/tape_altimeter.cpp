@@ -54,7 +54,7 @@ TapeAltimeter::TapeAltimeter(QWidget* window, QQmlApplicationEngine *engine, QNe
     engine->rootContext()->setContextProperty("tick_spacing", ALT_TICK_SPACE);
     engine->rootContext()->setContextProperty("altimeter_height", ALT_HEIGHT);
     engine->rootContext()->setContextProperty("tick_list", tick_list);
-    engine->load(QUrl(QStringLiteral("qrc:/tape_altimeter.qml")));
+    engine->load(QUrl(QStringLiteral("qrc:/display/tape_altimeter.qml")));
 
     QQuickWindow *qmlWindow = qobject_cast<QQuickWindow*>(engine->rootObjects().at(0));
     this->view = qmlWindow;
