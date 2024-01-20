@@ -25,10 +25,19 @@ Pspcom::Pspcom(SerialDevice* bus)
 
 bool Pspcom::send(pspcommsg msg)
 {
-    char tx_buf[265];
+    char tx_buf[256];
     uint16_t checksum = crc(CRC16_INIT, msg);
-    int tx_len = sprintf_s(tx_buf, "!$%c%c%c%c%c", msg.payload_len, msg.device_id, msg.msg_id, (uint8_t) checksum, (uint8_t) (checksum >> 8));
-    this->bus->write(tx_buf, tx_len);
+    sprintf_s(tx_buf, 3, "!$");
+    tx_buf[2] = msg.payload_len;
+    tx_buf[3] = msg.device_id;
+    tx_buf[4] = msg.msg_id;
+    memcpy(tx_buf + 5, msg.payload, msg.payload_len);
+    tx_buf[5 + msg.payload_len] = (uint8_t) checksum;
+    tx_buf[6 + msg.payload_len] = (uint8_t) (checksum >> 8);
+    tx_buf[7 + msg.payload_len] = '\0';
+    //QByteArray ba(tx_buf, 7 + msg.payload_len);
+    //qDebug() << ba;
+    this->bus->write(tx_buf, 7 + msg.payload_len);
     return true;
 }
 

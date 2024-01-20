@@ -1,6 +1,5 @@
 #include "pspcomworker.h"
 #include "pspcom/crc.h"
-#include "qdebug.h"
 #include "qthread.h"
 
 PspcomWorker::PspcomWorker(SerialDevice* bus)
