@@ -161,6 +161,44 @@ void DataTable::update_data(pspcommsg msg)
 
         break;
     }
+    case 0x8A:
+    {
+        int dev_id = msg.payload[0];
+
+        // Read lat
+        float x = bytes_to_float(msg.payload + 1);
+        fill_cell(table_widget, table, "lat", dev_id, x);
+
+        // Read lon
+        float y = bytes_to_float(msg.payload + 5);
+        fill_cell(table_widget, table, "lon", dev_id, y);
+
+        // Read alt
+        float z = bytes_to_float(msg.payload + 9);
+        fill_cell(table_widget, table, "alt_msl", dev_id, z);
+
+        break;
+    }
+        /* TODO add velocity to tables
+    case 0x8B:
+    {
+        int dev_id = msg.payload[0];
+
+        // Read lat
+        float x = bytes_to_float(msg.payload + 1);
+        fill_cell(table_widget, table, "lat", dev_id, x);
+
+        // Read lon
+        float y = bytes_to_float(msg.payload + 5);
+        fill_cell(table_widget, table, "lon", dev_id, y);
+
+        // Read alt
+        float z = bytes_to_float(msg.payload + 9);
+        fill_cell(table_widget, table, "alt_msl", dev_id, z);
+
+        break;
+    }
+*/
     }
 }
 
