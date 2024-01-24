@@ -6,7 +6,7 @@
 
 UsbLabel::UsbLabel(QWidget* window, QWidget *parent)
 {
-    this->label = window->findChild<QLabel*>("label_wireless");
+    this->label = window->findChild<QLabel*>("label_usb");
     this->label->setScaledContents(true);
     this->on_map = new QPixmap(":/images/Resources/usb-on.png");
     this->off_map = new QPixmap(":/images/Resources/usb.png");

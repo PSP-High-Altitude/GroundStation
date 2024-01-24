@@ -23,7 +23,7 @@ set(PROJECT_SOURCES
     mainwindow.cpp mainwindow.h
     display/map.cpp display/map.h
     clock.cpp clock.h
-    connection_status.cpp connection_status.h
+    display/connection_status.cpp display/connection_status.h
     mainwindow.ui
     resources.qrc
     display/tape_altimeter.cpp display/tape_altimeter.h

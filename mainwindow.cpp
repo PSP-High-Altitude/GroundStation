@@ -8,7 +8,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
 #include "clock.h"
-#include "connection_status.h"
 #include <QWindow>
 #include <QtQuick/QQuickWindow>
 #include <QPalette>
@@ -58,8 +57,8 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
 
     // Device Label
     sel_dev_label = new SelectedDevice(this);
-    UsbLabel *usb = new UsbLabel(this);
-    WirelessLabel *wireless = new WirelessLabel(this);
+    usb = new UsbLabel(this);
+    wireless = new WirelessLabel(this);
 
     // Set palette
     QPalette p = this->palette();
@@ -178,6 +177,10 @@ Device* MainWindow::get_active_device()
 
 void MainWindow::set_active_device(Device *device)
 {
+    // Clear connection icons
+    usb->set_off();
+    wireless->set_off();
+
     // Connect incoming messages to recipients
     disconnect(device_connection);
     device_connection = connect(device, &Device::received, this, [this](pspcommsg msg, QString msg_str){
@@ -198,17 +201,26 @@ void MainWindow::set_active_device(Device *device)
     });
 
     // Set active device
-    if(this->active_device == nullptr)
+    if(this->active_device != nullptr)
     {
-        this->active_device = device;
-        device->start();
-        sel_dev_label->set_device(device);
-        return;
+        this->active_device->stop();
     }
-    this->active_device->stop();
     this->active_device = device;
     device->start();
     sel_dev_label->set_device(device);
+
+    // Set connection icons
+    for(Pspcom *bus : *device->get_com_buses())
+    {
+        if(bus->get_bus()->get_type().compare("serial") == 0)
+        {
+            usb->set_on();
+        }
+        if(bus->get_bus()->get_type().compare("udp") == 0)
+        {
+            wireless->set_on();
+        }
+    }
 }
 
 QList<DataTable*>* MainWindow::get_tables()

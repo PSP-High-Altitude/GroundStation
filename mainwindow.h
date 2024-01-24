@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QQmlApplicationEngine>
-#include "connection_status.h"
+#include "display/connection_status.h"
 #include "console.h"
 #include "display/data_table.h"
 #include "device.h"
@@ -70,6 +70,8 @@ private:
     Map *map;
     QNetworkAccessManager *net_mgr;
     PyroStatus *pyro_stat;
+    UsbLabel *usb;
+    WirelessLabel *wireless;
 };
 
 #endif // MAINWINDOW_H
