@@ -18,37 +18,69 @@ SerialPort::SerialPort(QString name)
 
 int SerialPort::available()
 {
+    if(port == Q_NULLPTR)
+    {
+        return 0;
+    }
     return port->bytesAvailable();
 }
 
 bool SerialPort::read(char* buf, int len)
 {
+    if(port == Q_NULLPTR)
+    {
+        return false;
+    }
     return port->read(buf, len) > -1;
 }
 
 void SerialPort::write(char* buf, int len)
 {
+    if(port == Q_NULLPTR)
+    {
+        return;
+    }
     port->write(buf, len);
 }
 
 bool SerialPort::connect()
 {
+    if(port == Q_NULLPTR)
+    {
+        this->port = new QSerialPort();
+    }
     if(port->isOpen())
     {
         return true;
     }
-    bool open_success = port->open(QIODevice::ReadWrite);
+    port->setPortName(port_name);
+    port->setFlowControl(QSerialPort::NoFlowControl);
+    port->setParity(QSerialPort::NoParity);
+    port->setStopBits(QSerialPort::OneStop);
+    port->setDataBits(QSerialPort::Data8);
     port->setReadBufferSize(MAX_READ);
     port->setBaudRate(QSerialPort::Baud115200);
+    bool open_success = port->open(QIODevice::ReadWrite);
+    port->clear();
     return open_success;
 }
 
 void SerialPort::disconnect()
 {
+    if(port == Q_NULLPTR)
+    {
+        return;
+    }
     port->close();
+    delete port;
+    port = Q_NULLPTR;
 }
 
 bool SerialPort::is_connected()
 {
+    if(port == Q_NULLPTR)
+    {
+        return false;
+    }
     return port->isOpen();
 }

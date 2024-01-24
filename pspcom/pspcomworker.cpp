@@ -1,17 +1,34 @@
 #include "pspcomworker.h"
 #include "pspcom/crc.h"
+#include "qdebug.h"
 #include "qthread.h"
 
 PspcomWorker::PspcomWorker(SerialDevice* bus)
 {
     this->bus = bus;
+    timeout = new QTimer(this);
+    connect(this->timeout, &QTimer::timeout, this, &PspcomWorker::handle_timeout);
 }
 
 void PspcomWorker::receive_messages()
 {
     char buf[MAX_READ];
     int read_len = std::min(MAX_READ, bus->available());
-    if(!this->bus->read(buf, read_len)) {
+    if(!timeout)
+    {
+        return;
+    }
+    if(!timeout->isActive() && !read_len)   // If we aren't receiving, start the timeout countdown
+    {
+        timeout->start(PSPCOM_TIMEOUT_PERIOD);
+    }
+    else if(read_len)                       // If we receive something, stop the timer and clear the retries
+    {
+        num_retries = 0;
+        timeout->stop();
+    }
+    if(!this->bus->is_connected() || !this->bus->read(buf, read_len))
+    {
         emit errored();
         return;
     }
@@ -68,4 +85,28 @@ void PspcomWorker::receive_messages()
     emit finished();
 }
 
-PspcomWorker::~PspcomWorker(){}
+void PspcomWorker::handle_timeout()
+{
+    if(num_retries == PSPCOM_MAX_RETRIES)   // If we have exceeded max retries, error out
+    {
+        timeout->stop();
+        delete timeout;
+        timeout = Q_NULLPTR;
+        emit errored();
+        return;
+    }
+    // Reconnect the bus
+    this->bus->disconnect();
+    this->bus->connect();
+    num_retries++;
+    qDebug() << "Reconnecting, attempt" << num_retries;
+}
+
+PspcomWorker::~PspcomWorker()
+{
+    if(timeout != Q_NULLPTR)
+    {
+        timeout->stop();
+        timeout->deleteLater();
+    }
+}

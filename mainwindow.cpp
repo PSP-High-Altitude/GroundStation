@@ -143,6 +143,7 @@ void MainWindow::comport_removed(int vid, int pid, QString desc, QString port)
         if(p->get_name().compare(port) == 0)
         {
             serial_ports->removeAll(p);
+            delete p;
         }
     }
 }

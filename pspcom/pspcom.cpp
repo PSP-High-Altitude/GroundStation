@@ -54,6 +54,7 @@ void Pspcom::disconnect()
 
 void Pspcom::reconnect()
 {
+
     if(bus->is_connected())
     {
         this->conn_state = PSPCOM_CONNECTED;
@@ -92,12 +93,13 @@ void Pspcom::start_receiving()
             }
             QTextStream(&msg_str) << "}";
         }
+        qDebug() << msg_str;
         emit received(msg, msg_str);
     });
 
     // Handle error
     connect(this->worker, &PspcomWorker::errored, this, [this]() {
-        qDebug() << "Worker on " << this->get_bus()->get_name() << "errored";
+        qDebug() << "Worker on" << this->get_bus()->get_name() << "errored";
         this->conn_state = PSPCOM_ERRORED;
         this->state = PSPCOM_STOPPED;
         thread.quit();

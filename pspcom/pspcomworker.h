@@ -3,7 +3,11 @@
 
 #include "pspcom/pspcommsg.h"
 #include "qobject.h"
+#include "qtimer.h"
 #include "serial/serial_device.h"
+
+#define PSPCOM_MAX_RETRIES 3
+#define PSPCOM_TIMEOUT_PERIOD 10000
 
 class PspcomWorker : public QObject
 {
@@ -22,11 +26,15 @@ signals:
     void finished();
 
 private:
+    void handle_timeout();
     SerialDevice *bus;
     pspcommsg msg = {0};
     int state = 0;
     int payload_ptr = 0;
     int checksum = 0;
+    int time_since_last_data = 0;
+    int num_retries = 0;
+    QTimer *timeout;
 };
 
 #endif // PSPCOMWORKER_H
