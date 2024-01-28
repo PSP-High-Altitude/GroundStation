@@ -60,8 +60,10 @@ bool SerialPort::connect()
     port->setDataBits(QSerialPort::Data8);
     port->setReadBufferSize(MAX_READ);
     port->setBaudRate(QSerialPort::Baud115200);
-    bool open_success = port->open(QIODevice::ReadWrite);
-    port->clear();
+    bool open_success = port->open(QSerialPort::ReadWrite);
+    if(open_success) port->clear();
+    else
+        qDebug() << "Error opening port";
     return open_success;
 }
 

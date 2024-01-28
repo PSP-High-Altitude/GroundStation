@@ -8,6 +8,7 @@ Pspcom::Pspcom(SerialDevice* bus)
     this->bus = bus;
     this->state = PSPCOM_STOPPED;
     this->conn_state = PSPCOM_DISCONNECTED;
+    /*
     if(bus->is_connected())
     {
         this->conn_state = PSPCOM_CONNECTED;
@@ -21,6 +22,7 @@ Pspcom::Pspcom(SerialDevice* bus)
     {
         this->conn_state = PSPCOM_ERRORED;
     }
+    */
 }
 
 bool Pspcom::send(pspcommsg msg)
