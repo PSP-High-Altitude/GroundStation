@@ -40,6 +40,7 @@ const QStringList TABLE_ROW_TYPES = {
 
     "temp",
     "pres",
+    "baro_alt",
 
     "alt_gnd",
     "alt_msl",
@@ -48,6 +49,12 @@ const QStringList TABLE_ROW_TYPES = {
     "yaw",
     "lat",
     "lon",
+    "vel_n",
+    "vel_e",
+    "vel_d",
+    "num_sats",
+
+    "rssi",
 };
 
 const QMap<QString, QStringList> TABLE_ROW_UNITS = {
@@ -61,6 +68,7 @@ const QMap<QString, QStringList> TABLE_ROW_UNITS = {
 
     {"temp", {"°C", "°F", "K"}},
     {"pres", {"mbar", "inHg", "atm"}},
+    {"baro_alt", {"m", "ft"}},
 
     {"alt_gnd", {"m", "ft"}},
     {"alt_msl", {"m", "ft"}},
@@ -69,6 +77,12 @@ const QMap<QString, QStringList> TABLE_ROW_UNITS = {
     {"yaw", {"°"}},
     {"lat", {"°"}},
     {"lon", {"°"}},
+    {"vel_n", {"m/s"}},
+    {"vel_e", {"m/s"}},
+    {"vel_d", {"m/s"}},
+    {"num_sats", {"satellites"}},
+
+    {"rssi", {"dBm"}},
 };
 
 const QList<DataTableRow> DEFAULT_TABLE_ROWS = {

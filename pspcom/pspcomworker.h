@@ -7,7 +7,7 @@
 #include "serial/serial_device.h"
 
 #define PSPCOM_MAX_RETRIES 3
-#define PSPCOM_TIMEOUT_PERIOD 10000
+#define PSPCOM_TIMEOUT_PERIOD 30000
 
 class PspcomWorker : public QObject
 {

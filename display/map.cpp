@@ -42,7 +42,10 @@ void Map::update_position(GpsData *gps)
 
 void Map::update_map(pspcommsg msg)
 {
-    if(msg.msg_id == 0x8A)
+    switch(msg.msg_id)
+    {
+    case 0x8A:
+    case 0xE0:
     {
         float lat = bytes_to_float(msg.payload+1);
         float lon = bytes_to_float(msg.payload+5);
@@ -51,6 +54,10 @@ void Map::update_map(pspcommsg msg)
         gps.lon = lon;
         gps.fix_valid = 1;
         update_position(&gps);
+        break;
+    }
+    default:
+        break;
     }
 }
 

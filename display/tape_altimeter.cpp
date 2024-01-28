@@ -108,7 +108,10 @@ void TapeAltimeter::update_ground_level(float lat, float lon)
 
 void TapeAltimeter::update_altimeter(pspcommsg msg)
 {
-    if(msg.msg_id == 0x8A)
+    switch(msg.msg_id)
+    {
+    case 0x8A:
+    case 0xE0:
     {
         float lat = bytes_to_float(msg.payload+1);
         float lon = bytes_to_float(msg.payload+5);
@@ -119,6 +122,10 @@ void TapeAltimeter::update_altimeter(pspcommsg msg)
         gps.height_msl = alt;
         gps.fix_valid = 1;
         update_ticks(&gps);
+        break;
+    }
+    default:
+        break;
     }
 }
 

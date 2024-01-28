@@ -36,5 +36,13 @@ void PyroStatus::update_pyros(pspcommsg msg)
         cont_drogue->setPixmap(msg.payload[0] & 0x8 ? *green : *red);
         arm_aux->setPixmap(msg.payload[0] & 0x10 ? *green : *red);
         cont_aux->setPixmap(msg.payload[0] & 0x20 ? *green : *red);
+        break;
+    case 0xE0:
+        arm_main->setPixmap(msg.payload[30] & 0x1 ? *green : *red);
+        cont_main->setPixmap(msg.payload[30] & 0x2 ? *green : *red);
+        arm_drogue->setPixmap(msg.payload[30] & 0x4 ? *green : *red);
+        cont_drogue->setPixmap(msg.payload[30] & 0x8 ? *green : *red);
+        arm_aux->setPixmap(msg.payload[30] & 0x10 ? *green : *red);
+        cont_aux->setPixmap(msg.payload[30] & 0x20 ? *green : *red);
     }
 }

@@ -56,7 +56,7 @@ void fill_cell(QTableWidget *tw, DataTable *t, QString type, int dev_id, QString
     for(int i = 0; i < t->get_rows()->count(); i++)
     {
         DataTableRow row = t->get_rows()->at(i);
-        if(row.get_name() == type && row.get_pspcom_id() == dev_id)
+        if(row.get_name() == type /*&& row.get_pspcom_id() == dev_id*/)
         {
             tw->setItem(i, 1, new QTableWidgetItem(value));
             tw->model()->setData(tw->model()->index(i, 1),Qt::AlignCenter,Qt::TextAlignmentRole);
@@ -68,7 +68,7 @@ void fill_cell(QTableWidget *tw, DataTable *t, QString type, int dev_id, float v
     for(int i = 0; i < t->get_rows()->count(); i++)
     {
         DataTableRow row = t->get_rows()->at(i);
-        if(row.get_name() == type && row.get_pspcom_id() == dev_id)
+        if(row.get_name() == type /*&& row.get_pspcom_id() == dev_id*/)
         {
             value = conv_unit(type, row.get_units(), value);
             tw->setItem(i, 1, new QTableWidgetItem(QString::number(value, 'f', row.get_decimal_places())));
@@ -107,98 +107,136 @@ void DataTable::update_data(pspcommsg msg)
     {
     case 0x84:
     {
-        int dev_id = msg.payload[0];
-
         // Read x
         float x = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "acc_x", dev_id, x);
+        fill_cell(table_widget, table, "acc_x", 0, x);
 
         // Read y
         float y = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "acc_y", dev_id, y);
+        fill_cell(table_widget, table, "acc_y", 0, y);
 
         // Read z
         float z = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "acc_z", dev_id, z);
+        fill_cell(table_widget, table, "acc_z", 0, z);
 
         break;
     }
     case 0x85:
     {
-        int dev_id = msg.payload[0];
-
         // Read x
         float x = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "rot_x", dev_id, x);
+        fill_cell(table_widget, table, "rot_x", 0, x);
 
         // Read y
         float y = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "rot_y", dev_id, y);
+        fill_cell(table_widget, table, "rot_y", 0, y);
 
         // Read z
         float z = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "rot_z", dev_id, z);
+        fill_cell(table_widget, table, "rot_z", 0, z);
 
         break;
     }
     case 0x86:
     {
-        int dev_id = msg.payload[0];
-
         // Read temp
         float temp = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "temp", dev_id, temp);
+        fill_cell(table_widget, table, "temp", 0, temp);
 
         break;
     }
     case 0x87:
     {
-        int dev_id = msg.payload[0];
-
         // Read pres
         float pres = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "pres", dev_id, pres);
+        float baro_alt = 44330 * (1 - pow(pres/1013.25, 1/5.255));
+        fill_cell(table_widget, table, "pres", 0, pres);
+        fill_cell(table_widget, table, "baro_alt", 0, baro_alt);
 
         break;
     }
     case 0x8A:
     {
-        int dev_id = msg.payload[0];
+        // Read number of sats
+        int num_sats = msg.payload[0];
+        fill_cell(table_widget, table, "num_sats", 0, num_sats);
 
         // Read lat
-        float x = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "lat", dev_id, x);
+        float lat = bytes_to_float(msg.payload + 1);
+        fill_cell(table_widget, table, "lat", 0, lat);
 
         // Read lon
-        float y = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "lon", dev_id, y);
+        float lon = bytes_to_float(msg.payload + 5);
+        fill_cell(table_widget, table, "lon", 0, lon);
 
         // Read alt
-        float z = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "alt_msl", dev_id, z);
+        float alt = bytes_to_float(msg.payload + 9);
+        fill_cell(table_widget, table, "alt_msl", 0, alt);
 
         break;
     }
-        /* TODO add velocity to tables
     case 0x8B:
     {
-        int dev_id = msg.payload[0];
+        // Read velocity north
+        float vel_n = bytes_to_float(msg.payload);
+        fill_cell(table_widget, table, "vel_n", 0, vel_n);
 
-        // Read lat
-        float x = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "lat", dev_id, x);
+        // Read velocity east
+        float vel_e = bytes_to_float(msg.payload + 4);
+        fill_cell(table_widget, table, "vel_e", 0, vel_e);
 
-        // Read lon
-        float y = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "lon", dev_id, y);
-
-        // Read alt
-        float z = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "alt_msl", dev_id, z);
+        // Read velocity down
+        float vel_d = bytes_to_float(msg.payload + 8);
+        fill_cell(table_widget, table, "vel_d", 0, vel_d);
 
         break;
     }
-*/
+    case 0x8E:
+    {
+        // Read RSSI
+        int16_t rssi = msg.payload[0] | (((int16_t)msg.payload[1]) << 8);
+        fill_cell(table_widget, table, "rssi", 0, (float)rssi*0.01);
+
+        break;
+    }
+    case 0xE0:
+    {
+        // Read number of sats
+        int num_sats = msg.payload[0];
+        fill_cell(table_widget, table, "num_sats", 0, num_sats);
+
+        // Read lat
+        float lat = bytes_to_float(msg.payload + 1);
+        fill_cell(table_widget, table, "lat", 0, lat);
+
+        // Read lon
+        float lon = bytes_to_float(msg.payload + 5);
+        fill_cell(table_widget, table, "lon", 0, lon);
+
+        // Read alt
+        float alt = bytes_to_float(msg.payload + 9);
+        fill_cell(table_widget, table, "alt_msl", 0, alt);
+
+        // Read velocity north
+        float vel_n = bytes_to_float(msg.payload + 13);
+        fill_cell(table_widget, table, "vel_n", 0, vel_n);
+
+        // Read velocity east
+        float vel_e = bytes_to_float(msg.payload + 17);
+        fill_cell(table_widget, table, "vel_e", 0, vel_e);
+
+        // Read velocity down
+        float vel_d = bytes_to_float(msg.payload + 21);
+        fill_cell(table_widget, table, "vel_d", 0, vel_d);
+
+        // Read pres
+        float pres = bytes_to_float(msg.payload + 26);
+        float baro_alt = 44330 * (1 - pow(pres/1013.25, 1/5.255));
+        fill_cell(table_widget, table, "pres", 0, pres);
+        fill_cell(table_widget, table, "baro_alt", 0, baro_alt);
+
+        break;
+    }
     }
 }
 

@@ -72,7 +72,7 @@ const QString message_name_lut[] = {
     "", "", "", "", "", "", "", "",                                                             // 0x78-0x7F
 
     "", "MAINSTAT", "DRGSTAT", "AUXSTAT", "ACCEL", "GYRO", "TEMP", "PRES",                      // 0x80-0x87
-    "MAG", "TIME", "GPS_POS", "GPS_VEL", "SYS_STAT", "PYRO_STAT", "", "",                       // 0x88-0x8F
+    "MAG", "TIME", "GPS_POS", "GPS_VEL", "SYS_STAT", "PYRO_STAT", "RSSI", "",                   // 0x88-0x8F
     "", "", "", "", "", "", "", "",                                                             // 0x90-0x97
     "", "", "", "", "", "", "", "",                                                             // 0x98-0x9F
 
@@ -86,7 +86,7 @@ const QString message_name_lut[] = {
     "", "", "", "", "", "", "", "",                                                             // 0xD0-0xD7
     "", "", "", "", "", "", "", "",                                                             // 0xD8-0xDF
 
-    "", "", "", "", "", "", "", "",                                                             // 0xE0-0xE7
+    "STD_TELEM_1", "", "", "", "", "", "", "",                                                  // 0xE0-0xE7
     "", "", "", "", "", "", "", "",                                                             // 0xE8-0xEF
     "", "", "", "", "", "", "", "",                                                             // 0xF0-0xF7
     "", "", "", "", "", "", "", "",                                                             // 0xF8-0xFF
