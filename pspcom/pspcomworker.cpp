@@ -6,26 +6,21 @@
 PspcomWorker::PspcomWorker(SerialDevice* bus)
 {
     this->bus = bus;
-    timeout = new QTimer(this);
-    connect(this->timeout, &QTimer::timeout, this, &PspcomWorker::handle_timeout);
+    connect(&this->timeout, &QTimer::timeout, this, &PspcomWorker::handle_timeout);
 }
 
 void PspcomWorker::receive_messages()
 {
     char buf[MAX_READ];
     int read_len = std::min(MAX_READ, bus->available());
-    if(!timeout)
+    if(!timeout.isActive() && !read_len)   // If we aren't receiving, start the timeout countdown
     {
-        return;
-    }
-    if(!timeout->isActive() && !read_len)   // If we aren't receiving, start the timeout countdown
-    {
-        timeout->start(PSPCOM_TIMEOUT_PERIOD);
+        timeout.start(PSPCOM_TIMEOUT_PERIOD);
     }
     else if(read_len)                       // If we receive something, stop the timer and clear the retries
     {
         num_retries = 0;
-        timeout->stop();
+        timeout.stop();
     }
     if(!this->bus->is_connected() || !this->bus->read(buf, read_len))
     {
@@ -34,6 +29,7 @@ void PspcomWorker::receive_messages()
     }
     for(int i = 0; i < read_len; i++)
     {
+        qDebug() << buf[i];
         switch(state)
         {
         case 0:
@@ -89,9 +85,7 @@ void PspcomWorker::handle_timeout()
 {
     if(num_retries == PSPCOM_MAX_RETRIES)   // If we have exceeded max retries, error out
     {
-        timeout->stop();
-        delete timeout;
-        timeout = Q_NULLPTR;
+        timeout.stop();
         emit errored();
         return;
     }
@@ -104,9 +98,5 @@ void PspcomWorker::handle_timeout()
 
 PspcomWorker::~PspcomWorker()
 {
-    if(timeout != Q_NULLPTR)
-    {
-        timeout->stop();
-        timeout->deleteLater();
-    }
+    timeout.stop();
 }

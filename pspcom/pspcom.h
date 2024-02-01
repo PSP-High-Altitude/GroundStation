@@ -43,6 +43,8 @@ signals:
     void received(pspcommsg msg, QString msg_str);
 
 private:
+    void error_handler();
+    QMetaObject::Connection thread_looper;
     PspcomState state;
     PspcomConnState conn_state;
     PspcomWorker *worker= nullptr;;

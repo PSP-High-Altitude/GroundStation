@@ -34,7 +34,7 @@ private:
     int checksum = 0;
     int time_since_last_data = 0;
     int num_retries = 0;
-    QTimer *timeout;
+    QTimer timeout{this};
 };
 
 #endif // PSPCOMWORKER_H

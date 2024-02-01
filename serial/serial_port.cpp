@@ -54,13 +54,15 @@ bool SerialPort::connect()
         return true;
     }
     port->setPortName(port_name);
-    port->setFlowControl(QSerialPort::NoFlowControl);
+    port->setFlowControl(QSerialPort::HardwareControl);
     port->setParity(QSerialPort::NoParity);
     port->setStopBits(QSerialPort::OneStop);
     port->setDataBits(QSerialPort::Data8);
     port->setReadBufferSize(MAX_READ);
     port->setBaudRate(QSerialPort::Baud115200);
     bool open_success = port->open(QSerialPort::ReadWrite);
+    port->setDataTerminalReady(true);
+    port->setDataTerminalReady(false);
     if(open_success) port->clear();
     else
         qDebug() << "Error opening port";

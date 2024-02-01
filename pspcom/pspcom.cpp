@@ -72,6 +72,15 @@ void Pspcom::reconnect()
     }
 }
 
+void Pspcom::error_handler() {
+    qDebug() << "Worker on" << this->get_bus()->get_name() << "errored";
+    this->conn_state = PSPCOM_ERRORED;
+    this->state = PSPCOM_STOPPED;
+    thread.quit();
+    thread.wait();
+    this->worker->deleteLater();
+}
+
 void Pspcom::start_receiving()
 {
     this->state = PSPCOM_RUNNING;
@@ -100,17 +109,14 @@ void Pspcom::start_receiving()
     });
 
     // Handle error
-    connect(this->worker, &PspcomWorker::errored, this, [this]() {
-        qDebug() << "Worker on" << this->get_bus()->get_name() << "errored";
-        this->conn_state = PSPCOM_ERRORED;
-        this->state = PSPCOM_STOPPED;
-        thread.quit();
-        thread.wait();
-        delete this->worker;
-    });
+    connect(this->worker, &PspcomWorker::errored, this, &Pspcom::error_handler);
 
     // Handle finish
     connect(this->worker, &PspcomWorker::finished, this, [this]() {
+        if(!thread.isRunning())
+        {
+            return;
+        }
         QMetaObject::invokeMethod(worker, &PspcomWorker::receive_messages);
     });
 
@@ -121,8 +127,9 @@ void Pspcom::start_receiving()
 
 void Pspcom::stop_receiving()
 {
+    QObject::disconnect(thread_looper);
     this->state = PSPCOM_STOPPED;
-    delete this->worker;
+    this->worker->deleteLater();
     thread.quit();
     thread.wait();
 }
