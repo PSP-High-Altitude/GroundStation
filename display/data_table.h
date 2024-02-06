@@ -3,10 +3,12 @@
 
 #include "display/data_table_row.h"
 #include "pspcom/pspcommsg.h"
+#include "qtimer.h"
 #include "qwidget.h"
 
-class DataTable
+class DataTable : public QObject
 {
+    Q_OBJECT
 
 public:
     DataTable(QWidget *mw, QString name, QList<DataTableRow> *rows);
@@ -23,6 +25,8 @@ private:
     QWidget *mw;
     QString name;
     QList<DataTableRow> *rows;
+    int last_data_s;
+    QTimer age_timer;
 };
 
 #endif // DATA_TABLE_H

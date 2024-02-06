@@ -82,6 +82,18 @@ DataTable::DataTable(QWidget *mw, QString name, QList<DataTableRow> *rows)
     this->mw = mw;
     this->name = name;
     this->rows = rows;
+    this->last_data_s = 0;
+
+    age_timer.setInterval(1000);
+    connect(&age_timer, &QTimer::timeout, this, [this]{
+        if(this != ((MainWindow*) this->mw)->get_active_table())
+        {
+            return;
+        }
+        QTableWidget *table_widget = this->mw->findChild<QTableWidget*>("data_table");
+        fill_cell(table_widget, this, "age", 0, ++last_data_s); // Set data age
+    });
+    age_timer.start();
 }
 
 QString DataTable::get_name()
@@ -101,23 +113,25 @@ QList<DataTableRow>* DataTable::get_rows()
 
 void DataTable::update_data(pspcommsg msg)
 {
+    age_timer.stop();
+    last_data_s = 0;
+    age_timer.start();
     QTableWidget *table_widget = mw->findChild<QTableWidget*>("data_table");
-    DataTable *table = ((MainWindow*) mw)->get_active_table();
     switch(msg.msg_id)
     {
     case 0x84:
     {
         // Read x
         float x = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "acc_x", 0, x);
+        fill_cell(table_widget, this, "acc_x", 0, x);
 
         // Read y
         float y = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "acc_y", 0, y);
+        fill_cell(table_widget, this, "acc_y", 0, y);
 
         // Read z
         float z = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "acc_z", 0, z);
+        fill_cell(table_widget, this, "acc_z", 0, z);
 
         break;
     }
@@ -125,15 +139,15 @@ void DataTable::update_data(pspcommsg msg)
     {
         // Read x
         float x = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "rot_x", 0, x);
+        fill_cell(table_widget, this, "rot_x", 0, x);
 
         // Read y
         float y = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "rot_y", 0, y);
+        fill_cell(table_widget, this, "rot_y", 0, y);
 
         // Read z
         float z = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "rot_z", 0, z);
+        fill_cell(table_widget, this, "rot_z", 0, z);
 
         break;
     }
@@ -141,7 +155,7 @@ void DataTable::update_data(pspcommsg msg)
     {
         // Read temp
         float temp = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "temp", 0, temp);
+        fill_cell(table_widget, this, "temp", 0, temp);
 
         break;
     }
@@ -150,8 +164,8 @@ void DataTable::update_data(pspcommsg msg)
         // Read pres
         float pres = bytes_to_float(msg.payload + 1);
         float baro_alt = 44330 * (1 - pow(pres/1013.25, 1/5.255));
-        fill_cell(table_widget, table, "pres", 0, pres);
-        fill_cell(table_widget, table, "baro_alt", 0, baro_alt);
+        fill_cell(table_widget, this, "pres", 0, pres);
+        fill_cell(table_widget, this, "baro_alt", 0, baro_alt);
 
         break;
     }
@@ -159,19 +173,19 @@ void DataTable::update_data(pspcommsg msg)
     {
         // Read number of sats
         int num_sats = msg.payload[0];
-        fill_cell(table_widget, table, "num_sats", 0, num_sats);
+        fill_cell(table_widget, this, "num_sats", 0, num_sats);
 
         // Read lat
         float lat = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "lat", 0, lat);
+        fill_cell(table_widget, this, "lat", 0, lat);
 
         // Read lon
         float lon = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "lon", 0, lon);
+        fill_cell(table_widget, this, "lon", 0, lon);
 
         // Read alt
         float alt = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "alt_msl", 0, alt);
+        fill_cell(table_widget, this, "alt_msl", 0, alt);
 
         break;
     }
@@ -179,15 +193,15 @@ void DataTable::update_data(pspcommsg msg)
     {
         // Read velocity north
         float vel_n = bytes_to_float(msg.payload);
-        fill_cell(table_widget, table, "vel_n", 0, vel_n);
+        fill_cell(table_widget, this, "vel_n", 0, vel_n);
 
         // Read velocity east
         float vel_e = bytes_to_float(msg.payload + 4);
-        fill_cell(table_widget, table, "vel_e", 0, vel_e);
+        fill_cell(table_widget, this, "vel_e", 0, vel_e);
 
         // Read velocity down
         float vel_d = bytes_to_float(msg.payload + 8);
-        fill_cell(table_widget, table, "vel_d", 0, vel_d);
+        fill_cell(table_widget, this, "vel_d", 0, vel_d);
 
         break;
     }
@@ -195,7 +209,7 @@ void DataTable::update_data(pspcommsg msg)
     {
         // Read RSSI
         int16_t rssi = msg.payload[0] | (((int16_t)msg.payload[1]) << 8);
-        fill_cell(table_widget, table, "rssi", 0, (float)rssi*0.01);
+        fill_cell(table_widget, this, "rssi", 0, (float)rssi*0.01);
 
         break;
     }
@@ -203,37 +217,37 @@ void DataTable::update_data(pspcommsg msg)
     {
         // Read number of sats
         int num_sats = msg.payload[0];
-        fill_cell(table_widget, table, "num_sats", 0, num_sats);
+        fill_cell(table_widget, this, "num_sats", 0, num_sats);
 
         // Read lat
         float lat = bytes_to_float(msg.payload + 1);
-        fill_cell(table_widget, table, "lat", 0, lat);
+        fill_cell(table_widget, this, "lat", 0, lat);
 
         // Read lon
         float lon = bytes_to_float(msg.payload + 5);
-        fill_cell(table_widget, table, "lon", 0, lon);
+        fill_cell(table_widget, this, "lon", 0, lon);
 
         // Read alt
         float alt = bytes_to_float(msg.payload + 9);
-        fill_cell(table_widget, table, "alt_msl", 0, alt);
+        fill_cell(table_widget, this, "alt_msl", 0, alt);
 
         // Read velocity north
         float vel_n = bytes_to_float(msg.payload + 13);
-        fill_cell(table_widget, table, "vel_n", 0, vel_n);
+        fill_cell(table_widget, this, "vel_n", 0, vel_n);
 
         // Read velocity east
         float vel_e = bytes_to_float(msg.payload + 17);
-        fill_cell(table_widget, table, "vel_e", 0, vel_e);
+        fill_cell(table_widget, this, "vel_e", 0, vel_e);
 
         // Read velocity down
         float vel_d = bytes_to_float(msg.payload + 21);
-        fill_cell(table_widget, table, "vel_d", 0, vel_d);
+        fill_cell(table_widget, this, "vel_d", 0, vel_d);
 
         // Read pres
         float pres = bytes_to_float(msg.payload + 26);
         float baro_alt = 44330 * (1 - pow(pres/1013.25, 1/5.255));
-        fill_cell(table_widget, table, "pres", 0, pres);
-        fill_cell(table_widget, table, "baro_alt", 0, baro_alt);
+        fill_cell(table_widget, this, "pres", 0, pres);
+        fill_cell(table_widget, this, "baro_alt", 0, baro_alt);
 
         break;
     }

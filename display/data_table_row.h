@@ -55,6 +55,7 @@ const QStringList TABLE_ROW_TYPES = {
     "num_sats",
 
     "rssi",
+    "age",
 };
 
 const QMap<QString, QStringList> TABLE_ROW_UNITS = {
@@ -83,19 +84,26 @@ const QMap<QString, QStringList> TABLE_ROW_UNITS = {
     {"num_sats", {"satellites"}},
 
     {"rssi", {"dBm"}},
+    {"age", {"s"}},
 };
 
 const QList<DataTableRow> DEFAULT_TABLE_ROWS = {
-    DataTableRow("acc_x", "Acceleration X: ", "g", 4, 0),
-    DataTableRow("acc_y", "Acceleration Y: ", "g", 4, 0),
-    DataTableRow("acc_z", "Acceleration Z: ", "g", 4, 0),
+    // GPS
+    DataTableRow("lat", "Latitude:", "°", 6, 0),
+    DataTableRow("lon", "Longitude:", "°", 6, 0),
+    DataTableRow("alt_msl", "Altitude (GPS):", "m", 2, 0),
+    DataTableRow("vel_n", "Velocity North:", "m/s", 2, 0),
+    DataTableRow("vel_e", "Velocity East:", "m/s", 2, 0),
+    DataTableRow("vel_d", "Velocity Down:", "m/s", 2, 0),
+    DataTableRow("num_sats", "Number of Satellites:", "satellites", 0, 0),
 
-    DataTableRow("rot_x", "Rotation X: ", "dps", 4, 0),
-    DataTableRow("rot_y", "Rotation Y: ", "dps", 4, 0),
-    DataTableRow("rot_z", "Rotation Z: ", "dps", 4, 0),
+    // Barometer
+    DataTableRow("pres", "Air Pressure:", "mbar", 2, 0),
+    DataTableRow("baro_alt", "Altitude (Barometer):", "baro_alt", 2, 0),
 
-    DataTableRow("temp", "Temperature: ", "deg C", 4, 0),
-    DataTableRow("pres", "Pressure: ", "mbar", 4, 0),
+    // Signal
+    DataTableRow("rssi", "RSSI:", "dBm", 2, 0),
+    DataTableRow("age", "Data Age:", "s", 0, 0),
 };
 
 #endif // DATA_TABLE_ROW_H
