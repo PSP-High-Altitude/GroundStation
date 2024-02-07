@@ -1,7 +1,7 @@
 # GroundStation
 PSP High Altitude Ground Station software
 
-Created in QT Creator using QT 6.5
+Created in QT Creator using QT 6.6.1
 
 ## Supported Platforms
 
@@ -9,7 +9,7 @@ Windows
 
 ## Build Instructions
 
-Download and install QT Creator Community Edition. In the installer, install QT 6.5 and all of its addons. Clone this repository and add the following file:
+Download and install QT Creator Community Edition. In the installer, install QT 6.6.1 and all of its addons. Clone this repository and add the following file:
 
 keys.h:
 ```
