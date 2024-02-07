@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>PSP GroundStation</Name>
+    <Version>1.0.0</Version>
+    <Title>PSP GroundStation Installer</Title>
+    <Publisher>PSP High Altitude</Publisher>
+    <StartMenuDir>PSP</StartMenuDir>
+    <TargetDir>@ApplicationsDir@/GroundStation</TargetDir>
+    <RunProgram>@TargetDir@/GroundStation.exe</RunProgram>
+    <RunProgramDescription>Open PSP GroundStation</RunProgramDescription>
+    <InstallerApplicationIcon>logo</InstallerApplicationIcon>
+    <InstallerWindowIcon>logo</InstallerWindowIcon>
+    <Logo>logo.png</Logo>
+    <SupportsModify>true</SupportsModify>
+</Installer>
