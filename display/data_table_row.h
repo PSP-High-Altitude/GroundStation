@@ -49,6 +49,7 @@ const QStringList TABLE_ROW_TYPES = {
     "yaw",
     "lat",
     "lon",
+    "gps_valid",
     "vel_n",
     "vel_e",
     "vel_d",
@@ -56,6 +57,7 @@ const QStringList TABLE_ROW_TYPES = {
 
     "rssi",
     "age",
+    "flight_phase",
 };
 
 const QMap<QString, QStringList> TABLE_ROW_UNITS = {
@@ -78,6 +80,7 @@ const QMap<QString, QStringList> TABLE_ROW_UNITS = {
     {"yaw", {"°"}},
     {"lat", {"°"}},
     {"lon", {"°"}},
+    {"gps_valid", {""}},
     {"vel_n", {"m/s"}},
     {"vel_e", {"m/s"}},
     {"vel_d", {"m/s"}},
@@ -85,6 +88,7 @@ const QMap<QString, QStringList> TABLE_ROW_UNITS = {
 
     {"rssi", {"dBm"}},
     {"age", {"s"}},
+    {"flight_phase", {""}},
 };
 
 const QList<DataTableRow> DEFAULT_TABLE_ROWS = {
@@ -96,10 +100,14 @@ const QList<DataTableRow> DEFAULT_TABLE_ROWS = {
     DataTableRow("vel_e", "Velocity East:", "m/s", 2, 0),
     DataTableRow("vel_d", "Velocity Down:", "m/s", 2, 0),
     DataTableRow("num_sats", "Number of Satellites:", "satellites", 0, 0),
+    DataTableRow("gps_valid", "GPS Fix:", "", 0, 0),
 
     // Barometer
     DataTableRow("pres", "Air Pressure:", "mbar", 2, 0),
     DataTableRow("baro_alt", "Altitude (Barometer):", "baro_alt", 2, 0),
+
+    // Status
+    DataTableRow("flight_phase", "Flight Phase:", "", 0, 0),
 
     // Signal
     DataTableRow("rssi", "RSSI:", "dBm", 2, 0),

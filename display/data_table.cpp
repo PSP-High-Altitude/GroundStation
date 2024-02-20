@@ -249,6 +249,40 @@ void DataTable::update_data(pspcommsg msg)
         fill_cell(table_widget, this, "pres", 0, pres);
         fill_cell(table_widget, this, "baro_alt", 0, baro_alt);
 
+        // Read status
+        uint8_t phase = (msg.payload[31] >> 3) & 0xF;
+        uint8_t fix_valid = msg.payload[31] & 0x1;
+        switch(phase) {
+        case 0x0:
+            fill_cell(table_widget, this, "flight_phase", 0, "Init");
+            break;
+        case 0x1:
+            fill_cell(table_widget, this, "flight_phase", 0, "Ready");
+            break;
+        case 0x2:
+            fill_cell(table_widget, this, "flight_phase", 0, "Boost");
+            break;
+        case 0x3:
+            fill_cell(table_widget, this, "flight_phase", 0, "Fast");
+            break;
+        case 0x4:
+            fill_cell(table_widget, this, "flight_phase", 0, "Coast");
+            break;
+        case 0x5:
+            fill_cell(table_widget, this, "flight_phase", 0, "Drogue");
+            break;
+        case 0x6:
+            fill_cell(table_widget, this, "flight_phase", 0, "Main");
+            break;
+        case 0x7:
+            fill_cell(table_widget, this, "flight_phase", 0, "Landed");
+            break;
+        default:
+            fill_cell(table_widget, this, "flight_phase", 0, "Unknown");
+            break;
+        }
+        fill_cell(table_widget, this, "gps_valid", 0, fix_valid ? "Valid" : "Invalid");
+
         break;
     }
     }
