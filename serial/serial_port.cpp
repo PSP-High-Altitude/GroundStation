@@ -61,8 +61,6 @@ bool SerialPort::connect()
     port->setReadBufferSize(MAX_READ);
     port->setBaudRate(QSerialPort::Baud115200);
     bool open_success = port->open(QSerialPort::ReadWrite);
-    port->setDataTerminalReady(true);
-    port->setDataTerminalReady(false);
     if(open_success) port->clear();
     else
         qDebug() << "Error opening port";
