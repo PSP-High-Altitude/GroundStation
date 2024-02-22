@@ -1,4 +1,3 @@
-import QtQuick 2.0
 import QtQuick.Window 2.14
 import QtLocation 6.5
 import QtPositioning 6.5
