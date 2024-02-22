@@ -40,7 +40,10 @@ void SerialPort::write(char* buf, int len)
     {
         return;
     }
-    port->write(buf, len);
+    if(port->write(buf, len) == -1)
+    {
+        qDebug() << "Write error";
+    }
 }
 
 bool SerialPort::connect()
@@ -54,7 +57,7 @@ bool SerialPort::connect()
         return true;
     }
     port->setPortName(port_name);
-    port->setFlowControl(QSerialPort::HardwareControl);
+    port->setFlowControl(QSerialPort::NoFlowControl);
     port->setParity(QSerialPort::NoParity);
     port->setStopBits(QSerialPort::OneStop);
     port->setDataBits(QSerialPort::Data8);
