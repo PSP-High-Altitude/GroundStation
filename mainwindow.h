@@ -53,6 +53,7 @@ public slots:
 
 private:
     void load_settings();
+    void log_telemetry(pspcommsg msg);
 
     Ui::MainWindow *ui;
     QSettings *settings;
@@ -72,6 +73,7 @@ private:
     PyroStatus *pyro_stat;
     UsbLabel *usb;
     WirelessLabel *wireless;
+    QFile *log_file;
 };
 
 #endif // MAINWINDOW_H

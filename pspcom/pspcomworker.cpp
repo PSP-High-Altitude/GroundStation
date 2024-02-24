@@ -29,7 +29,6 @@ void PspcomWorker::receive_messages()
     }
     for(int i = 0; i < read_len; i++)
     {
-        qDebug() << buf[i];
         switch(state)
         {
         case 0:

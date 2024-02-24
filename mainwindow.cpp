@@ -108,6 +108,10 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
 
 MainWindow::~MainWindow()
 {
+    if(log_file != Q_NULLPTR && log_file->isOpen())
+    {
+        log_file->close();
+    }
     delete ui;
 }
 
@@ -198,6 +202,9 @@ void MainWindow::set_active_device(Device *device)
         // Update map and altimeter
         map->update_map(msg);
         altimeter->update_altimeter(msg);
+
+        // Log telemetry message
+        log_telemetry(msg);
     });
 
     // Set active device
@@ -381,4 +388,65 @@ void MainWindow::load_settings()
         // End group
         settings->endGroup();
     }
+    /*
+    if(!settings->childKeys().contains("log_dir"))
+    {
+        settings->setValue("log_dir", "%%appdata%%\\PSP\\GroundStation");
+    }
+    */
+
+    // Get log file path
+    QStringList appdata_locs = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
+    QString log_path = appdata_locs.first();
+
+    // Create path if nonexistent
+    QDir dir;
+    if(!dir.exists(log_path))
+    {
+        dir.mkpath(log_path);
+    }
+
+    // Create log file name
+    log_path.append(QDate::currentDate().toString("/yyyy-MM-dd"));
+    int ending = 1;
+    log_path.append("-1");
+    while(QFile::exists(log_path + ".log"))
+    {
+        ending++;
+        log_path.chop(2);
+        log_path.append("-");
+        log_path.append(QString::number(ending));
+    }
+    log_path.append(".log");
+
+    // Open log file
+    qDebug() << "log file:" << log_path;
+    log_file = new QFile(log_path);
+    if(!log_file->open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        qDebug() << "Error opening log file";
+        return;
+    }
+    log_file->write("[Time] Device_ID Message_ID Payload_length Data\n");
+}
+
+void MainWindow::log_telemetry(pspcommsg msg)
+{
+    if(!log_file->isOpen())
+    {
+        return;
+    }
+    QTextStream out(log_file);
+    out << "[" + QTime::currentTime().toString() << "]";
+    int msg_str_len = 11 + 3*msg.payload_len;
+    char* msg_str = (char*)malloc(sizeof(char) * msg_str_len);
+    int msg_str_ptr = 0;
+    msg_str_ptr += snprintf(msg_str, msg_str_len, " %02x %02x %02x", msg.device_id, msg.msg_id, msg.payload_len);
+    for(int i = 0; i < msg.payload_len; i++)
+    {
+        msg_str_ptr += snprintf(msg_str + msg_str_ptr, msg_str_len, " %02x", msg.payload[i]);
+    }
+    snprintf(msg_str + msg_str_ptr, msg_str_len, "\n");
+    out << QString(msg_str);
+    free(msg_str);
 }

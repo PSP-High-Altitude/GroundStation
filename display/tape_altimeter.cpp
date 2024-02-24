@@ -84,7 +84,7 @@ TapeAltimeter::TapeAltimeter(QWidget* window, QQmlApplicationEngine *engine, QNe
 
 TapeAltimeter::~TapeAltimeter() {}
 
-void TapeAltimeter::update_ticks(GpsData *gps)
+void TapeAltimeter::update_ticks(GpsData *gps, SensorData *sens)
 {
     if(gps->fix_valid)
     {
@@ -94,6 +94,14 @@ void TapeAltimeter::update_ticks(GpsData *gps)
             update_ground_level(gps->lat, gps->lon);
             alt_lat = gps->lat;
             alt_lon = gps->lon;
+        }
+    }
+    else
+    {
+        float baro_alt = 44330 * (1 - pow(sens->baro.pressure/1013.25, 1/5.255));
+        if(baro_alt < 11000)
+        {
+            engine->rootContext()->setContextProperty("altitude", (int) baro_alt);
         }
     }
 }
@@ -113,6 +121,7 @@ void TapeAltimeter::update_altimeter(pspcommsg msg)
     case 0x8A:
     case 0xE0:
     {
+        // Lat and lon for ground alt, alt
         float lat = bytes_to_float(msg.payload+1);
         float lon = bytes_to_float(msg.payload+5);
         float alt = bytes_to_float(msg.payload+9);
@@ -120,8 +129,15 @@ void TapeAltimeter::update_altimeter(pspcommsg msg)
         gps.lat = lat;
         gps.lon = lon;
         gps.height_msl = alt;
-        gps.fix_valid = 1;
-        update_ticks(&gps);
+        gps.fix_valid = msg.payload[31] & 0x1;
+
+        // Barometer for alternate source
+        float pres = bytes_to_float(msg.payload + 26);
+        SensorData sens;
+        sens.baro.pressure = pres;
+
+        update_ticks(&gps, &sens);
+
         break;
     }
     default:

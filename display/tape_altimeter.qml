@@ -6,6 +6,7 @@ Window {
     id: altimeter_window
     visible: true
     flags: Qt.FramelessWindowHint
+    color: "#2c2c2c"
 
     readonly property int vertical_division: 100
     property int current_max_alt: altimeter_height
@@ -19,7 +20,8 @@ Window {
         anchors.fill: parent
         width: altimeter_window.width
         height: altimeter_window.height
-        color: "#2c2c2c"
+        color: "transparent"
+        z: 3
     }
 
     Rectangle {

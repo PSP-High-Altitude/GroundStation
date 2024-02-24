@@ -22,7 +22,7 @@ public:
     ~TapeAltimeter();
 
 public slots:
-    void update_ticks(GpsData *gps);
+    void update_ticks(GpsData *gps, SensorData *sens);
     void update_ground_level(float lat, float lon);
     void update_altimeter(pspcommsg msg);
 
