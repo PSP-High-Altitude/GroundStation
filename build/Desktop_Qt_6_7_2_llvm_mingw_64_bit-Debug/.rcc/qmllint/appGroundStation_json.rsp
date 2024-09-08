@@ -1,0 +1,16 @@
+--bare
+-I
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug
+-I
+E:/Programs/Qt/6.7.2/llvm-mingw_64/./qml
+--resource
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug/.qt/rcc/qmake_GroundStation.qrc
+--resource
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug/.qt/rcc/appGroundStation_raw_qml_0.qrc
+C:/Users/griff/OneDrive/Documents/GroundStation/Main.qml
+C:/Users/griff/OneDrive/Documents/GroundStation/TapeAltimeter.qml
+C:/Users/griff/OneDrive/Documents/GroundStation/Clock.qml
+C:/Users/griff/OneDrive/Documents/GroundStation/PSPMap.qml
+C:/Users/griff/OneDrive/Documents/GroundStation/DataTable.qml
+--json
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug/appGroundStation_qmllint.json

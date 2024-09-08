@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/alt_marker.png</file>
+        <file>resources/marker.png</file>
+    </qresource>
+</RCC>

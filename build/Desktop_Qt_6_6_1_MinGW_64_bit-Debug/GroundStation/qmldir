@@ -1,0 +1,5 @@
+module GroundStation
+typeinfo appGroundStation.qmltypes
+prefer :/qt/qml/GroundStation/
+Main 1.0 Main.qml
+

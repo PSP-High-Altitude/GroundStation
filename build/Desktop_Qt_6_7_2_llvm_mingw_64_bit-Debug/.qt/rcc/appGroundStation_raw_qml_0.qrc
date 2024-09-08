@@ -1,0 +1,15 @@
+<RCC>
+  <qresource prefix="/qt/qml/GroundStation/">
+    <file alias="Main.qml">C:/Users/griff/OneDrive/Documents/GroundStation/Main.qml</file>
+    <file alias="TapeAltimeter.qml">C:/Users/griff/OneDrive/Documents/GroundStation/TapeAltimeter.qml</file>
+    <file alias="Clock.qml">C:/Users/griff/OneDrive/Documents/GroundStation/Clock.qml</file>
+    <file alias="PSPMap.qml">C:/Users/griff/OneDrive/Documents/GroundStation/PSPMap.qml</file>
+    <file alias="DataTable.qml">C:/Users/griff/OneDrive/Documents/GroundStation/DataTable.qml</file>
+    <file alias="resources.qrc">C:/Users/griff/OneDrive/Documents/GroundStation/resources.qrc</file>
+    <file alias="resources/alt_marker.png">C:/Users/griff/OneDrive/Documents/GroundStation/resources/alt_marker.png</file>
+    <file alias="resources/appico.ico">C:/Users/griff/OneDrive/Documents/GroundStation/resources/appico.ico</file>
+    <file alias="resources/map_pointer.png">C:/Users/griff/OneDrive/Documents/GroundStation/resources/map_pointer.png</file>
+    <file alias="resources/marker.png">C:/Users/griff/OneDrive/Documents/GroundStation/resources/marker.png</file>
+  </qresource>
+</RCC>
+

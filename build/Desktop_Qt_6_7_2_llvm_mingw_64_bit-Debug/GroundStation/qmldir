@@ -1,0 +1,9 @@
+module GroundStation
+typeinfo appGroundStation.qmltypes
+prefer :/qt/qml/GroundStation/
+Main 1.0 Main.qml
+TapeAltimeter 1.0 TapeAltimeter.qml
+Clock 1.0 Clock.qml
+PSPMap 1.0 PSPMap.qml
+DataTable 1.0 DataTable.qml
+

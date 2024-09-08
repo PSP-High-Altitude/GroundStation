@@ -1,0 +1,14 @@
+-rootPath
+C:/Users/griff/OneDrive/Documents/GroundStation
+-cmake-output
+-output-file
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_6_1_MinGW_64_bit-Debug/.qt_plugins/Qt6_QmlPlugins_Imports_appGroundStation.cmake
+-importPath
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_6_1_MinGW_64_bit-Debug/GroundStation
+-importPath
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_6_1_MinGW_64_bit-Debug
+-importPath
+E:/Programs/Qt/6.6.1/mingw_64/./qml
+-qrcFiles
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_6_1_MinGW_64_bit-Debug/.rcc/qmake_GroundStation.qrc
+C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_6_1_MinGW_64_bit-Debug/.rcc/appGroundStation_raw_qml_0.qrc
