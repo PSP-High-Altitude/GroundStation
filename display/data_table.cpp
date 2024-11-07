@@ -252,35 +252,95 @@ void DataTable::update_data(pspcommsg msg)
         // Read status
         uint8_t phase = (msg.payload[31] >> 3) & 0xF;
         uint8_t fix_valid = msg.payload[31] & 0x1;
-        switch(phase) {
-        case 0x0:
-            fill_cell(table_widget, this, "flight_phase", 0, "Init");
-            break;
-        case 0x1:
-            fill_cell(table_widget, this, "flight_phase", 0, "Ready");
-            break;
-        case 0x2:
-            fill_cell(table_widget, this, "flight_phase", 0, "Boost");
-            break;
-        case 0x3:
-            fill_cell(table_widget, this, "flight_phase", 0, "Fast");
-            break;
-        case 0x4:
-            fill_cell(table_widget, this, "flight_phase", 0, "Coast");
-            break;
-        case 0x5:
-            fill_cell(table_widget, this, "flight_phase", 0, "Drogue");
-            break;
-        case 0x6:
-            fill_cell(table_widget, this, "flight_phase", 0, "Main");
-            break;
-        case 0x7:
-            fill_cell(table_widget, this, "flight_phase", 0, "Landed");
-            break;
-        default:
+        QString phases[] = {
+            "Init",
+            "Ready",
+            "Boost 1",
+            "Fast Boost 1",
+            "Fast 1",
+            "Coast 1",
+            "Stage",
+            "Ignite",
+            "Boost 2",
+            "Fast Boost 2",
+            "Fast 2",
+            "Coast 2",
+            "Drogue",
+            "Main",
+            "Landed",
+        };
+
+        if(phase < 15) {
+            fill_cell(table_widget, this, "flight_phase", 0, phases[phase]);
+        } else {
             fill_cell(table_widget, this, "flight_phase", 0, "Unknown");
-            break;
         }
+
+        fill_cell(table_widget, this, "gps_valid", 0, fix_valid ? "Valid" : "Invalid");
+    }
+    case 0xE1:
+    {
+        // Read number of sats
+        int num_sats = msg.payload[0];
+        fill_cell(table_widget, this, "num_sats", 0, num_sats);
+
+        // Read lat
+        float lat = bytes_to_float(msg.payload + 1);
+        fill_cell(table_widget, this, "lat", 0, lat);
+
+        // Read lon
+        float lon = bytes_to_float(msg.payload + 5);
+        fill_cell(table_widget, this, "lon", 0, lon);
+
+        // Read alt
+        float alt = bytes_to_float(msg.payload + 9);
+        fill_cell(table_widget, this, "alt_msl", 0, alt);
+
+        // Read velocity north
+        float vel_n = bytes_to_float(msg.payload + 13);
+        fill_cell(table_widget, this, "vel_n", 0, vel_n);
+
+        // Read velocity east
+        float vel_e = bytes_to_float(msg.payload + 17);
+        fill_cell(table_widget, this, "vel_e", 0, vel_e);
+
+        // Read velocity down
+        float vel_d = bytes_to_float(msg.payload + 21);
+        fill_cell(table_widget, this, "vel_d", 0, vel_d);
+
+        // Read pres
+        float pres = bytes_to_float(msg.payload + 26);
+        float baro_alt = 44330 * (1 - pow(pres/1013.25, 1/5.255));
+        fill_cell(table_widget, this, "pres", 0, pres);
+        fill_cell(table_widget, this, "baro_alt", 0, baro_alt);
+
+        // Read status
+        uint8_t phase = (msg.payload[32] >> 3) & 0xF;
+        uint8_t fix_valid = msg.payload[32] & 0x1;
+        QString phases[] = {
+            "Init",
+            "Ready",
+            "Boost 1",
+            "Fast Boost 1",
+            "Fast 1",
+            "Coast 1",
+            "Stage",
+            "Ignite",
+            "Boost 2",
+            "Fast Boost 2",
+            "Fast 2",
+            "Coast 2",
+            "Drogue",
+            "Main",
+            "Landed",
+        };
+
+        if(phase < 15) {
+            fill_cell(table_widget, this, "flight_phase", 0, phases[phase]);
+        } else {
+            fill_cell(table_widget, this, "flight_phase", 0, "Unknown");
+        }
+
         fill_cell(table_widget, this, "gps_valid", 0, fix_valid ? "Valid" : "Invalid");
 
         break;

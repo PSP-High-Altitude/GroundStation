@@ -97,5 +97,6 @@ void PspcomWorker::handle_timeout()
 
 PspcomWorker::~PspcomWorker()
 {
+    this->bus->disconnect();
     timeout.stop();
 }

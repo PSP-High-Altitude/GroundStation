@@ -49,10 +49,23 @@ void Map::update_map(pspcommsg msg)
     {
         float lat = bytes_to_float(msg.payload+1);
         float lon = bytes_to_float(msg.payload+5);
+        uint8_t fix_valid = msg.payload[31] & 0x1;
         GpsData gps;
         gps.lat = lat;
         gps.lon = lon;
-        gps.fix_valid = 1;
+        gps.fix_valid = fix_valid;
+        update_position(&gps);
+        break;
+    }
+    case 0xE1:
+    {
+        float lat = bytes_to_float(msg.payload+1);
+        float lon = bytes_to_float(msg.payload+5);
+        uint8_t fix_valid = msg.payload[32] & 0x1;
+        GpsData gps;
+        gps.lat = lat;
+        gps.lon = lon;
+        gps.fix_valid = fix_valid;
         update_position(&gps);
         break;
     }

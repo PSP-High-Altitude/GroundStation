@@ -125,11 +125,34 @@ void TapeAltimeter::update_altimeter(pspcommsg msg)
         float lat = bytes_to_float(msg.payload+1);
         float lon = bytes_to_float(msg.payload+5);
         float alt = bytes_to_float(msg.payload+9);
+        uint8_t fix_valid = msg.payload[31] & 0x1;
         GpsData gps;
         gps.lat = lat;
         gps.lon = lon;
         gps.height_msl = alt;
-        gps.fix_valid = msg.payload[31] & 0x1;
+        gps.fix_valid = fix_valid;
+
+        // Barometer for alternate source
+        float pres = bytes_to_float(msg.payload + 26);
+        SensorData sens;
+        sens.baro.pressure = pres;
+
+        update_ticks(&gps, &sens);
+
+        break;
+    }
+    case 0xE1:
+    {
+        // Lat and lon for ground alt, alt
+        float lat = bytes_to_float(msg.payload+1);
+        float lon = bytes_to_float(msg.payload+5);
+        float alt = bytes_to_float(msg.payload+9);
+        uint8_t fix_valid = msg.payload[32] & 0x1;
+        GpsData gps;
+        gps.lat = lat;
+        gps.lon = lon;
+        gps.height_msl = alt;
+        gps.fix_valid = fix_valid;
 
         // Barometer for alternate source
         float pres = bytes_to_float(msg.payload + 26);

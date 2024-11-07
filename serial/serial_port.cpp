@@ -44,6 +44,7 @@ void SerialPort::write(char* buf, int len)
     {
         qDebug() << "Write error";
     }
+    port->flush();
 }
 
 bool SerialPort::connect()

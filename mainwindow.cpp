@@ -20,6 +20,7 @@
 #include "serial/udp_port.h"
 #include "utils/search.h"
 #include <QStackedWidget>
+#include <QLineEdit>
 
 MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine* alt_engine, QWidget *parent)
     : QMainWindow(parent)
@@ -94,6 +95,31 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     });
     connect(this->console, &Console::closed, toggle_console, [toggle_console]{
         toggle_console->setText("Open Console");
+    });
+
+    // Set frequency
+    QLineEdit *freq_line_edit = this->findChild<QLineEdit*>("frequency_line_edit");
+    QPushButton *freq_button = this->findChild<QPushButton*>("frequency_set_button");
+    connect(freq_button, &QPushButton::clicked, console, [this, freq_line_edit]{
+        bool success = false;
+        int freq_hz = (int)(freq_line_edit->text().toDouble(&success) * 1e6);
+        if(success && this->active_device && this->active_device->get_tx_bus()) {
+            //// Set frequency
+            pspcommsg msg = {
+                .payload_len = 5,
+                .device_id = this->active_device->get_id(),
+                .msg_id = 0x5,
+            };
+
+            msg.payload[0] = 0;
+            msg.payload[1] = (freq_hz & 0xFF);
+            msg.payload[2] = ((freq_hz >> 8) & 0xFF);
+            msg.payload[3] = ((freq_hz >> 16) & 0xFF);
+            msg.payload[4] = ((freq_hz >> 24) & 0xFF);
+            qDebug() << freq_hz;
+
+            this->active_device->get_tx_bus()->send(msg);
+        }
     });
 
     Q_UNUSED(dev_menu);
@@ -298,7 +324,9 @@ void MainWindow::load_settings()
                 continue;
             }
             uint16_t id = settings->value("id").toUInt();
+            uint32_t freq = settings->value("freq").toUInt();
             Device *device = new Device(name, id);
+            device->set_frequency(freq);
             this->add_device(device);
 
             QStringList groups = settings->childGroups();

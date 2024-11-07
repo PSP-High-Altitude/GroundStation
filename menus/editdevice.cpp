@@ -66,6 +66,7 @@ EditDevice::EditDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent) :
     connect(save_and_close, &QPushButton::clicked, this, [this, mw, dm]{
         QLineEdit *device_name = this->findChild<QLineEdit*>("device_name");
         QComboBox *device_id = this->findChild<QComboBox*>("device_id");
+        QLineEdit *radio_freq = this->findChild<QLineEdit*>("radio_freq");
         QTableWidget *pspcom_table = this->findChild<QTableWidget*>("pspcom_table");
         if(device_name->text().length() == 0 || device_name->text().length() > 50)
         {
@@ -89,8 +90,10 @@ EditDevice::EditDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent) :
         settings->remove(current_device->get_name());
         current_device->set_name(device_name->text());
         current_device->set_id(device_id->currentIndex()+1);
+        current_device->set_frequency(radio_freq->text().toDouble() * 1e6);
         settings->beginGroup(current_device->get_name());
         settings->setValue("id", current_device->get_id());
+        settings->setValue("freq", current_device->get_frequency());
         settings->beginGroup("pspcoms");
         for(Pspcom *pspcom : *current_device->get_com_buses())
         {
@@ -148,6 +151,8 @@ void EditDevice::set_fields()
     device_name->setText(this->current_device->get_name());
     QComboBox *device_id = this->findChild<QComboBox*>("device_id");
     device_id->setCurrentIndex(this->current_device->get_id()-1);
+    QLineEdit *radio_freq = this->findChild<QLineEdit*>("radio_freq");
+    radio_freq->setText(QString::number(this->current_device->get_frequency() / 1e6));
     this->update_table();
 }
 

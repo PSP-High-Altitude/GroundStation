@@ -19,6 +19,8 @@ public:
     void set_name(QString name);
     uint8_t get_id();
     void set_id(uint8_t id);
+    void set_frequency(uint32_t freq);
+    uint32_t get_frequency();
 
     void start();
     void stop();
@@ -36,6 +38,7 @@ private:
     uint8_t id;
     QList<Pspcom*> *com_buses;
     Pspcom *tx_bus;
+    uint32_t radio_freq_hz;
 };
 
 #endif // DEVICE_H

@@ -58,6 +58,7 @@ CreateDevice::CreateDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent) :
     connect(save_and_close, &QPushButton::clicked, this, [this, mw, dm]{
         QRadioButton *serial = this->findChild<QRadioButton*>("serial");
         QLineEdit *device_name = this->findChild<QLineEdit*>("device_name");
+        QLineEdit *radio_freq = this->findChild<QLineEdit*>("radio_freq");
         QComboBox *device_id = this->findChild<QComboBox*>("device_id");
         SerialDevice *port = nullptr;
         if(device_name->text().length() == 0 || device_name->text().length() > 50)
@@ -102,9 +103,11 @@ CreateDevice::CreateDevice(MainWindow *mw, SelectMenu *dm, QWidget *parent) :
 
         // Add device
         Device *device = new Device(device_name->text(), device_id->currentIndex()+1);
+        device->set_frequency(radio_freq->text().toDouble() * 1e6);
         mw->get_settings()->beginGroup("devices");
         mw->get_settings()->beginGroup(device->get_name());
         mw->get_settings()->setValue("id", device->get_id());
+        mw->get_settings()->setValue("freq", device->get_frequency());
         if(port != nullptr)
         {
             Pspcom *pspcom = new Pspcom(port);

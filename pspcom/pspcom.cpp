@@ -37,8 +37,8 @@ bool Pspcom::send(pspcommsg msg)
     tx_buf[5 + msg.payload_len] = (uint8_t) checksum;
     tx_buf[6 + msg.payload_len] = (uint8_t) (checksum >> 8);
     tx_buf[7 + msg.payload_len] = '\0';
-    //QByteArray ba(tx_buf, 7 + msg.payload_len);
-    //qDebug() << ba;
+    QByteArray ba(tx_buf, 7 + msg.payload_len);
+    qDebug() << ba;
     this->bus->write(tx_buf, 7 + msg.payload_len);
     return true;
 }
@@ -78,7 +78,9 @@ void Pspcom::error_handler() {
     this->state = PSPCOM_STOPPED;
     thread.quit();
     thread.wait();
-    this->worker->deleteLater();
+    if(this->worker) {
+        this->worker->deleteLater();
+    }
 }
 
 void Pspcom::start_receiving()
@@ -129,7 +131,9 @@ void Pspcom::stop_receiving()
 {
     QObject::disconnect(thread_looper);
     this->state = PSPCOM_STOPPED;
-    this->worker->deleteLater();
+    if(this->worker) {
+        this->worker->deleteLater();
+    }
     thread.quit();
     thread.wait();
 }
