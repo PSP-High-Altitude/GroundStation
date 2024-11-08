@@ -7,7 +7,7 @@ import QtQuick.tooling 1.2
 
 Module {
     Component {
-        file: "qquickfusionstyle_p.h"
+        file: "private/qquickfusionstyle_p.h"
         name: "QQuickFusionStyle"
         accessSemantics: "reference"
         prototype: "QObject"

@@ -7,7 +7,7 @@ import QtQuick.tooling 1.2
 
 Module {
     Component {
-        file: "qquickbasicstyle_p.h"
+        file: "private/qquickbasicstyle_p.h"
         name: "QQuickBasicStyle"
         accessSemantics: "reference"
         prototype: "QObject"

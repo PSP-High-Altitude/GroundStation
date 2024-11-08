@@ -797,6 +797,7 @@ Module {
             "QtPositioning/geoAddress 5.0",
             "QtPositioning/geoAddress 6.0"
         ]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1536]
     }
     Component {
@@ -808,6 +809,7 @@ Module {
             "QtPositioning/geoCircle 5.0",
             "QtPositioning/geoCircle 6.0"
         ]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1536]
         Property { name: "center"; type: "QGeoCoordinate"; read: "center"; write: "setCenter"; index: 0 }
         Property { name: "radius"; type: "double"; read: "radius"; write: "setRadius"; index: 1 }
@@ -836,6 +838,7 @@ Module {
             "QtPositioning/geoCoordinate 5.0",
             "QtPositioning/geoCoordinate 6.0"
         ]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1536]
         Enum {
             name: "CoordinateFormat"
@@ -907,6 +910,7 @@ Module {
             "QtPositioning/geoLocation 5.0",
             "QtPositioning/geoLocation 6.0"
         ]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1536]
     }
     Component {
@@ -915,6 +919,7 @@ Module {
         accessSemantics: "value"
         prototype: "QGeoShape"
         exports: ["QtPositioning/geoPath 5.0", "QtPositioning/geoPath 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1536]
         Property {
             name: "path"
@@ -993,6 +998,7 @@ Module {
             "QtPositioning/geoPolygon 5.12",
             "QtPositioning/geoPolygon 6.0"
         ]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1292, 1536]
         Property {
             name: "perimeter"
@@ -1084,6 +1090,7 @@ Module {
             "QtPositioning/geoPositionInfo 5.0",
             "QtPositioning/geoPositionInfo 6.0"
         ]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1536]
     }
     Component {
@@ -1095,6 +1102,7 @@ Module {
             "QtPositioning/geoRectangle 5.0",
             "QtPositioning/geoRectangle 6.0"
         ]
+        isStructured: true
         exportMetaObjectRevisions: [1280, 1536]
         Property {
             name: "bottomLeft"

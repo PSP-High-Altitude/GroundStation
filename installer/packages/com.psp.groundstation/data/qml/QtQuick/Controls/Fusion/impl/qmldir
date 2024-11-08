@@ -1,6 +1,6 @@
 module QtQuick.Controls.Fusion.impl
 linktarget Qt6::qtquickcontrols2fusionstyleimplplugin
-plugin qtquickcontrols2fusionstyleimplplugin
+optional plugin qtquickcontrols2fusionstyleimplplugin
 classname QtQuickControls2FusionStyleImplPlugin
 typeinfo plugins.qmltypes
 depends QtQuick auto

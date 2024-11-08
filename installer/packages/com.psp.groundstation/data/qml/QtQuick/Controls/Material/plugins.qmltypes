@@ -13,7 +13,7 @@ Module {
         prototype: "QObject"
     }
     Component {
-        file: "qquickmaterialstyle_p.h"
+        file: "private/qquickmaterialstyle_p.h"
         name: "QQuickMaterialStyle"
         accessSemantics: "reference"
         prototype: "QQuickAttachedPropertyPropagator"
@@ -534,10 +534,19 @@ Module {
             isConstant: true
         }
         Property {
+            name: "buttonVerticalPadding"
+            type: "int"
+            read: "buttonVerticalPadding"
+            index: 48
+            isReadonly: true
+            isFinal: true
+            isConstant: true
+        }
+        Property {
             name: "buttonHeight"
             type: "int"
             read: "buttonHeight"
-            index: 48
+            index: 49
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -546,7 +555,7 @@ Module {
             name: "delegateHeight"
             type: "int"
             read: "delegateHeight"
-            index: 49
+            index: 50
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -555,7 +564,25 @@ Module {
             name: "dialogButtonBoxHeight"
             type: "int"
             read: "dialogButtonBoxHeight"
-            index: 50
+            index: 51
+            isReadonly: true
+            isFinal: true
+            isConstant: true
+        }
+        Property {
+            name: "dialogTitleFontPixelSize"
+            type: "int"
+            read: "dialogTitleFontPixelSize"
+            index: 52
+            isReadonly: true
+            isFinal: true
+            isConstant: true
+        }
+        Property {
+            name: "dialogRoundedScale"
+            type: "RoundedScale"
+            read: "dialogRoundedScale"
+            index: 53
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -564,7 +591,7 @@ Module {
             name: "frameVerticalPadding"
             type: "int"
             read: "frameVerticalPadding"
-            index: 51
+            index: 54
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -573,7 +600,7 @@ Module {
             name: "menuItemHeight"
             type: "int"
             read: "menuItemHeight"
-            index: 52
+            index: 55
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -582,7 +609,7 @@ Module {
             name: "menuItemVerticalPadding"
             type: "int"
             read: "menuItemVerticalPadding"
-            index: 53
+            index: 56
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -591,7 +618,7 @@ Module {
             name: "switchIndicatorWidth"
             type: "int"
             read: "switchIndicatorWidth"
-            index: 54
+            index: 57
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -600,7 +627,7 @@ Module {
             name: "switchIndicatorHeight"
             type: "int"
             read: "switchIndicatorHeight"
-            index: 55
+            index: 58
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -609,7 +636,7 @@ Module {
             name: "switchNormalHandleHeight"
             type: "int"
             read: "switchNormalHandleHeight"
-            index: 56
+            index: 59
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -618,7 +645,7 @@ Module {
             name: "switchCheckedHandleHeight"
             type: "int"
             read: "switchCheckedHandleHeight"
-            index: 57
+            index: 60
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -627,7 +654,7 @@ Module {
             name: "switchLargestHandleHeight"
             type: "int"
             read: "switchLargestHandleHeight"
-            index: 58
+            index: 61
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -636,7 +663,7 @@ Module {
             name: "switchDelegateVerticalPadding"
             type: "int"
             read: "switchDelegateVerticalPadding"
-            index: 59
+            index: 62
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -645,7 +672,7 @@ Module {
             name: "textFieldHeight"
             type: "int"
             read: "textFieldHeight"
-            index: 60
+            index: 63
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -654,7 +681,7 @@ Module {
             name: "textFieldHorizontalPadding"
             type: "int"
             read: "textFieldHorizontalPadding"
-            index: 61
+            index: 64
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -663,7 +690,7 @@ Module {
             name: "textFieldVerticalPadding"
             type: "int"
             read: "textFieldVerticalPadding"
-            index: 62
+            index: 65
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -672,7 +699,7 @@ Module {
             name: "tooltipHeight"
             type: "int"
             read: "tooltipHeight"
-            index: 63
+            index: 66
             isReadonly: true
             isFinal: true
             isConstant: true
@@ -719,6 +746,19 @@ Module {
             type: "QColor"
             Parameter { name: "color"; type: "QColor" }
             Parameter { name: "shade"; type: "Shade" }
+        }
+        Method {
+            name: "buttonLeftPadding"
+            type: "int"
+            Parameter { name: "flat"; type: "bool" }
+            Parameter { name: "hasIcon"; type: "bool" }
+        }
+        Method {
+            name: "buttonRightPadding"
+            type: "int"
+            Parameter { name: "flat"; type: "bool" }
+            Parameter { name: "hasIcon"; type: "bool" }
+            Parameter { name: "hasText"; type: "bool" }
         }
     }
 }

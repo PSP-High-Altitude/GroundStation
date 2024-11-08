@@ -7,7 +7,7 @@ import QtQuick.tooling 1.2
 
 Module {
     Component {
-        file: "qquickmaterialbusyindicator_p.h"
+        file: "private/qquickmaterialbusyindicator_p.h"
         name: "QQuickMaterialBusyIndicator"
         accessSemantics: "reference"
         defaultProperty: "data"
@@ -20,9 +20,10 @@ Module {
             "QtQuick.Controls.Material.impl/BusyIndicatorImpl 2.7",
             "QtQuick.Controls.Material.impl/BusyIndicatorImpl 2.11",
             "QtQuick.Controls.Material.impl/BusyIndicatorImpl 6.0",
-            "QtQuick.Controls.Material.impl/BusyIndicatorImpl 6.3"
+            "QtQuick.Controls.Material.impl/BusyIndicatorImpl 6.3",
+            "QtQuick.Controls.Material.impl/BusyIndicatorImpl 6.7"
         ]
-        exportMetaObjectRevisions: [512, 513, 516, 519, 523, 1536, 1539]
+        exportMetaObjectRevisions: [512, 513, 516, 519, 523, 1536, 1539, 1543]
         Property { name: "color"; type: "QColor"; read: "color"; write: "setColor"; index: 0; isFinal: true }
         Property {
             name: "running"
@@ -34,14 +35,15 @@ Module {
         }
     }
     Component {
-        file: "qquickmaterialplaceholdertext_p.h"
+        file: "private/qquickmaterialplaceholdertext_p.h"
         name: "QQuickMaterialPlaceholderText"
         accessSemantics: "reference"
         prototype: "QQuickPlaceholderText"
         exports: [
-            "QtQuick.Controls.Material.impl/FloatingPlaceholderText 6.5"
+            "QtQuick.Controls.Material.impl/FloatingPlaceholderText 6.5",
+            "QtQuick.Controls.Material.impl/FloatingPlaceholderText 6.7"
         ]
-        exportMetaObjectRevisions: [1541]
+        exportMetaObjectRevisions: [1541, 1543]
         Property {
             name: "filled"
             type: "bool"
@@ -113,7 +115,7 @@ Module {
         Method { name: "adjustTransformOrigin" }
     }
     Component {
-        file: "qquickmaterialprogressbar_p.h"
+        file: "private/qquickmaterialprogressbar_p.h"
         name: "QQuickMaterialProgressBar"
         accessSemantics: "reference"
         defaultProperty: "data"
@@ -126,9 +128,10 @@ Module {
             "QtQuick.Controls.Material.impl/ProgressBarImpl 2.7",
             "QtQuick.Controls.Material.impl/ProgressBarImpl 2.11",
             "QtQuick.Controls.Material.impl/ProgressBarImpl 6.0",
-            "QtQuick.Controls.Material.impl/ProgressBarImpl 6.3"
+            "QtQuick.Controls.Material.impl/ProgressBarImpl 6.3",
+            "QtQuick.Controls.Material.impl/ProgressBarImpl 6.7"
         ]
-        exportMetaObjectRevisions: [512, 513, 516, 519, 523, 1536, 1539]
+        exportMetaObjectRevisions: [512, 513, 516, 519, 523, 1536, 1539, 1543]
         Property { name: "color"; type: "QColor"; read: "color"; write: "setColor"; index: 0; isFinal: true }
         Property {
             name: "progress"
@@ -148,7 +151,7 @@ Module {
         }
     }
     Component {
-        file: "qquickmaterialripple_p.h"
+        file: "private/qquickmaterialripple_p.h"
         name: "QQuickMaterialRipple"
         accessSemantics: "reference"
         defaultProperty: "data"
@@ -161,9 +164,10 @@ Module {
             "QtQuick.Controls.Material.impl/Ripple 2.7",
             "QtQuick.Controls.Material.impl/Ripple 2.11",
             "QtQuick.Controls.Material.impl/Ripple 6.0",
-            "QtQuick.Controls.Material.impl/Ripple 6.3"
+            "QtQuick.Controls.Material.impl/Ripple 6.3",
+            "QtQuick.Controls.Material.impl/Ripple 6.7"
         ]
-        exportMetaObjectRevisions: [512, 513, 516, 519, 523, 1536, 1539]
+        exportMetaObjectRevisions: [512, 513, 516, 519, 523, 1536, 1539, 1543]
         Enum {
             name: "Trigger"
             values: ["Press", "Release"]
@@ -212,12 +216,15 @@ Module {
         }
     }
     Component {
-        file: "qquickmaterialtextcontainer_p.h"
+        file: "private/qquickmaterialtextcontainer_p.h"
         name: "QQuickMaterialTextContainer"
         accessSemantics: "reference"
         prototype: "QQuickPaintedItem"
-        exports: ["QtQuick.Controls.Material.impl/MaterialTextContainer 6.5"]
-        exportMetaObjectRevisions: [1541]
+        exports: [
+            "QtQuick.Controls.Material.impl/MaterialTextContainer 6.5",
+            "QtQuick.Controls.Material.impl/MaterialTextContainer 6.7"
+        ]
+        exportMetaObjectRevisions: [1541, 1543]
         Enum {
             name: "PlaceHolderHAlignment"
             values: [

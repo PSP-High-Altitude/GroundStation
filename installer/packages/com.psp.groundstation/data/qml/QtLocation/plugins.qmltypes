@@ -110,9 +110,10 @@ Module {
             "QtLocation/MapCircle 5.15",
             "QtLocation/MapCircle 6.0",
             "QtLocation/MapCircle 6.3",
-            "QtLocation/MapCircle 6.6"
+            "QtLocation/MapCircle 6.6",
+            "QtLocation/MapCircle 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542]
+        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542, 1543]
         Property {
             name: "center"
             type: "QGeoCoordinate"
@@ -178,6 +179,53 @@ Module {
         exportMetaObjectRevisions: [1280, 1536]
     }
     Component {
+        file: "private/qdeclarativegeojsondata_p.h"
+        name: "QDeclarativeGeoJsonData"
+        accessSemantics: "reference"
+        prototype: "QObject"
+        exports: ["QtLocation/GeoJsonData 6.7"]
+        exportMetaObjectRevisions: [1543]
+        Property {
+            name: "model"
+            type: "QVariant"
+            read: "model"
+            write: "setModel"
+            notify: "modelChanged"
+            index: 0
+        }
+        Property {
+            name: "sourceUrl"
+            type: "QUrl"
+            read: "sourceUrl"
+            write: "openUrl"
+            notify: "sourceUrlChanged"
+            index: 1
+        }
+        Signal { name: "modelChanged" }
+        Signal { name: "sourceUrlChanged" }
+        Method { name: "clear" }
+        Method {
+            name: "addItem"
+            Parameter { name: "item"; type: "QQuickItem"; isPointer: true }
+        }
+        Method { name: "open"; type: "bool" }
+        Method {
+            name: "openUrl"
+            type: "bool"
+            Parameter { name: "url"; type: "QUrl" }
+        }
+        Method { name: "save"; type: "bool" }
+        Method {
+            name: "saveAs"
+            type: "bool"
+            Parameter { name: "url"; type: "QUrl" }
+        }
+        Method {
+            name: "setModelToMapContents"
+            Parameter { name: "map"; type: "QDeclarativeGeoMap"; isPointer: true }
+        }
+    }
+    Component {
         file: "private/qdeclarativegeomap_p.h"
         name: "QDeclarativeGeoMap"
         accessSemantics: "reference"
@@ -189,9 +237,10 @@ Module {
             "QtLocation/Map 5.0",
             "QtLocation/Map 5.12",
             "QtLocation/Map 6.0",
-            "QtLocation/Map 6.3"
+            "QtLocation/Map 6.3",
+            "QtLocation/Map 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1292, 1536, 1539]
+        exportMetaObjectRevisions: [1280, 1292, 1536, 1539, 1543]
         Property {
             name: "plugin"
             type: "QDeclarativeGeoServiceProvider"
@@ -548,9 +597,10 @@ Module {
         exports: [
             "QtLocation/MapCopyrightNotice 5.0",
             "QtLocation/MapCopyrightNotice 6.0",
-            "QtLocation/MapCopyrightNotice 6.3"
+            "QtLocation/MapCopyrightNotice 6.3",
+            "QtLocation/MapCopyrightNotice 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1536, 1539]
+        exportMetaObjectRevisions: [1280, 1536, 1539, 1543]
         Property {
             name: "mapSource"
             type: "QDeclarativeGeoMap"
@@ -608,10 +658,11 @@ Module {
             "QtLocation/GeoMapItemBase 5.15",
             "QtLocation/GeoMapItemBase 6.0",
             "QtLocation/GeoMapItemBase 6.3",
-            "QtLocation/GeoMapItemBase 6.6"
+            "QtLocation/GeoMapItemBase 6.6",
+            "QtLocation/GeoMapItemBase 6.7"
         ]
         isCreatable: false
-        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542]
+        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542, 1543]
         Property { name: "geoShape"; type: "QGeoShape"; read: "geoShape"; write: "setGeoShape"; index: 0 }
         Property {
             name: "autoFadeIn"
@@ -666,9 +717,10 @@ Module {
         exports: [
             "QtLocation/MapItemGroup 5.0",
             "QtLocation/MapItemGroup 6.0",
-            "QtLocation/MapItemGroup 6.3"
+            "QtLocation/MapItemGroup 6.3",
+            "QtLocation/MapItemGroup 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1536, 1539]
+        exportMetaObjectRevisions: [1280, 1536, 1539, 1543]
         Signal { name: "mapItemOpacityChanged" }
         Signal { name: "addTransitionFinished" }
         Signal { name: "removeTransitionFinished" }
@@ -683,9 +735,10 @@ Module {
             "QtLocation/MapItemView 5.0",
             "QtLocation/MapItemView 5.12",
             "QtLocation/MapItemView 6.0",
-            "QtLocation/MapItemView 6.3"
+            "QtLocation/MapItemView 6.3",
+            "QtLocation/MapItemView 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1292, 1536, 1539]
+        exportMetaObjectRevisions: [1280, 1292, 1536, 1539, 1543]
         Property {
             name: "model"
             type: "QVariant"
@@ -766,9 +819,10 @@ Module {
             "QtLocation/MapQuickItem 5.15",
             "QtLocation/MapQuickItem 6.0",
             "QtLocation/MapQuickItem 6.3",
-            "QtLocation/MapQuickItem 6.6"
+            "QtLocation/MapQuickItem 6.6",
+            "QtLocation/MapQuickItem 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542]
+        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542, 1543]
         Property {
             name: "coordinate"
             type: "QGeoCoordinate"
@@ -1622,8 +1676,6 @@ Module {
         name: "QDeclarativeMapLineProperties"
         accessSemantics: "reference"
         prototype: "QObject"
-        exports: ["QtLocation/QDeclarativeMapLineProperties 6.0"]
-        exportMetaObjectRevisions: [1536]
         Property {
             name: "width"
             type: "double"
@@ -2018,9 +2070,10 @@ Module {
             "QtLocation/MapPolygon 5.15",
             "QtLocation/MapPolygon 6.0",
             "QtLocation/MapPolygon 6.3",
-            "QtLocation/MapPolygon 6.6"
+            "QtLocation/MapPolygon 6.6",
+            "QtLocation/MapPolygon 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542]
+        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542, 1543]
         Property {
             name: "path"
             type: "QGeoCoordinate"
@@ -2078,9 +2131,10 @@ Module {
             "QtLocation/MapPolyline 5.15",
             "QtLocation/MapPolyline 6.0",
             "QtLocation/MapPolyline 6.3",
-            "QtLocation/MapPolyline 6.6"
+            "QtLocation/MapPolyline 6.6",
+            "QtLocation/MapPolyline 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542]
+        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542, 1543]
         Property {
             name: "path"
             type: "QGeoCoordinate"
@@ -2154,9 +2208,10 @@ Module {
             "QtLocation/MapRectangle 5.15",
             "QtLocation/MapRectangle 6.0",
             "QtLocation/MapRectangle 6.3",
-            "QtLocation/MapRectangle 6.6"
+            "QtLocation/MapRectangle 6.6",
+            "QtLocation/MapRectangle 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542]
+        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542, 1543]
         Property {
             name: "topLeft"
             type: "QGeoCoordinate"
@@ -2220,9 +2275,10 @@ Module {
             "QtLocation/MapRoute 5.15",
             "QtLocation/MapRoute 6.0",
             "QtLocation/MapRoute 6.3",
-            "QtLocation/MapRoute 6.6"
+            "QtLocation/MapRoute 6.6",
+            "QtLocation/MapRoute 6.7"
         ]
-        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542]
+        exportMetaObjectRevisions: [1280, 1294, 1295, 1536, 1539, 1542, 1543]
         Property {
             name: "route"
             type: "QGeoRoute"
@@ -2560,6 +2616,7 @@ Module {
         name: "QGeoManeuver"
         accessSemantics: "value"
         exports: ["QtLocation/routeManeuver 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Enum {
             name: "InstructionDirection"
@@ -2657,6 +2714,7 @@ Module {
         name: "QGeoMapType"
         accessSemantics: "value"
         exports: ["QtLocation/mapType 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Enum {
             name: "MapStyle"
@@ -2790,6 +2848,7 @@ Module {
         name: "QGeoRoute"
         accessSemantics: "value"
         exports: ["QtLocation/route 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property {
             name: "routeId"
@@ -2887,6 +2946,7 @@ Module {
         name: "QGeoRouteSegment"
         accessSemantics: "value"
         exports: ["QtLocation/routeSegment 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property {
             name: "travelTime"
@@ -2931,7 +2991,8 @@ Module {
         exportMetaObjectRevisions: [1542]
         Enum {
             name: "ReferenceSurface"
-            type: "uint8_t"
+            isScoped: true
+            type: "quint8"
             values: ["Map", "Globe"]
         }
     }
@@ -2940,6 +3001,7 @@ Module {
         name: "QPlaceAttribute"
         accessSemantics: "value"
         exports: ["QtLocation/placeAttribute 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property { name: "label"; type: "QString"; read: "label"; write: "setLabel"; index: 0 }
         Property { name: "text"; type: "QString"; read: "text"; write: "setText"; index: 1 }
@@ -2949,6 +3011,7 @@ Module {
         name: "QPlaceContactDetail"
         accessSemantics: "value"
         exports: ["QtLocation/contactDetail 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property { name: "label"; type: "QString"; read: "label"; write: "setLabel"; index: 0 }
         Property { name: "value"; type: "QString"; read: "value"; write: "setValue"; index: 1 }
@@ -2958,6 +3021,7 @@ Module {
         name: "QPlaceIcon"
         accessSemantics: "value"
         exports: ["QtLocation/icon 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property {
             name: "parameters"
@@ -2986,6 +3050,7 @@ Module {
         name: "QPlaceRatings"
         accessSemantics: "value"
         exports: ["QtLocation/ratings 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property { name: "average"; type: "double"; read: "average"; write: "setAverage"; index: 0 }
         Property { name: "maximum"; type: "double"; read: "maximum"; write: "setMaximum"; index: 1 }
@@ -2996,6 +3061,7 @@ Module {
         name: "QPlaceSupplier"
         accessSemantics: "value"
         exports: ["QtLocation/supplier 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property { name: "name"; type: "QString"; read: "name"; write: "setName"; index: 0 }
         Property {
@@ -3013,6 +3079,7 @@ Module {
         name: "QPlaceUser"
         accessSemantics: "value"
         exports: ["QtLocation/user 6.0"]
+        isStructured: true
         exportMetaObjectRevisions: [1536]
         Property { name: "userId"; type: "QString"; read: "userId"; write: "setUserId"; index: 0 }
         Property { name: "name"; type: "QString"; read: "name"; write: "setName"; index: 1 }

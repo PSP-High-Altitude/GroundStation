@@ -698,14 +698,7 @@ Module {
         ]
         exportMetaObjectRevisions: [513, 527, 1536]
         attachedType: "QQmlDelegateModelAttached"
-        Property {
-            name: "model"
-            type: "QVariant"
-            read: "model"
-            write: "setModel"
-            index: 0
-            isFinal: true
-        }
+        Property { name: "model"; type: "QVariant"; read: "model"; write: "setModel"; index: 0 }
         Property {
             name: "delegate"
             type: "QQmlComponent"
@@ -714,7 +707,6 @@ Module {
             write: "setDelegate"
             notify: "delegateChanged"
             index: 1
-            isFinal: true
         }
         Property {
             name: "filterOnGroup"
@@ -724,7 +716,6 @@ Module {
             reset: "resetFilterGroup"
             notify: "filterGroupChanged"
             index: 2
-            isFinal: true
         }
         Property {
             name: "items"
@@ -733,7 +724,6 @@ Module {
             read: "items"
             index: 3
             isReadonly: true
-            isFinal: true
             isConstant: true
         }
         Property {
@@ -743,7 +733,6 @@ Module {
             read: "persistedItems"
             index: 4
             isReadonly: true
-            isFinal: true
             isConstant: true
         }
         Property {
@@ -753,7 +742,6 @@ Module {
             read: "groups"
             index: 5
             isReadonly: true
-            isFinal: true
             isConstant: true
         }
         Property {
@@ -763,7 +751,6 @@ Module {
             read: "parts"
             index: 6
             isReadonly: true
-            isFinal: true
             isConstant: true
         }
         Property {
@@ -773,7 +760,6 @@ Module {
             write: "setRootIndex"
             notify: "rootIndexChanged"
             index: 7
-            isFinal: true
         }
         Signal { name: "filterGroupChanged" }
         Signal { name: "defaultGroupsChanged" }
@@ -955,7 +941,6 @@ Module {
             notify: "countChanged"
             index: 0
             isReadonly: true
-            isFinal: true
         }
         Property {
             name: "name"
@@ -964,7 +949,6 @@ Module {
             write: "setName"
             notify: "nameChanged"
             index: 1
-            isFinal: true
         }
         Property {
             name: "includeByDefault"
@@ -973,7 +957,6 @@ Module {
             write: "setDefaultInclude"
             notify: "defaultIncludeChanged"
             index: 2
-            isFinal: true
         }
         Signal { name: "countChanged" }
         Signal { name: "nameChanged" }
@@ -1009,7 +992,6 @@ Module {
             notify: "countChanged"
             index: 0
             isReadonly: true
-            isFinal: true
         }
         Signal { name: "countChanged" }
         Signal {
@@ -1063,7 +1045,6 @@ Module {
             write: "setActive"
             notify: "activeChanged"
             index: 0
-            isFinal: true
         }
         Property {
             name: "asynchronous"
@@ -1072,7 +1053,6 @@ Module {
             write: "setAsync"
             notify: "asynchronousChanged"
             index: 1
-            isFinal: true
         }
         Property {
             name: "model"
@@ -1081,7 +1061,6 @@ Module {
             write: "setModel"
             notify: "modelChanged"
             index: 2
-            isFinal: true
         }
         Property {
             name: "count"
@@ -1090,7 +1069,6 @@ Module {
             notify: "countChanged"
             index: 3
             isReadonly: true
-            isFinal: true
         }
         Property {
             name: "delegate"
@@ -1100,7 +1078,6 @@ Module {
             write: "setDelegate"
             notify: "delegateChanged"
             index: 4
-            isFinal: true
         }
         Property {
             name: "object"
@@ -1110,7 +1087,6 @@ Module {
             notify: "objectChanged"
             index: 5
             isReadonly: true
-            isFinal: true
         }
         Signal { name: "modelChanged" }
         Signal { name: "delegateChanged" }
@@ -1251,7 +1227,6 @@ Module {
             notify: "countChanged"
             index: 0
             isReadonly: true
-            isFinal: true
         }
         Property {
             name: "dynamicRoles"
@@ -1259,7 +1234,6 @@ Module {
             read: "dynamicRoles"
             write: "setDynamicRoles"
             index: 1
-            isFinal: true
         }
         Property {
             name: "agent"
@@ -1269,7 +1243,6 @@ Module {
             read: "agent"
             index: 2
             isReadonly: true
-            isFinal: true
             isConstant: true
         }
         Signal { name: "countChanged" }
@@ -1416,6 +1389,13 @@ Module {
             isConstant: true
         }
         Method { name: "toString"; type: "QString" }
+        Method {
+            name: "data"
+            revision: 1543
+            type: "QVariant"
+            Parameter { name: "role"; type: "int" }
+        }
+        Method { name: "data"; revision: 1543; type: "QVariant"; isCloned: true }
     }
     Component {
         file: "private/qqmlobjectmodel_p.h"
@@ -1542,6 +1522,13 @@ Module {
             isFinal: true
         }
         Method { name: "toString"; type: "QString" }
+        Method {
+            name: "data"
+            revision: 1543
+            type: "QVariant"
+            Parameter { name: "role"; type: "int" }
+        }
+        Method { name: "data"; revision: 1543; type: "QVariant"; isCloned: true }
     }
     Component {
         file: "private/qquickpackage_p.h"

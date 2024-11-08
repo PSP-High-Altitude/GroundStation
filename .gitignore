@@ -1,5 +1,4 @@
 keys.h
-installer/*.exe
-installer/packages/com.psp.groundstation/data/GroundStation.exe
+installer/packages/com.psp.groundstation/data/
 installer/installercreationcmd.txt
 build/

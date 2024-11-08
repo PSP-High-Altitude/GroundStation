@@ -1,6 +1,6 @@
 module QtQuick.Controls.Universal.impl
 linktarget Qt6::qtquickcontrols2universalstyleimplplugin
-plugin qtquickcontrols2universalstyleimplplugin
+optional plugin qtquickcontrols2universalstyleimplplugin
 classname QtQuickControls2UniversalStyleImplPlugin
 typeinfo plugins.qmltypes
 depends QtQuick auto

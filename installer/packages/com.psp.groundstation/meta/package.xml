@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>GroundStation</DisplayName>
     <Description>The PSPHA Ground Station Software</Description>
-    <Version>1.0.3</Version>
-    <ReleaseDate>2024-02-26</ReleaseDate>
+    <Version>1.0.4</Version>
+    <ReleaseDate>2024-11-07</ReleaseDate>
     <Licenses>
     </Licenses>
     <Default>true</Default>
