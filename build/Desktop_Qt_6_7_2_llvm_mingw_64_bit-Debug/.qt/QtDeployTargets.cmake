@@ -1,3 +1,0 @@
-set(__QT_DEPLOY_TARGET_appGroundStation_FILE C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug/appGroundStation.exe)
-set(__QT_DEPLOY_TARGET_appGroundStation_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_appGroundStation_RUNTIME_DLLS E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6QuickControls2.dll;E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6Quick.dll;E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6QmlModels.dll;E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6Qml.dll;E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6Network.dll;E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6OpenGL.dll;E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6Gui.dll;E:/Programs/Qt/6.7.2/llvm-mingw_64/bin/Qt6Core.dll)

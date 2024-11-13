@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/GroundStation">
-    <file alias="qmldir">C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug/GroundStation/qmldir</file>
-  </qresource>
-</RCC>
-

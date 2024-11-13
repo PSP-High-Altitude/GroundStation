@@ -1,9 +1,0 @@
---resource
-C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug/.qt/rcc/qmake_GroundStation.qrc
---resource
-C:/Users/griff/OneDrive/Documents/GroundStation/build/Desktop_Qt_6_7_2_llvm_mingw_64_bit-Debug/.qt/rcc/appGroundStation_raw_qml_0.qrc
-/qt/qml/GroundStation/Main.qml
-/qt/qml/GroundStation/TapeAltimeter.qml
-/qt/qml/GroundStation/Clock.qml
-/qt/qml/GroundStation/PSPMap.qml
-/qt/qml/GroundStation/DataTable.qml
