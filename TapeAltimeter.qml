@@ -60,8 +60,9 @@ Rectangle {
     ListView {
         id: tick_repeater
         interactive: false
-        model: (max_alt-(-min_alt))
+        model: (max_alt-min_alt)
         z: 3
+
         verticalLayoutDirection: ListView.BottomToTop
         anchors.fill: parent
         clip: true
@@ -100,6 +101,9 @@ Rectangle {
                 color: "white"
                 font.pointSize: 14
             }
+        }
+        Component.onCompleted: {
+            tick_repeater.contentY = min_alt/tick_interval*tick_spacing
         }
     }
 
@@ -143,7 +147,7 @@ Rectangle {
             sky.height = Math.min(altimeter_window.height-4, (altimeter_window.height)/2 + ((current_displayed_altitude - ground_alt)*(tick_spacing/tick_interval)))
 
             // set sky color
-            var newObject = Qt.createQmlObject('
+            var skyObject = Qt.createQmlObject('
                 import QtQuick 2.0
                 Gradient {
                     GradientStop { id: "gStop1"; position: 1.0; color: "blue" }
@@ -152,9 +156,23 @@ Rectangle {
                 ',
                sky,
                "dynamicSnippet1");
-            newObject.stops[0].color = Qt.hsva((230-(Math.E**(3.6-0.0001*current_displayed_altitude)))/360, 60.0/100, (82/100)*(Math.E**(-0.1-0.0001*current_displayed_altitude))+0.15, 1.0)
-            newObject.stops[1].color = Qt.hsva((230-(Math.E**(3.6-0.0001*current_displayed_altitude)))/360, 60.0/100, (82/100)*(Math.E**(-0.5-0.0001*current_displayed_altitude))+0.025, 1.0)
-            sky.gradient = newObject;
+            skyObject.stops[0].color = Qt.hsva((230-(Math.E**(3.6-0.0001*current_displayed_altitude)))/360, 60.0/100, (82/100)*(Math.E**(-0.1-0.0001*current_displayed_altitude))+0.15, 1.0)
+            skyObject.stops[1].color = Qt.hsva((230-(Math.E**(3.6-0.0001*current_displayed_altitude)))/360, 60.0/100, (82/100)*(Math.E**(-0.5-0.0001*current_displayed_altitude))+0.025, 1.0)
+            sky.gradient = skyObject;
+
+            // set ground color
+            var gndObject = Qt.createQmlObject('
+                import QtQuick 2.0
+                Gradient {
+                    GradientStop { id: "gStop1"; position: 1.0; color: "brown" }
+                    GradientStop { id: "gStop2"; position: 0.0; color: "brown" }
+                }
+                ',
+               ground,
+               "dynamicSnippet1");
+            gndObject.stops[0].color = Qt.hsva((42.0/360), 50.0/100, (16/100)*(Math.E**(-0.5-0.0001*current_displayed_altitude))+0.025, 1.0)
+            gndObject.stops[1].color = Qt.hsva((42.0/360), 50.0/100, (16/100)*(Math.E**(-0.1-0.0001*current_displayed_altitude))+0.15, 1.0)
+            ground.gradient = gndObject;
 
             tick_repeater.contentY -= speed
         }

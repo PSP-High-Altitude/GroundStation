@@ -41,19 +41,19 @@ ApplicationWindow {
             Layout.bottomMargin: 10
             Layout.rightMargin: 10
 
+            PSPMap {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.horizontalStretchFactor: 1
+                Layout.verticalStretchFactor: 1
+            }
+
             DataTable {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.horizontalStretchFactor: 1
                 Layout.verticalStretchFactor: 1
 
-            }
-
-            PSPMap {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.horizontalStretchFactor: 1
-                Layout.verticalStretchFactor: 1
             }
 
             TapeAltimeter {

@@ -21,7 +21,8 @@ Item {
         var seconds = date.getSeconds();
 
         const zeroPad = (num, places) => String(num).padStart(places, '0')
+        if(hours == 0) hours = 12;
 
-        clock_text.text = zeroPad(hours, 2) + ":" + zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2) + " " + (ampm ? "AM" : "PM")
+        clock_text.text = zeroPad(hours, 2) + ":" + zeroPad(minutes, 2) + ":" + zeroPad(seconds, 2) + " " + (ampm ? "PM" : "AM")
     }
 }
