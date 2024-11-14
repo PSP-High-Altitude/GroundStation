@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Fusion
+import QtQuick.Shapes
+import "AppStyle"
 
 ApplicationWindow {
     id: app_window
@@ -8,6 +10,9 @@ ApplicationWindow {
     height: 720
     visible: true
     title: "PSP GroundStation"
+    color: AppStyle.window
+    property int stack_index: 0
+    readonly property var stack_components: [attitude_view, data_view]
 
     menuBar: MenuBar {
         Menu {
@@ -17,6 +22,18 @@ ApplicationWindow {
                 onTriggered: Qt.quit();
             }
         }
+        Menu {
+            title: "Devices"
+            MenuItem {
+                text: "Devices..."
+                onTriggered: device_dialog.show();
+            }
+        }
+    }
+
+    // Popups/Dialogs
+    DeviceDialog {
+        id: device_dialog
     }
 
     ColumnLayout {
@@ -36,32 +53,49 @@ ApplicationWindow {
 
         // Data section
         RowLayout {
-            Layout.topMargin: 10
-            Layout.leftMargin: 10
-            Layout.bottomMargin: 10
-            Layout.rightMargin: 10
+            id: data_section
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
-            PSPMap {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                Layout.horizontalStretchFactor: 1
-                Layout.verticalStretchFactor: 1
+            ArrowButton {
+                width: 30
+                height: 100
+                Layout.margins: 10
+                direction: "left"
+                onClicked: {
+                    main_swipe_view.decrementCurrentIndex()
+                }
             }
 
-            DataTable {
-                Layout.fillWidth: true
+            SwipeView {
+                id: main_swipe_view
                 Layout.fillHeight: true
-                Layout.horizontalStretchFactor: 1
-                Layout.verticalStretchFactor: 1
+                Layout.fillWidth: true
+                currentIndex: 0
 
+                AttitudeView {
+                    id: attitude_view
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    visible: (main_swipe_view.currentItem === this)
+                }
+
+                DataView {
+                    id: data_view
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    visible: (main_swipe_view.currentItem === this)
+                }
             }
 
-            TapeAltimeter {
-                id: tape_alt
-                altitude: 190
-                ground_alt: 190
-                Layout.fillHeight: true
-                Layout.verticalStretchFactor: 1
+            ArrowButton {
+                width: 30
+                height: 100
+                Layout.margins: 10
+                direction: "right"
+                onClicked: {
+                    main_swipe_view.incrementCurrentIndex()
+                }
             }
         }
     }

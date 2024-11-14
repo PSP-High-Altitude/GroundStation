@@ -3,6 +3,7 @@ import QtQml
 import QtQuick.Controls
 import QtQuick.Window
 import QtQuick.Layouts
+import "AppStyle"
 
 Rectangle {
     id: altimeter_window
@@ -20,7 +21,7 @@ Rectangle {
     property int current_max_idx: 0
     property int timer_period: 10
 
-    color: "#2c2c2c"
+    color: AppStyle.window
 
     Rectangle {
         id: alt_border

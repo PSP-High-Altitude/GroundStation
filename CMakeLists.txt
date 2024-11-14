@@ -5,6 +5,7 @@ project(GroundStation VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.7 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 
 qt_standard_project_setup(REQUIRES 6.7)
@@ -17,6 +18,9 @@ qt_add_executable(appGroundStation
     resources.qrc
 )
 
+set_source_files_properties(AppStyle/AppStyle.qml
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 qt_add_qml_module(appGroundStation
     URI GroundStation
     VERSION 1.0
@@ -26,6 +30,13 @@ qt_add_qml_module(appGroundStation
         Clock.qml
         PSPMap.qml
         DataTable.qml
+        DeviceDialog.qml
+        DeviceDialogSelect.qml
+        AppStyle/AppStyle.qml
+        CustomSwitch.qml
+        AttitudeView.qml
+        DataView.qml
+        ArrowButton.qml
     RESOURCES
         resources.qrc
         resources/alt_marker.png
@@ -34,6 +45,7 @@ qt_add_qml_module(appGroundStation
         resources/marker.png
     SOURCES
         groundstation.rc
+        settings.h settings.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -50,6 +62,7 @@ set_target_properties(appGroundStation PROPERTIES
 target_link_libraries(appGroundStation
     PRIVATE Qt6::Quick
     PRIVATE Qt6::QuickControls2
+    PRIVATE Qt6::Widgets
 )
 
 include(GNUInstallDirs)
