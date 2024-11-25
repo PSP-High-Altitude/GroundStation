@@ -72,6 +72,7 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 currentIndex: 0
+                interactive: false
 
                 AttitudeView {
                     id: attitude_view
