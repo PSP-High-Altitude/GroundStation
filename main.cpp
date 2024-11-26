@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
+#include "datachart.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,9 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.loadFromModule("GroundStation", "Main");
+
+    // Support class for the datachart
+    DataChart chart(&engine);
 
     return app.exec();
 }

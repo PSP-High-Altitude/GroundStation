@@ -21,44 +21,44 @@ RowLayout {
         data_chart.series(type).append(x, y)
     }
 
+    // Chart of different flight data
     ChartView {
         id: data_chart
+        objectName: "data_chart"
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.horizontalStretchFactor: 1
         Layout.verticalStretchFactor: 1
-        legend.visible: true
+        //legend.visible: true
+        antialiasing: true
 
-        LineSeries {
+        //ValuesAxis {
+        //    id: axisAlt
+        //    Component.onCompleted: {
+        //        console.log(this)
+        //    }
+        //}
+
+        //ValuesAxis {
+        //    id: axisSpd
+        //    Component.onCompleted: {
+        //        console.log(this)
+        //    }
+        //}
+
+        // Various data series
+        DataSeries {
             id: altitude_series
             name: "Altitude"
-            onPointAdded: function(index) {
-                let x = this.at(index).x
-                let y = this.at(index).y
-                // create lower and upper rounded values
-                let hiX = Math.ceil(x/10)*10 + 10
-                let lowX = Math.floor(x/10)*10 - 10
-                let hiY = Math.ceil(y/10)*10 + 10
-                let lowY = Math.floor(y/10)*10 - 10
-                // find new min and max
-                if(x < minX) minX = lowX
-                if(x > maxX) maxX = hiX
-                if(y < minY) minY = lowY
-                if(y > maxY) maxY = hiY
-
-                if(!autoScale) {
-                    // Don't actually rescale if this is false
-                    return
-                }
-
-                // rescale axes
-                this.axisX.min = minX
-                this.axisX.max = maxX
-                this.axisY.min = minY
-                this.axisY.max = maxY
-            }
+            //axisY: axisAlt
+        }
+        DataSeries {
+            id: speed_series
+            name: "Speed"
+            //axisYRight: axisSpd
         }
 
+        // Provide mouse area for chart interaction
         MouseArea {
             id: chart_mouse
             property int dStartX: 0
@@ -111,7 +111,12 @@ RowLayout {
                 id: contextMenu
                 MenuItem {
                     text: "Autoscale Axes"
-                    onTriggered: { data_view.autoScale = true }
+                    onTriggered: {
+                        data_view.autoScale = true
+                        for(var i = 0; i < data_chart.count; i++) {
+                            data_chart.series(i).rescaleAxes()
+                        }
+                    }
                 }
             }
         }
@@ -131,6 +136,8 @@ RowLayout {
         onTriggered: {
             var y = Math.floor(Math.random() * 100)
             data_view.addDataPoint("Altitude", time, y)
+            y = Math.floor(Math.random() * 1000)
+            data_view.addDataPoint("Speed", time, y)
             time++
         }
     }
