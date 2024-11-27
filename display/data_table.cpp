@@ -254,23 +254,16 @@ void DataTable::update_data(pspcommsg msg)
         uint8_t fix_valid = msg.payload[31] & 0x1;
         QString phases[] = {
             "Init",
+            "Wait",
             "Ready",
-            "Boost 1",
-            "Fast Boost 1",
-            "Fast 1",
-            "Coast 1",
-            "Stage",
-            "Ignite",
-            "Boost 2",
-            "Fast Boost 2",
-            "Fast 2",
-            "Coast 2",
+            "Boost",
+            "Coast",
             "Drogue",
             "Main",
             "Landed",
         };
 
-        if(phase < 15) {
+        if(phase < sizeof(phases)/sizeof(QString)) {
             fill_cell(table_widget, this, "flight_phase", 0, phases[phase]);
         } else {
             fill_cell(table_widget, this, "flight_phase", 0, "Unknown");
@@ -319,23 +312,16 @@ void DataTable::update_data(pspcommsg msg)
         uint8_t fix_valid = msg.payload[32] & 0x1;
         QString phases[] = {
             "Init",
+            "Wait",
             "Ready",
-            "Boost 1",
-            "Fast Boost 1",
-            "Fast 1",
-            "Coast 1",
-            "Stage",
-            "Ignite",
-            "Boost 2",
-            "Fast Boost 2",
-            "Fast 2",
-            "Coast 2",
+            "Boost",
+            "Coast",
             "Drogue",
             "Main",
             "Landed",
         };
 
-        if(phase < 15) {
+        if(phase < sizeof(phases)/sizeof(QString)) {
             fill_cell(table_widget, this, "flight_phase", 0, phases[phase]);
         } else {
             fill_cell(table_widget, this, "flight_phase", 0, "Unknown");
