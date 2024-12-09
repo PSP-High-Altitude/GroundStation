@@ -4,12 +4,12 @@ project(GroundStation VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.7 REQUIRED COMPONENTS Quick)
-find_package(Qt6 6.7 REQUIRED COMPONENTS Charts)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Charts)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 
-qt_standard_project_setup(REQUIRES 6.7)
+qt_standard_project_setup(REQUIRES 6.8)
 
 set(app_icon_resource_windows "${CMAKE_CURRENT_SOURCE_DIR}/groundstation.rc")
 
@@ -39,6 +39,8 @@ qt_add_qml_module(appGroundStation
         DataView.qml
         ArrowButton.qml
         DataSeries.qml
+        DataGraph.qml
+        DataAxis.qml
     RESOURCES
         resources.qrc
         resources/alt_marker.png
@@ -49,6 +51,7 @@ qt_add_qml_module(appGroundStation
         groundstation.rc
         settings.h settings.cpp
         datachart.h datachart.cpp
+        fileio.h fileio.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

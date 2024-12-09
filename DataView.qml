@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import QtCharts
+import FileIO 1.0
 
 RowLayout {
     id: data_view
@@ -12,51 +13,79 @@ RowLayout {
     Layout.fillHeight: true
     Layout.fillWidth: true
     property int time: 0
-    property int minX: 0
-    property int maxX: 0
-    property int minY: 0
-    property int maxY: 0
     property bool autoScale: true
     function addDataPoint(type, x, y) {
-        data_chart.series(type).append(x, y)
+        if(data_chart.getSeries(type)) {
+            data_chart.getSeries(type).addPoint(x, y)
+        }
     }
 
     // Chart of different flight data
-    ChartView {
+    DataGraph {
         id: data_chart
         objectName: "data_chart"
+        title: "Live Data"
         Layout.fillWidth: true
         Layout.fillHeight: true
         Layout.horizontalStretchFactor: 1
         Layout.verticalStretchFactor: 1
         //legend.visible: true
-        antialiasing: true
+        //antialiasing: true
 
-        //ValuesAxis {
-        //    id: axisAlt
-        //    Component.onCompleted: {
-        //        console.log(this)
-        //    }
-        //}
+        leftMargin: 75
+        rightMargin: 200
+        topMargin: 50
 
-        //ValuesAxis {
-        //    id: axisSpd
-        //    Component.onCompleted: {
-        //        console.log(this)
-        //    }
-        //}
+        xaxis: DataAxis {
+            id: timeAxis
+            min: 0
+            max: 10
+            label: "Time (s)"
+        }
+
+        yaxis: [
+            DataAxis {
+                id: axisAlt
+
+                label: "Altitude (m)"
+            },
+            DataAxis {
+                id: axisSpd
+
+                label: "Speed (m/s)"
+                min: -10
+                max: 300
+                //spacing: 20
+                color: "red"
+            },
+            DataAxis {
+                id: axisAcc
+
+                label: "Acceleration (m/s^2)"
+                min: -20
+                max: 20
+                //spacing: 4
+                color: "orange"
+            }
+        ]
 
         // Various data series
-        DataSeries {
-            id: altitude_series
-            name: "Altitude"
-            //axisY: axisAlt
-        }
-        DataSeries {
-            id: speed_series
-            name: "Speed"
-            //axisYRight: axisSpd
-        }
+        series: [
+            DataSeries {
+                id: altitude_series
+                name: "Altitude"
+                axisx: timeAxis
+                axisy: axisAlt
+                color: "black"
+            },
+            DataSeries {
+                id: speed_series
+                name: "Speed"
+                axisx: timeAxis
+                axisy: axisSpd
+                color: "red"
+            }
+        ]
 
         // Provide mouse area for chart interaction
         MouseArea {
@@ -76,9 +105,16 @@ RowLayout {
                     autoScale = false
                     let dx = chart_mouse.mouseX - dStartX
                     let dy = chart_mouse.mouseY - dStartY
+                    if(dx) {
+                        dStartX = chart_mouse.mouseX
+                    }
+                    if(dy) {
+                        dStartY = chart_mouse.mouseY
+                    }
                     data_chart.scrollLeft(dx)
                     data_chart.scrollUp(dy)
                 }
+
             }
 
             onMouseXChanged: {
@@ -113,8 +149,9 @@ RowLayout {
                     text: "Autoscale Axes"
                     onTriggered: {
                         data_view.autoScale = true
-                        for(var i = 0; i < data_chart.count; i++) {
-                            data_chart.series(i).rescaleAxes()
+                        data_chart.rescaleAxis(data_chart.xaxis)
+                        for(var i = 0; i < data_chart.yaxis.length; i++) {
+                            data_chart.rescaleAxis(data_chart.yaxis[i])
                         }
                     }
                 }
@@ -122,22 +159,34 @@ RowLayout {
         }
     }
 
-    DataTable {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.horizontalStretchFactor: 1
-        Layout.verticalStretchFactor: 1
+    //DataTable {
+    //    Layout.fillWidth: true
+    //    Layout.fillHeight: true
+    //    Layout.horizontalStretchFactor: 1
+    //    Layout.verticalStretchFactor: 1
+    //}
+
+    FileIO {
+        id: test_file
+        source: "D:/github_repos/PSP-HA-Firmware/data/dm3/dm3_hwil_dat.csv"
+    }
+
+    Component.onCompleted: {
+        test_file.open()
     }
 
     Timer {
-        interval: 500
+        interval: 25//500
         repeat: true
         running: true
         onTriggered: {
-            var y = Math.floor(Math.random() * 100)
-            data_view.addDataPoint("Altitude", time, y)
-            y = Math.floor(Math.random() * 1000)
-            data_view.addDataPoint("Speed", time, y)
+            const line = test_file.readLine()
+            const data = line.split(',')
+            const timestamp = Number(data[0])
+            const pressure = Number(data[2])
+            const alt = (1 - (pressure/1013.25) ** 0.190284) * 145366.45
+
+            data_view.addDataPoint("Altitude", timestamp/1e6, alt)
             time++
         }
     }

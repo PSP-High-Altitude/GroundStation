@@ -2,10 +2,13 @@
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include "datachart.h"
+#include "fileio.h"
 
-int main(int argc, char *argv[])
+Q_DECL_EXPORT int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    qmlRegisterType<FileIO, 1>("FileIO", 1, 0, "FileIO");
 
     QQuickWindow::setSceneGraphBackend("software");
 
