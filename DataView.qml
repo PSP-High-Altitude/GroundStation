@@ -56,7 +56,7 @@ RowLayout {
                 min: -10
                 max: 300
                 //spacing: 20
-                color: "red"
+                color: "lime"
             },
             DataAxis {
                 id: axisAcc
@@ -65,7 +65,7 @@ RowLayout {
                 min: -20
                 max: 20
                 //spacing: 4
-                color: "orange"
+                color: "orangered"
             }
         ]
 
@@ -76,14 +76,28 @@ RowLayout {
                 name: "Altitude"
                 axisx: timeAxis
                 axisy: axisAlt
-                color: "black"
+                color: "white"
             },
             DataSeries {
-                id: speed_series
-                name: "Speed"
+                id: acc_x_series
+                name: "Acceleration (x)"
                 axisx: timeAxis
-                axisy: axisSpd
+                axisy: axisAcc
                 color: "red"
+            },
+            DataSeries {
+                id: acc_y_series
+                name: "Acceleration (y)"
+                axisx: timeAxis
+                axisy: axisAcc
+                color: "orangered"
+            },
+            DataSeries {
+                id: acc_z_series
+                name: "Acceleration (z)"
+                axisx: timeAxis
+                axisy: axisAcc
+                color: "chocolate"
             }
         ]
 
@@ -159,12 +173,11 @@ RowLayout {
         }
     }
 
-    //DataTable {
-    //    Layout.fillWidth: true
-    //    Layout.fillHeight: true
-    //    Layout.horizontalStretchFactor: 1
-    //    Layout.verticalStretchFactor: 1
-    //}
+    DataTable {
+        Layout.preferredWidth: 500
+        Layout.fillHeight: true
+        Layout.verticalStretchFactor: 1
+    }
 
     FileIO {
         id: test_file
@@ -176,7 +189,7 @@ RowLayout {
     }
 
     Timer {
-        interval: 25//500
+        interval: 50
         repeat: true
         running: true
         onTriggered: {
@@ -184,9 +197,19 @@ RowLayout {
             const data = line.split(',')
             const timestamp = Number(data[0])
             const pressure = Number(data[2])
+            const acc_x = Number(data[3]) * 9.8
+            const acc_y = Number(data[4]) * 9.8
+            const acc_z = Number(data[5]) * 9.8
             const alt = (1 - (pressure/1013.25) ** 0.190284) * 145366.45
 
             data_view.addDataPoint("Altitude", timestamp/1e6, alt)
+            data_view.addDataPoint("Acceleration (x)", timestamp/1e6, acc_x)
+            data_view.addDataPoint("Acceleration (y)", timestamp/1e6, acc_y)
+            data_view.addDataPoint("Acceleration (z)", timestamp/1e6, acc_z)
+
+            for(let i = 0; i < 39; i++) {
+                test_file.readLine()
+            }
             time++
         }
     }

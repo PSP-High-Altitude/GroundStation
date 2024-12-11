@@ -7,7 +7,7 @@ Item {
     property string title: "Graph"
     property int textPadding: 5
     property int topMargin: 75
-    property int bottomMargin: 50
+    property int bottomMargin: 75
     property int leftMargin: 50
     property int rightMargin: 50
     property real shiftX: 0
@@ -47,26 +47,26 @@ Item {
             }
 
             // Get axis ranges and spacing
-            var xmin = (xaxis.min + Math.floor(shiftX)) * zoom
-            var xmax = (xaxis.max + Math.floor(shiftX)) * zoom
-            var ymin = (yaxis[0].min + Math.floor(shiftY)) * zoom
-            var ymax = (yaxis[0].max + Math.floor(shiftY)) * zoom
+            var xmin = (xaxis.min + Math.floor(shiftX*(xaxis.max-xaxis.min)/(height-bottomMargin-topMargin))) * zoom
+            var xmax = (xaxis.max + Math.floor(shiftX*(xaxis.max-xaxis.min)/(height-bottomMargin-topMargin))) * zoom
+            var scale_graph_to_window_x = (width-leftMargin-rightMargin)/(xmax-xmin)
+            var ymin = (yaxis[0].min + Math.floor(shiftY*(yaxis[0].max-yaxis[0].min)/(height-bottomMargin-topMargin))) * zoom
+            var ymax = (yaxis[0].max + Math.floor(shiftY*(yaxis[0].max-yaxis[0].min)/(height-bottomMargin-topMargin))) * zoom
+            var scale_graph_to_window_y = (height-bottomMargin-topMargin)/(ymax-ymin)
             var gridSpacingX = truncateToSignificantFigures((xmax-xmin)/xaxis.ticks, 2)
             var gridSpacingY = truncateToSignificantFigures((ymax-ymin)/yaxis[0].ticks, 2)
 
             var ctx = getContext("2d")
 
-            // Background
-            ctx.fillStyle = Qt.rgba(1, 1, 1, 1)
-            ctx.fillRect(0, 0, width, height)
+            // Reset Canvas
+            ctx.reset()
 
             // Draw gridlines and tick labels
             ctx.textBaseline = "middle"
             ctx.font = "12px sans-serif"
-            ctx.fillStyle = Qt.rgba(0, 0, 0, 1)
-            var scale_graph_to_window_x = (width-leftMargin-rightMargin)/(xmax-xmin)
+            ctx.fillStyle = Qt.rgba(1, 1, 1, 1)
+
             var grid_spacing_window_x = gridSpacingX * scale_graph_to_window_x
-            var scale_graph_to_window_y = (height-bottomMargin-topMargin)/(ymax-ymin)
             var grid_spacing_window_y = gridSpacingY * scale_graph_to_window_y
 
             // Find first gridlines that can appear
@@ -76,7 +76,7 @@ Item {
             var grid_pos_horiz = (height - bottomMargin) - (gridy-ymin) * scale_graph_to_window_y
 
             ctx.beginPath()
-            ctx.strokeStyle = "#AAAAAA"
+            ctx.strokeStyle = "#666666"
             ctx.textBaseline = "top"
             ctx.textAlign = "center"
             while(true) {
@@ -147,8 +147,8 @@ Item {
                 ctx.beginPath()
 
                 // Use the proper y-axis
-                ymin = (series[i].axisy.min + Math.floor(shiftY)) * zoom
-                ymax = (series[i].axisy.max + Math.floor(shiftY)) * zoom
+                ymin = (series[i].axisy.min + Math.floor(shiftY*(series[i].axisy.max-series[i].axisy.min)/(height-bottomMargin-topMargin))) * zoom
+                ymax = (series[i].axisy.max + Math.floor(shiftY*(series[i].axisy.max-series[i].axisy.min)/(height-bottomMargin-topMargin))) * zoom
                 scale_graph_to_window_y = (height-bottomMargin-topMargin)/(ymax-ymin)
 
                 for(let j = 1; j < series[i].data.length; j++) {
@@ -245,8 +245,8 @@ Item {
             ctx.beginPath()
             var axis_label_shift = 0
             for(i = 1; i < yaxis.length; i++) {
-                ymin = (yaxis[i].min + Math.floor(shiftY)) * zoom
-                ymax = (yaxis[i].max + Math.floor(shiftY)) * zoom
+                ymin = (series[i].axisy.min + Math.floor(shiftY*(series[i].axisy.max-series[i].axisy.min)/(height-bottomMargin-topMargin))) * zoom
+                ymax = (series[i].axisy.max + Math.floor(shiftY*(series[i].axisy.max-series[i].axisy.min)/(height-bottomMargin-topMargin))) * zoom
                 scale_graph_to_window_y = (height-bottomMargin-topMargin)/(ymax-ymin)
                 gridSpacingY = truncateToSignificantFigures((ymax-ymin)/yaxis[i].ticks, 2)
                 grid_spacing_window_y = gridSpacingY * scale_graph_to_window_y
@@ -307,7 +307,7 @@ Item {
             }
 
             // Draw frame
-            ctx.strokeStyle = "#000000"
+            ctx.strokeStyle = "#FFFFFF"
             ctx.beginPath()
             ctx.moveTo(leftMargin, topMargin)
             ctx.lineTo(width-rightMargin, topMargin)
@@ -321,8 +321,36 @@ Item {
             ctx.textBaseline = "middle"
             ctx.textAlign = "center"
             ctx.font = "32px sans-serif"
-            ctx.fillStyle = Qt.rgba(0, 0, 0, 1)
-            ctx.fillText(title, width/2, topMargin/2)
+            ctx.fillStyle = Qt.rgba(1, 1, 1, 1)
+            ctx.fillText(title, leftMargin + (width-leftMargin-rightMargin)/2, topMargin/2)
+
+            // Draw legend
+            ctx.textBaseline = "middle"
+            ctx.textAlign = "left"
+            ctx.font = "12px sans-serif"
+            ctx.lineWidth = 3
+            // First find the required width
+            var legend_width = 30*series.length + textPadding*series.length
+            for(let i = 0; i < series.length; i++) {
+                let sname = series[i].name
+                legend_width += ctx.measureText(sname).width
+            }
+            // Then draw legend
+            var legend_x = leftMargin + ((width-rightMargin-leftMargin)/2) - (legend_width/2)
+            const legend_y = height - bottomMargin + textPadding*6 + 16 + 6
+            for(i = 0; i < series.length; i++) {
+                let sname = series[i].name
+                ctx.beginPath()
+                ctx.strokeStyle = series[i].color
+                ctx.moveTo(legend_x, legend_y)
+                ctx.lineTo(legend_x + 20, legend_y)
+                ctx.fillText(sname, legend_x + 20 + textPadding, legend_y)
+                ctx.stroke()
+                ctx.closePath()
+                legend_x += 30 + textPadding + ctx.measureText(sname).width
+            }
+            ctx.lineWidth = 1
+
         }
     }
 
@@ -330,11 +358,8 @@ Item {
         if(xaxis == null || yaxis == null || yaxis.length < 1) {
             return
         }
-        var xmin = xaxis.min
-        var xmax = xaxis.max
-        var pixels_to_graph = (xmax-xmin)/(width-leftMargin-rightMargin)
         var lastShiftX = shiftX
-        shiftX -= pixels*pixels_to_graph
+        shiftX -= pixels
         if(Math.floor(lastShiftX) - Math.floor(shiftX) != 0) {
             canvas.requestPaint()
         }
@@ -348,11 +373,8 @@ Item {
         if(xaxis == null || yaxis == null || yaxis.length < 1) {
             return
         }
-        var ymin = yaxis[0].min
-        var ymax = yaxis[0].max
-        var pixels_to_graph = (ymax-ymin)/(height-bottomMargin-topMargin)
         var lastShiftY = shiftY
-        shiftY -= pixels*pixels_to_graph
+        shiftY -= pixels
         if(Math.floor(lastShiftY) - Math.floor(shiftY) != 0) {
             canvas.requestPaint()
         }
