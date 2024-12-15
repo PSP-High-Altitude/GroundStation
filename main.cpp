@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
-#include "datachart.h"
 #include "fileio.h"
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
@@ -20,9 +19,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.loadFromModule("GroundStation", "Main");
-
-    // Support class for the datachart
-    DataChart chart(&engine);
 
     return app.exec();
 }

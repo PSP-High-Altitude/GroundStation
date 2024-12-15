@@ -13,11 +13,16 @@ RowLayout {
     Layout.fillHeight: true
     Layout.fillWidth: true
     property int time: 0
-    property bool autoScale: true
     function addDataPoint(type, x, y) {
+        // Block NANs
+        if(isNaN(x) || isNaN(y)) {
+            return
+        }
+
         if(data_chart.getSeries(type)) {
             data_chart.getSeries(type).addPoint(x, y)
         }
+        data_table.setRow(type, y)
     }
 
     // Chart of different flight data
@@ -29,12 +34,11 @@ RowLayout {
         Layout.fillHeight: true
         Layout.horizontalStretchFactor: 1
         Layout.verticalStretchFactor: 1
-        //legend.visible: true
-        //antialiasing: true
 
         leftMargin: 75
         rightMargin: 200
         topMargin: 50
+        bottomMargin: 20
 
         xaxis: DataAxis {
             id: timeAxis
@@ -55,7 +59,6 @@ RowLayout {
                 label: "Speed (m/s)"
                 min: -10
                 max: 300
-                //spacing: 20
                 color: "lime"
             },
             DataAxis {
@@ -64,7 +67,6 @@ RowLayout {
                 label: "Acceleration (m/s^2)"
                 min: -20
                 max: 20
-                //spacing: 4
                 color: "orangered"
             }
         ]
@@ -100,80 +102,10 @@ RowLayout {
                 color: "chocolate"
             }
         ]
-
-        // Provide mouse area for chart interaction
-        MouseArea {
-            id: chart_mouse
-            property int dStartX: 0
-            property int dStartY: 0
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-            onPressed: {
-                dStartX = chart_mouse.mouseX
-                dStartY = chart_mouse.mouseY
-            }
-
-            function moveAxes() {
-                if(containsPress) {
-                    autoScale = false
-                    let dx = chart_mouse.mouseX - dStartX
-                    let dy = chart_mouse.mouseY - dStartY
-                    if(dx) {
-                        dStartX = chart_mouse.mouseX
-                    }
-                    if(dy) {
-                        dStartY = chart_mouse.mouseY
-                    }
-                    data_chart.scrollLeft(dx)
-                    data_chart.scrollUp(dy)
-                }
-
-            }
-
-            onMouseXChanged: {
-                moveAxes()
-                dStartX = chart_mouse.mouseX
-                dStartY = chart_mouse.mouseY
-            }
-
-            onMouseYChanged: {
-                moveAxes()
-                dStartX = chart_mouse.mouseX
-                dStartY = chart_mouse.mouseY
-            }
-
-            onClicked: function(mouse) {
-                if (mouse.button === Qt.RightButton)
-                    contextMenu.popup()
-            }
-
-            onWheel: function(wheel) {
-                autoScale = false
-                if(wheel.angleDelta.y < 0) {
-                    data_chart.zoomOut()
-                } else {
-                    data_chart.zoomIn()
-                }
-            }
-
-            Menu {
-                id: contextMenu
-                MenuItem {
-                    text: "Autoscale Axes"
-                    onTriggered: {
-                        data_view.autoScale = true
-                        data_chart.rescaleAxis(data_chart.xaxis)
-                        for(var i = 0; i < data_chart.yaxis.length; i++) {
-                            data_chart.rescaleAxis(data_chart.yaxis[i])
-                        }
-                    }
-                }
-            }
-        }
     }
 
     DataTable {
+        id: data_table
         Layout.preferredWidth: 500
         Layout.fillHeight: true
         Layout.verticalStretchFactor: 1
@@ -181,7 +113,7 @@ RowLayout {
 
     FileIO {
         id: test_file
-        source: "D:/github_repos/PSP-HA-Firmware/data/dm3/dm3_hwil_dat.csv"
+        source: "C:/Users/griff/OneDrive/Documents/Purdue Space Program/skyshot test/dat_00_trimmed_zero_start.csv"
     }
 
     Component.onCompleted: {
@@ -194,6 +126,11 @@ RowLayout {
         running: true
         onTriggered: {
             const line = test_file.readLine()
+            if(line === "") {
+                console.log("out of data")
+                running = false
+            }
+
             const data = line.split(',')
             const timestamp = Number(data[0])
             const pressure = Number(data[2])

@@ -49,8 +49,6 @@ qt_add_qml_module(appGroundStation
         resources/marker.png
     SOURCES
         groundstation.rc
-        settings.h settings.cpp
-        datachart.h datachart.cpp
         fileio.h fileio.cpp
 )
 

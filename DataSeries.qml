@@ -29,7 +29,7 @@ Item {
         if(isNaN(ymax) || y > ymax) ymax = y
 
         // rescale axes
-        if(autoScale) {
+        if(chart.autoScale) {
             chart.rescaleAxis(axisx)
             chart.rescaleAxis(axisy)
         }
