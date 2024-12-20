@@ -8,6 +8,7 @@ find_package(Qt6 6.8 REQUIRED COMPONENTS Quick)
 find_package(Qt6 6.8 REQUIRED COMPONENTS Charts)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS SerialPort)
 
 qt_standard_project_setup(REQUIRES 6.8)
 
@@ -41,6 +42,7 @@ qt_add_qml_module(appGroundStation
         DataSeries.qml
         DataGraph.qml
         DataAxis.qml
+        ConnectionView.qml
     RESOURCES
         resources.qrc
         resources/alt_marker.png
@@ -50,6 +52,11 @@ qt_add_qml_module(appGroundStation
     SOURCES
         groundstation.rc
         fileio.h fileio.cpp
+        device.h device.cpp
+        pspcom_reader.h pspcom_reader.cpp
+        pspcommsg.h
+        crc.h crc.cpp
+        pspcom_decoder.h pspcom_decoder.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -68,6 +75,7 @@ target_link_libraries(appGroundStation
     PRIVATE Qt6::QuickControls2
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::Charts
+    PRIVATE Qt6::SerialPort
 )
 
 include(GNUInstallDirs)

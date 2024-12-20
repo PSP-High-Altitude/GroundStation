@@ -5,6 +5,7 @@ Item {
         id: clock_text
         text: "00:00:00 AM"
         font.pointSize: 20
+        verticalAlignment: Text.AlignVCenter
         color: "white"
     }
 

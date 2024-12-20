@@ -45,9 +45,16 @@ ApplicationWindow {
             Layout.leftMargin: 10
             Layout.bottomMargin: 10
             Layout.rightMargin: 10
+            Layout.fillWidth: true
             Clock {
                 id: clock
                 height: 30
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft
+            }
+            ConnectionView {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignRight
             }
         }
 
