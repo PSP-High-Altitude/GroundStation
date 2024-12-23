@@ -3,11 +3,13 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 RowLayout {
+    property var deviceList: []
     ComboBox {
         id: dropdown
         font.pointSize: 20
 
         model: ListModel {
+            id: model
             ListElement { text: "No Device Connected" }
         }
 
@@ -55,6 +57,12 @@ RowLayout {
                 border.color: "#4c4c4c"
                 radius: 2
             }
+        }
+    }
+
+    Component.onCompleted: {
+        for(let dev of deviceList) {
+            model.append({ "text" : dev })
         }
     }
 }

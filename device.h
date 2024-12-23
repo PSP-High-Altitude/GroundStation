@@ -9,6 +9,11 @@ class Device : public QObject
 {
     Q_OBJECT
 public:
+    Q_PROPERTY(QString deviceName
+                   READ getDeviceName
+                       WRITE setDeviceName
+                           NOTIFY deviceNameChanged)
+
     Q_PROPERTY(QString portName
                    READ getPortName
                        WRITE setPortName
@@ -21,6 +26,9 @@ public:
 
     Q_PROPERTY(qint64 bytesAvailable
                    READ getBytesAvailable)
+
+    void setDeviceName(QString name) { mDeviceName = name; }
+    QString getDeviceName() { return mDeviceName; }
 
     void setPortName(QString name);
     QString getPortName() { return mPortName; }
@@ -40,6 +48,7 @@ public slots:
     void checkBytesAvail();
 
 signals:
+    void deviceNameChanged();
     void portNameChanged();
     void baudRateChanged();
     void newDataArrived();
@@ -48,6 +57,7 @@ signals:
 
 private:
     QSerialPort port;
+    QString mDeviceName;
     QString mPortName;
     qint32 mBaudRate;
     QTimer timer;

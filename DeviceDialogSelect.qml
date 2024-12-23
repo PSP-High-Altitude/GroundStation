@@ -7,7 +7,7 @@ import PSPCOMReader 1.0
 import PSPCOMDecoder 1.0
 
 Rectangle {
-    property string dev_name: ""
+    property string deviceName: ""
     color: AppStyle.light
     height: 40
 
@@ -18,7 +18,7 @@ Rectangle {
             id: device_name
             Layout.fillWidth: true
             Layout.fillHeight: true
-            text: dev_name
+            text: deviceName
             font.pointSize: 16
             verticalAlignment: Text.AlignVCenter
             color: "white"

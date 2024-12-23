@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls.Fusion
 import QtQuick.Shapes
 import "AppStyle"
+import Device
 
 ApplicationWindow {
     id: app_window
@@ -34,6 +35,7 @@ ApplicationWindow {
     // Popups/Dialogs
     DeviceDialog {
         id: device_dialog
+        deviceList: ["PAL 9K5"]
     }
 
     ColumnLayout {
@@ -53,6 +55,7 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignLeft
             }
             ConnectionView {
+                deviceList: device_dialog.deviceList
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
             }

@@ -9,18 +9,19 @@ Window {
     height: 320
     modality: Qt.ApplicationModal
     title: "Devices..."
+    property var deviceList: []
 
     Page {
         anchors.fill: parent
         ListView {
             id: device_dialog_list
             anchors.fill: parent
-            model: 3
+            model: deviceList.length
             spacing: 5
             anchors.margins: 5
             delegate: DeviceDialogSelect {
                 width: device_dialog_list.width
-                dev_name: "Device " + index
+                deviceName: deviceList[index]
             }
         }
 
