@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import "AppStyle"
+import Device 1.0
 
 Window {
     id: device_dialog_window
@@ -9,7 +10,7 @@ Window {
     height: 320
     modality: Qt.ApplicationModal
     title: "Devices..."
-    property var deviceList: []
+    property list<Device> deviceList: []
 
     Page {
         anchors.fill: parent
@@ -21,7 +22,7 @@ Window {
             anchors.margins: 5
             delegate: DeviceDialogSelect {
                 width: device_dialog_list.width
-                deviceName: deviceList[index]
+                device: deviceList[index]
             }
         }
 

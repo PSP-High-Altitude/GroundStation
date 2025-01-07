@@ -27,6 +27,10 @@ public:
     Q_PROPERTY(qint64 bytesAvailable
                    READ getBytesAvailable)
 
+    Q_PROPERTY(bool isConnected
+                   READ getIsConnected
+                        NOTIFY isConnectedChanged)
+
     void setDeviceName(QString name) { mDeviceName = name; }
     QString getDeviceName() { return mDeviceName; }
 
@@ -38,7 +42,10 @@ public:
 
     qint64 getBytesAvailable() { return port.bytesAvailable(); }
 
+    bool getIsConnected() { return port.isOpen(); };
+
     explicit Device(QObject *parent = 0);
+    Device(QString deviceName, QString portName, qint32 baudRate);
 
 public slots:
     Q_INVOKABLE void connect();
@@ -52,6 +59,7 @@ signals:
     void portNameChanged();
     void baudRateChanged();
     void newDataArrived();
+    void isConnectedChanged();
     void portOpened();
     void portClosed();
 

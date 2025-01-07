@@ -3,7 +3,8 @@ import QtQuick.Layouts
 import QtQuick.Controls.Fusion
 import QtQuick.Shapes
 import "AppStyle"
-import Device
+import Device 1.0
+import AppSettings 1.0
 
 ApplicationWindow {
     id: app_window
@@ -32,10 +33,14 @@ ApplicationWindow {
         }
     }
 
+    AppSettings {
+        id: app_settings
+    }
+
     // Popups/Dialogs
     DeviceDialog {
         id: device_dialog
-        deviceList: ["PAL 9K5"]
+        deviceList: app_settings.deviceList
     }
 
     ColumnLayout {
@@ -45,7 +50,7 @@ ApplicationWindow {
         RowLayout {
             Layout.topMargin: 10
             Layout.leftMargin: 10
-            Layout.bottomMargin: 10
+            Layout.bottomMargin: 10 
             Layout.rightMargin: 10
             Layout.fillWidth: true
             Clock {
@@ -55,7 +60,7 @@ ApplicationWindow {
                 Layout.alignment: Qt.AlignLeft
             }
             ConnectionView {
-                deviceList: device_dialog.deviceList
+                settings: app_settings
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
             }

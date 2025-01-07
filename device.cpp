@@ -1,14 +1,41 @@
 #include "device.h"
-#include "QDebug"
 
 Device::Device(QObject *parent) {
+    mDeviceName = "";
     mPortName = "";
+    mBaudRate = 115200;
     lastBytesAvail = 0;
 
     // 10 milliseconds interval
     timer.setInterval(10);
     QObject::connect(&timer, &QTimer::timeout, this, &Device::checkBytesAvail);
     timer.setSingleShot(false);
+
+    // Device unplugged
+    QObject::connect(&port, &QSerialPort::errorOccurred, this, [this](QSerialPort::SerialPortError error) {
+        if(error == QSerialPort::ResourceError || error == QSerialPort::TimeoutError || error == QSerialPort::UnknownError || error == QSerialPort::PermissionError) {
+            port.close();
+            emit portClosed();
+            emit isConnectedChanged();
+        }
+    });
+}
+
+Device::Device(QString deviceName, QString portName, qint32 baudRate) {
+    mDeviceName = deviceName;
+    mPortName = portName;
+    port.setPortName(portName);
+    mBaudRate = baudRate;
+    port.setBaudRate(baudRate);
+
+    // Device unplugged
+    QObject::connect(&port, &QSerialPort::errorOccurred, this, [this](QSerialPort::SerialPortError error) {
+if(error == QSerialPort::ResourceError || error == QSerialPort::TimeoutError || error == QSerialPort::UnknownError || error == QSerialPort::PermissionError) {
+            port.close();
+            emit portClosed();
+            emit isConnectedChanged();
+        }
+    });
 }
 
 void Device::setPortName(QString name) {
@@ -18,6 +45,7 @@ void Device::setPortName(QString name) {
         timer.stop();
         lastBytesAvail = 0;
         emit portClosed();
+        emit isConnectedChanged();
     }
 
     // Set port name
@@ -38,10 +66,12 @@ void Device::connect() {
             timer.start();
             lastBytesAvail = 0;
             emit portOpened();
+            emit isConnectedChanged();
         } else {
             timer.stop();
             lastBytesAvail = 0;
             emit portClosed();
+            emit isConnectedChanged();
         }
     }
 }
@@ -53,6 +83,7 @@ void Device::disconnect() {
         timer.stop();
         lastBytesAvail = 0;
         emit portClosed();
+        emit isConnectedChanged();
     }
 }
 
@@ -67,6 +98,7 @@ void Device::checkBytesAvail() {
 bool Device::write(QByteArray bytes) {
     // Check port is open
     if(!port.isOpen()) {
+        emit isConnectedChanged();
         return false;
     }
 
@@ -81,6 +113,7 @@ QByteArray Device::read(qint64 num) {
     QByteArray ret;
     // Check port is open
     if(!port.isOpen()) {
+        emit isConnectedChanged();
         return ret;
     }
 

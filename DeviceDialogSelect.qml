@@ -7,7 +7,8 @@ import PSPCOMReader 1.0
 import PSPCOMDecoder 1.0
 
 Rectangle {
-    property string deviceName: ""
+    id: root
+    property Device device
     color: AppStyle.light
     height: 40
 
@@ -18,7 +19,7 @@ Rectangle {
             id: device_name
             Layout.fillWidth: true
             Layout.fillHeight: true
-            text: deviceName
+            text: device.deviceName
             font.pointSize: 16
             verticalAlignment: Text.AlignVCenter
             color: "white"
@@ -34,45 +35,38 @@ Rectangle {
                     device.connect()
                     break
                 case "ON":
-
                     break
                 case "OFF":
                     device.disconnect()
                     break
                 }
-
-                //if(state === "WAIT") {
-                //    wait_timer.running = true
-                //}
             }
         }
-
-        // DEMO of wait animation
-        // TODO: replace with actual device connection
-        //Timer {
-        //    id: wait_timer
-        //    interval: 1000
-        //    repeat: false
-        //    running: false
-        //    onTriggered: {
-        //        device_on.state = "ON"
-        //    }
-        //}
     }
 
-    Device {
-        id: device
-        portName: "COM17"
-        baudRate: 115200
-        onPortClosed: {
+    // Connect device signals
+    function setDevice() {
+        device.portClosed.connect(() => {
             device_on.state = "OFF"
-        }
-        onPortOpened: {
+        })
+
+        device.portOpened.connect(() => {
             device_on.state = "ON"
-        }
-        onNewDataArrived: {
+        })
+
+        device.newDataArrived.connect(() => {
             pspcom.write(device.read(device.bytesAvailable))
-        }
+        })
+    }
+
+    // Set device on creation
+    Component.onCompleted: {
+        setDevice();
+    }
+
+    // Set device if property is changed
+    onDeviceChanged: {
+        setDevice();
     }
 
     PSPCOMReader {

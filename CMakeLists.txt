@@ -57,6 +57,7 @@ qt_add_qml_module(appGroundStation
         pspcommsg.h
         crc.h crc.cpp
         pspcom_decoder.h pspcom_decoder.cpp
+        settings.h settings.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
