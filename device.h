@@ -3,7 +3,12 @@
 
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QTimer>
+#include <QList>
+#include <QString>
+#include <pspcom_reader.h>
+#include <pspcom_decoder.h>
 
 class Device : public QObject
 {
@@ -29,7 +34,13 @@ public:
 
     Q_PROPERTY(bool isConnected
                    READ getIsConnected
-                        NOTIFY isConnectedChanged)
+                       NOTIFY isConnectedChanged)
+
+    Q_PROPERTY(PSPCOMReader *pspcomReader
+                   READ getPspcomReader)
+
+    Q_PROPERTY(PSPCOMDecoder *pspcomDecoder
+                   READ getPspcomDecoder)
 
     void setDeviceName(QString name) { mDeviceName = name; }
     QString getDeviceName() { return mDeviceName; }
@@ -43,6 +54,10 @@ public:
     qint64 getBytesAvailable() { return port.bytesAvailable(); }
 
     bool getIsConnected() { return port.isOpen(); };
+
+    PSPCOMReader *getPspcomReader() { return mPspcomReader; };
+
+    PSPCOMDecoder *getPspcomDecoder() { return mPspcomDecoder; };
 
     explicit Device(QObject *parent = 0);
     Device(QString deviceName, QString portName, qint32 baudRate);
@@ -62,7 +77,7 @@ signals:
     void isConnectedChanged();
     void portOpened();
     void portClosed();
-
+    void newMessage();
 private:
     QSerialPort port;
     QString mDeviceName;
@@ -70,6 +85,28 @@ private:
     qint32 mBaudRate;
     QTimer timer;
     qint64 lastBytesAvail;
+    PSPCOMReader *mPspcomReader;
+    PSPCOMDecoder *mPspcomDecoder;
+};
+
+class SerialList : public QObject
+{
+    Q_OBJECT
+public:
+    explicit SerialList(QObject *parent = 0) {}
+
+    Q_PROPERTY(QList<QString> ports
+                   READ getPorts);
+
+    QList<QString> getPorts()
+    {
+        QList<QString> res;
+        for (QSerialPortInfo info : QSerialPortInfo::availablePorts())
+        {
+            res.append(info.portName());
+        }
+        return res;
+    }
 };
 
 #endif // DEVICE_H
