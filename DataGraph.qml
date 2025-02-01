@@ -19,6 +19,9 @@ Item {
 
     // Store dynamically created CB objects
     property var checkboxes: []
+    // Store dynamically created MouseArea objects
+    property var series_clicks: []
+    property int series_highlighted: -1
 
     // dynamic bottom_offset from legend
     property int bottom_off: 0
@@ -95,11 +98,18 @@ Item {
                 ctx.beginPath()
                 ctx.strokeStyle = series[i].color
                 ctx.fillText(sname, legend_x, legend_y)
+                // Start placing the click box too
+                series_clicks[i].width = legend_x + 4
+                series_clicks[i].height = 16
+                series_clicks[i].y = legend_y - 8
                 legend_x -= ctx.measureText(sname).width + textPadding
                 ctx.moveTo(legend_x, legend_y)
                 ctx.lineTo(legend_x - 20, legend_y)
                 ctx.stroke()
                 ctx.closePath()
+                // Finish click box
+                series_clicks[i].width -= (legend_x - 22)
+                series_clicks[i].x = legend_x - 22
                 legend_x -= 50
                 // Position checkbox
                 if(checkboxes[i]) {
@@ -466,10 +476,14 @@ Item {
     }
 
     Component.onCompleted: {
+        // Create checkboxes and mouse areas for series
         for(var i = 0; i < series.length; i++) {
+            // Connect series to graph
             series[i].pointAdded.connect(canvas.requestPaint)
             series[i].chart = root
-            const newObject = Qt.createQmlObject(`
+
+            // Add checkboxes
+            const newCheck = Qt.createQmlObject(`
                 import QtQuick.Controls
 
                 CheckBox {
@@ -481,8 +495,35 @@ Item {
                 root,
                 "myDynamicSnippet"
             );
-            checkboxes[i] = newObject
+            checkboxes[i] = newCheck
             checkboxes[i].checked = series[i].startChecked
+
+            // Add mouse areas
+            const newMouseArea = Qt.createQmlObject(`
+                import QtQuick
+
+                Rectangle {
+                    z: -1
+                    color: (mouse_`+i+`.containsMouse ? ((series_highlighted === `+i+`) ? "gray" : "#3b3b3b") : ((series_highlighted === `+i+`) ? "dimgray" : "transparent"))
+                    MouseArea {
+                        id: mouse_`+i+`
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: {
+                            if(series_highlighted === `+i+`) {
+                                series_highlighted = -1
+                            } else {
+                                series_highlighted = `+i+`
+                            }
+                            parent.parent.repaint()
+                        }
+                    }
+                }
+                `,
+                root,
+                "myDynamicSnippet"
+            );
+            series_clicks[i] = newMouseArea
         }
     }
 
@@ -615,6 +656,22 @@ Item {
                     }
                     root.repaint()
                 }
+            }
+        }
+
+        Text {
+            x: chart_mouse.mouseX + 2
+            y: chart_mouse.mouseY - height - 2
+            text: (root.series_highlighted > -1) ? ((canvas.get_label_for_number(series[root.series_highlighted].axisx.min + ((series[root.series_highlighted].axisx.max - series[root.series_highlighted].axisx.min) / chart_mouse.width) * (chart_mouse.mouseX))) +
+                                                   ", " +
+                                                   (canvas.get_label_for_number(series[root.series_highlighted].axisy.min + ((series[root.series_highlighted].axisy.max - series[root.series_highlighted].axisy.min) / chart_mouse.height) * (chart_mouse.height - chart_mouse.mouseY))))
+                                                    : ""
+            color: "white"
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: -2
+                color: (root.series_highlighted > -1) ? "dimgray" : "transparent"
+                z: -1
             }
         }
     }

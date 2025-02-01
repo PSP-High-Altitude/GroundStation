@@ -79,7 +79,7 @@ RowLayout {
                 label: "RSSI (dBm)"
                 min: -150
                 max: 0
-                color: "purple"
+                color: "violet"
             }
         ]
 
