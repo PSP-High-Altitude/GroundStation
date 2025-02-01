@@ -3,6 +3,7 @@ import QtCharts
 
 Item {
     property string name: "Series"
+    property bool startChecked: false
     property DataAxis axisx
     property DataAxis axisy
     property list<point> data

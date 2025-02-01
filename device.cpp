@@ -29,7 +29,11 @@ Device::Device(QString deviceName, QString portName, qint32 baudRate)
     mPspcomReader = new PSPCOMReader();
     mPspcomDecoder = new PSPCOMDecoder();
     QObject::connect(this, &Device::newDataArrived, mPspcomReader, [this]() {mPspcomReader->write(this->read(this->getBytesAvailable()));});
-    QObject::connect(mPspcomReader, &PSPCOMReader::messageReceived, mPspcomDecoder, [this](PspcomMsg msg) {mPspcomDecoder->processMessage(msg);});
+    QObject::connect(mPspcomReader, &PSPCOMReader::messageReceived, mPspcomDecoder, [this](PspcomMsg msg) {
+        emit newMessage();
+        mLastMessage = msg;
+        mPspcomDecoder->processMessage(msg);
+    });
 }
 
 void Device::setPortName(QString name)

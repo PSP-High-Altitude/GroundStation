@@ -21,7 +21,7 @@ Item {
     property var checkboxes: []
 
     // dynamic bottom_offset from legend
-    property var bottom_off: 0
+    property int bottom_off: 0
 
     Canvas {
         id: canvas
@@ -42,7 +42,7 @@ Item {
                 return val.toExponential(2)
             } else if (Math.abs(val) < 10) {
                 return parseFloat(val.toFixed(2));
-            } else if(Math.abs(val) > 10000) {
+            } else if(Math.abs(val) >= 100000) {
                 return val.toExponential(2)
             } else {
                 return val.toFixed(0)
@@ -244,7 +244,6 @@ Item {
 
                     //console.log(xmin, xmax, ymin, ymax)
 
-
                     // Advance line start to meet graph edge
                     if(line_start_x < xmin) {
                         let dx = xmin - line_start_x
@@ -314,8 +313,8 @@ Item {
             ctx.beginPath()
             var axis_label_shift = 0
             for(i = 1; i < yaxis.length; i++) {
-                ymin = (series[i].axisy.min + Math.floor(shiftY*(series[i].axisy.max-series[i].axisy.min)/(height-bottom_off-topMargin))) * zoom
-                ymax = (series[i].axisy.max + Math.floor(shiftY*(series[i].axisy.max-series[i].axisy.min)/(height-bottom_off-topMargin))) * zoom
+                ymin = (yaxis[i].min + Math.floor(shiftY*(yaxis[i].max-yaxis[i].min)/(height-bottom_off-topMargin))) * zoom
+                ymax = (yaxis[i].max + Math.floor(shiftY*(yaxis[i].max-yaxis[i].min)/(height-bottom_off-topMargin))) * zoom
                 scale_graph_to_window_y = (height-bottom_off-topMargin)/(ymax-ymin)
                 gridSpacingY = truncateToSignificantFigures((ymax-ymin)/yaxis[i].ticks, 2)
                 grid_spacing_window_y = gridSpacingY * scale_graph_to_window_y
@@ -483,6 +482,7 @@ Item {
                 "myDynamicSnippet"
             );
             checkboxes[i] = newObject
+            checkboxes[i].checked = series[i].startChecked
         }
     }
 

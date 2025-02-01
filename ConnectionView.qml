@@ -6,24 +6,29 @@ import AppSettings 1.0
 
 RowLayout {
     id: root
-    property AppSettings settings
+    required property AppSettings settings
     ComboBox {
         id: dropdown
         font.pointSize: 20
-        onCurrentTextChanged: {
-            if(currentText === "") {
-                currentIndex = 0
+        onCurrentIndexChanged: {
+            if(currentIndex) {
+                settings.activeDevice = model.get(currentIndex).device
+            } else {
+                settings.activeDevice = null
             }
         }
 
         model: ListModel {
             id: model
-            ListElement { text: "No device selected" }
+            ListElement {
+                text: "No device selected"
+                device: null
+            }
             Component.onCompleted: {
                 for (let dev of settings.deviceList) {
                     if(dev.isConnected) {
                         // If the device is connected, display it
-                        append({ text: dev.deviceName })
+                        append({text: dev.deviceName, device: dev})
                     }
                     dev.isConnectedChanged.connect(() => updateModel(dev))
                 }
@@ -33,11 +38,15 @@ RowLayout {
 
             // Remove a device
             function removeDevice() {
-                for (var i = 0; i < count; i++) {
+                for (var i = 1; i < count; i++) {
                     // Search to see if this is the removed device
                     for(let dev of settings.deviceList) {
-                        if(dev.deviceName === get(i).text) {
+                        if(dev === get(i).device) {
+                            if(i === dropdown.currentIndex) {
+                                dropdown.currentIndex = 0
+                            }
                             remove(i, 1)
+
                             return
                         }
                     }
@@ -48,7 +57,7 @@ RowLayout {
             function addDevice(dev) {
                 if(dev.isConnected) {
                     // If the device is connected, display it
-                    append({ text: dev.deviceName })
+                    append({ text: dev.deviceName, device: dev })
                 }
                 dev.isConnectedChanged.connect(updateModel(dev))
             }
@@ -56,10 +65,11 @@ RowLayout {
             // Update a specific device in the model
             function updateModel(obj) {
                 var found = false
-                for (var i = 0; i < count; i++) {
-                    if (get(i).text === obj.deviceName) {
+                for (var i = 1; i < count; i++) {
+                    if (get(i).device === obj) {
                         if(!obj.isConnected) {
                             // If the device is disconnected, stop displaying it
+                            dropdown.currentIndex = 0
                             remove(i, 1);
                             i--;
                         }
@@ -69,7 +79,7 @@ RowLayout {
                 }
                 if(!found && obj.isConnected) {
                     // If the device is connected, but not shown, diplay it
-                    append({ text: obj.deviceName })
+                    append({ text: obj.deviceName, device: obj })
                 }
             }
         }

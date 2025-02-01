@@ -59,6 +59,8 @@ public:
 
     PSPCOMDecoder *getPspcomDecoder() { return mPspcomDecoder; };
 
+    PspcomMsg getLastMessage() { return mLastMessage; };
+
     explicit Device(QObject *parent = 0);
     Device(QString deviceName, QString portName, qint32 baudRate);
 
@@ -87,6 +89,7 @@ private:
     qint64 lastBytesAvail;
     PSPCOMReader *mPspcomReader;
     PSPCOMDecoder *mPspcomDecoder;
+    PspcomMsg mLastMessage;
 };
 
 class SerialList : public QObject

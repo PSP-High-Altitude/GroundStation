@@ -98,6 +98,7 @@ ApplicationWindow {
 
                 DataView {
                     id: data_view
+                    settings: app_settings
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     visible: (main_swipe_view.currentItem === this)
