@@ -4,6 +4,8 @@ import Qt.labs.qmlmodels
 import "AppStyle"
 
 ColumnLayout {
+    property list<DataSeries> series
+
     Rectangle {
         Layout.preferredHeight: 50
         color: "transparent"
@@ -35,7 +37,6 @@ ColumnLayout {
             }
         }
 
-
         model: TableModel {
             id: table_model
             TableModelColumn {
@@ -47,24 +48,7 @@ ColumnLayout {
             TableModelColumn {
                 display: "units"
             }
-
-            rows: [
-                {
-                    "name": "Altitude",
-                    "value": "0",
-                    "units": "m"
-                },
-                {
-                    "name": "Latitude",
-                    "value": "1",
-                    "units": "°"
-                },
-                {
-                    "name": "Longitude",
-                    "value": "2",
-                    "units": "°"
-                }
-            ]
+            rows: []
         }
 
         delegate: Rectangle {
@@ -82,15 +66,40 @@ ColumnLayout {
         }
     }
 
-    function setRow(type, value) {
+    function setRow(name, value) {
         for(var i = 0; i < table_model.rowCount; i++) {
-            if(table_model.getRow(i).name === type) {
-                table_model.setRow(0, {
-                    name: type,
-                    value: value,
-                    units: table_model.getRow(i).units,
-                })
+            if(table_model.getRow(i).name === name) {
+                let the_series = series[i]
+                let precision = the_series.precision
+                var value_str = ""
+                if(the_series.data.length > 0 && precision > 0) {
+                    // Get the latest value, with decimals
+                    value_str = value.toFixed(precision)
+                } else if (the_series.data.length > 0) {
+                    // Get the latest value, no decimals
+                    value_str = Math.round(value).toString()
+                }
+                // Modify row
+                var row = table_model.getRow(i)
+                row.value = value_str
+                table_model.setRow(i, row)
             }
+        }
+    }
+
+    Component.onCompleted: {
+        for (let the_series of series) {
+            let precision = the_series.precision
+            var value = ""
+            if(the_series.data.length > 0 && precision > 0) {
+                // Get the latest value, with decimals
+                value = the_series.data[the_series.data.length - 1].y.toFixed(precision)
+            } else if (the_series.data.length > 0) {
+                // Get the latest value, no decimals
+                value = Math.round(the_series.data[the_series.data.length - 1].y).toString()
+            }
+
+            table_model.appendRow({ "name" : the_series.name, "value" : value, "units" : the_series.units })
         }
     }
 }

@@ -17,17 +17,84 @@ RowLayout {
     Layout.fillHeight: true
     Layout.fillWidth: true
     property real time_0_ms: 0
+
+    function getSeries(name) {
+        for(var i = 0; i < series.length; i++) {
+            if(series[i].name === name) {
+                return series[i]
+            }
+        }
+        return null
+    }
+
     function addDataPoint(type, x, y) {
         // Block NANs
         if(isNaN(x) || isNaN(y)) {
             return
         }
 
-        if(data_chart.getSeries(type)) {
-            data_chart.getSeries(type).addPoint(x, y)
+        if(data_view.getSeries(type)) {
+            data_view.getSeries(type).addPoint(x, y)
         }
         data_table.setRow(type, y)
     }
+
+    property list<DataSeries> series: [
+        DataSeries {
+            id: altitude_gps_series
+            name: "Altitude ASL (GPS)"
+            axisx: timeAxis
+            axisy: axisAlt
+            color: "white"
+            precision: 2
+            units: "m"
+        },
+        DataSeries {
+            id: altitude_baro_series
+            name: "Altitude ASL (Baro)"
+            axisx: timeAxis
+            axisy: axisAlt
+            color: "lightgray"
+            precision: 2
+            units: "m"
+        },
+        DataSeries {
+            id: acc_x_series
+            name: "Acceleration (x)"
+            axisx: timeAxis
+            axisy: axisAcc
+            color: "red"
+            precision: 2
+            units: "g"
+        },
+        DataSeries {
+            id: acc_y_series
+            name: "Acceleration (y)"
+            axisx: timeAxis
+            axisy: axisAcc
+            color: "orangered"
+            precision: 2
+            units: "g"
+        },
+        DataSeries {
+            id: acc_z_series
+            name: "Acceleration (z)"
+            axisx: timeAxis
+            axisy: axisAcc
+            color: "chocolate"
+            precision: 2
+            units: "g"
+        },
+        DataSeries {
+            id: rssi_series
+            name: "RSSI"
+            axisx: timeAxis
+            axisy: axisRssi
+            color: "violet"
+            precision: 2
+            units: "dBm"
+        }
+    ]
 
     // Chart of different flight data
     DataGraph {
@@ -84,50 +151,7 @@ RowLayout {
         ]
 
         // Various data series
-        series: [
-            DataSeries {
-                id: altitude_gps_series
-                name: "Altitude ASL (GPS)"
-                axisx: timeAxis
-                axisy: axisAlt
-                color: "white"
-            },
-            DataSeries {
-                id: altitude_baro_series
-                name: "Altitude ASL (Baro)"
-                axisx: timeAxis
-                axisy: axisAlt
-                color: "lightgray"
-            },
-            DataSeries {
-                id: acc_x_series
-                name: "Acceleration (x)"
-                axisx: timeAxis
-                axisy: axisAcc
-                color: "red"
-            },
-            DataSeries {
-                id: acc_y_series
-                name: "Acceleration (y)"
-                axisx: timeAxis
-                axisy: axisAcc
-                color: "orangered"
-            },
-            DataSeries {
-                id: acc_z_series
-                name: "Acceleration (z)"
-                axisx: timeAxis
-                axisy: axisAcc
-                color: "chocolate"
-            },
-            DataSeries {
-                id: rssi_series
-                name: "RSSI"
-                axisx: timeAxis
-                axisy: axisRssi
-                color: "violet"
-            }
-        ]
+        series: data_view.series
     }
 
     DataTable {
@@ -135,6 +159,7 @@ RowLayout {
         Layout.preferredWidth: 500
         Layout.fillHeight: true
         Layout.verticalStretchFactor: 1
+        series: data_view.series
     }
 
     PSPCOMDecoder {

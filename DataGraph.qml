@@ -466,15 +466,6 @@ Item {
         canvas.requestPaint()
     }
 
-    function getSeries(name) {
-        for(var i = 0; i < series.length; i++) {
-            if(series[i].name === name) {
-                return series[i]
-            }
-        }
-        return null
-    }
-
     Component.onCompleted: {
         // Create checkboxes and mouse areas for series
         for(var i = 0; i < series.length; i++) {

@@ -7,6 +7,8 @@ Item {
     property DataAxis axisx
     property DataAxis axisy
     property list<point> data
+    property string units: ""
+    property int precision: 2
     property color color: "black"
     signal pointAdded()
     property real xmin: NaN
