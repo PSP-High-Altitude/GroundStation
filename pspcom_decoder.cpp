@@ -41,8 +41,8 @@ void PSPCOMDecoder::processMessage(PspcomMsg msg) {
         memcpy(&sys_stat, msg.m_payload.data() + pos, sizeof(SysStat));
         pos += sizeof(SysStat);
 
-        emit gpsPosReceived(gps_pos);
-        emit gpsVelReceived(gps_vel);
+        emit gpsPosReceived(gps_pos, sys_stat.m_gps_fix_ok);
+        emit gpsVelReceived(gps_vel, sys_stat.m_gps_fix_ok);
         emit presReceived(pres);
         emit pyroStatusReceived(pyro_stat);
         emit sysStatusReceived(sys_stat);

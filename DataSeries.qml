@@ -7,6 +7,7 @@ Item {
     property DataAxis axisx
     property DataAxis axisy
     property list<point> data
+    property list<string> table_translation: [] // If defined, maps ints to strings (e.g. flight phase names)
     property string units: ""
     property int precision: 2
     property color color: "black"
@@ -18,10 +19,6 @@ Item {
     property Item chart
 
     function addPoint(x, y) {
-        if(axisx == null || axisy == null) {
-            return
-        }
-
         // add point
         data.push(Qt.point(x, y))
 
@@ -32,9 +29,15 @@ Item {
         if(isNaN(ymax) || y > ymax) ymax = y
 
         // rescale axes
-        if(chart.autoScale) {
-            chart.rescaleAxis(axisx)
-            chart.rescaleAxis(axisy)
+        if(chart) {
+            if(chart.autoScale) {
+                if(axisx) {
+                    chart.rescaleAxis(axisx)
+                }
+                if(axisy) {
+                    chart.rescaleAxis(axisy)
+                }
+            }
         }
 
         pointAdded()

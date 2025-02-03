@@ -121,8 +121,8 @@ public:
 
 signals:
     void rssiReceived(double rssi);
-    void gpsPosReceived(GPSPos gps_pos);
-    void gpsVelReceived(GPSVel gps_vel);
+    void gpsPosReceived(GPSPos gps_pos, bool fix_valid);
+    void gpsVelReceived(GPSVel gps_vel, bool fix_valid);
     void presReceived(Pres pres);
     void pyroStatusReceived(PyroStat2);
     void sysStatusReceived(SysStat sys_stat);

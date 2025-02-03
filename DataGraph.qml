@@ -533,37 +533,44 @@ Item {
             if(isNaN(series[i].xmin) || isNaN(series[i].xmax) || isNaN(series[i].ymin) || isNaN(series[i].ymax)) {
                 continue
             }
+
+            // Get the range
+            let xrange = series[i].xmax - series[i].xmin
+            let yrange = series[i].ymax - series[i].ymin
+
+            // Give some margin if the values are equal to prevent bugs
             if(series[i].xmin === series[i].xmax || series[i].ymin === series[i].ymax) {
-                continue
+                xrange += 1
+                yrange += 1
             }
 
             // Check the series uses this as an x axis
             if(series[i].axisx === axis) {
                 if(first_scale_x) {
-                    axis.min = series[i].xmin
-                    axis.max = series[i].xmax
+                    axis.min = series[i].xmin - (xrange*0.05)
+                    axis.max = series[i].xmax + (xrange*0.05)
                     first_scale_x = false
                 } else {
                     if(series[i].xmin < axis.min) {
-                        axis.min = series[i].xmin
+                        axis.min = series[i].xmin - (xrange*0.05)
                     }
                     if(series[i].xmax > axis.max) {
-                        axis.max = series[i].xmax
+                        axis.max = series[i].xmax + (xrange*0.05)
                     }
                 }
             }
             // Check the series uses this as a y axis
             if(series[i].axisy === axis) {
                 if(first_scale_y) {
-                    axis.min = series[i].ymin
-                    axis.max = series[i].ymax
+                    axis.min = series[i].ymin - (yrange*0.05)
+                    axis.max = series[i].ymax + (yrange*0.05)
                     first_scale_y = false
                 } else {
                     if(series[i].ymin < axis.min) {
-                        axis.min = series[i].ymin
+                        axis.min = series[i].ymin - (yrange*0.05)
                     }
                     if(series[i].ymax > axis.max) {
-                        axis.max = series[i].ymax
+                        axis.max = series[i].ymax + (yrange*0.05)
                     }
                 }
             }
