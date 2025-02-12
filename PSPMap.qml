@@ -28,6 +28,16 @@ Item {
         map.addMapItem(item)
     }
 
+    function setMarker(lat, lon) {
+        marker.coordinate.latitude = lat
+        marker.coordinate.longitude = lon
+    }
+
+    function recenter() {
+        map.center.latitude = marker.coordinate.latitude
+        map.center.longitude = marker.coordinate.longitude
+    }
+
     Map {
         id: map
         objectName: "map"
@@ -56,16 +66,6 @@ Item {
             anchorPoint.y: marker_img.height
         }
 
-        function setMarker(lat, lon) {
-            marker.coordinate.latitude = lat
-            marker.coordinate.longitude = lon
-        }
-
-        function recenter() {
-            center.latitude = marker.coordinate.latitude
-            center.longitude = marker.coordinate.longitude
-        }
-
         WheelHandler {
                     id: wheel
                     rotationScale: 1/120
@@ -85,7 +85,7 @@ Item {
         x: map.width - width - 15
         y: 15
         text: ""
-        onClicked: map.recenter()
+        onClicked: recenter()
         icon {
             source: "resources/map_pointer.png"
             color: "transparent"

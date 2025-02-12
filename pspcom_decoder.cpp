@@ -48,5 +48,40 @@ void PSPCOMDecoder::processMessage(PspcomMsg msg) {
         emit sysStatusReceived(sys_stat);
         break;
     }
+    case 0xE1: {
+        // STD_TELEM_2
+        GPSPos gps_pos;
+        GPSVel gps_vel;
+        Pres pres;
+        PyroStat2 pyro_stat;
+        pyro_stat.m_num_pyro_stat = 2;
+        SysStat sys_stat;
+        int pos = 0;
+
+        memcpy(&gps_pos, msg.m_payload.data() + pos, sizeof(GPSPos));
+        pos += sizeof(GPSPos);
+
+        memcpy(&gps_vel, msg.m_payload.data() + pos, sizeof(GPSVel));
+        pos += sizeof(GPSVel);
+
+        memcpy(&pres, msg.m_payload.data() + pos, sizeof(Pres));
+        pos += sizeof(Pres);
+
+        memcpy(&pyro_stat.m_pyro_stat_0, msg.m_payload.data() + pos, sizeof(PyroStat));
+        pos += sizeof(PyroStat);
+
+        memcpy(&pyro_stat.m_pyro_stat_1, msg.m_payload.data() + pos, sizeof(PyroStat));
+        pos += sizeof(PyroStat);
+
+        memcpy(&sys_stat, msg.m_payload.data() + pos, sizeof(SysStat));
+        pos += sizeof(SysStat);
+
+        emit gpsPosReceived(gps_pos, sys_stat.m_gps_fix_ok);
+        emit gpsVelReceived(gps_vel, sys_stat.m_gps_fix_ok);
+        emit presReceived(pres);
+        emit pyroStatusReceived(pyro_stat);
+        emit sysStatusReceived(sys_stat);
+        break;
+    }
     }
 }

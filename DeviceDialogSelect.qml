@@ -12,6 +12,11 @@ Rectangle {
     property Device device
     color: AppStyle.light
     height: 40
+    radius: 5
+
+    HoverHandler {
+        id: hover_handler
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -73,6 +78,32 @@ Rectangle {
                 case "OFF":
                     device.disconnect()
                     break
+                }
+            }
+        }
+
+        Rectangle {
+            MouseArea {
+                anchors.fill: parent
+                id: del_area
+                hoverEnabled: true
+                z: 1
+            }
+            radius: 3
+            Layout.margins: 5
+            Layout.minimumHeight: 25
+            Layout.maximumHeight: 25
+            Layout.minimumWidth: 25
+            Layout.maximumWidth: 25
+            color: del_area.containsMouse ? AppStyle.light_highlight : "transparent"
+            Repeater {
+                model: 2
+                delegate: Rectangle {
+                    visible: hover_handler.hovered
+                    anchors.centerIn: parent
+                    width: 20
+                    height: 2
+                    rotation: 45 + 90*index
                 }
             }
         }

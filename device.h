@@ -19,6 +19,11 @@ public:
                        WRITE setDeviceName
                            NOTIFY deviceNameChanged)
 
+    Q_PROPERTY(int deviceId
+                   READ getDeviceId
+                       WRITE setDeviceId
+                           NOTIFY deviceIdChanged)
+
     Q_PROPERTY(QString portName
                    READ getPortName
                        WRITE setPortName
@@ -45,6 +50,9 @@ public:
     void setDeviceName(QString name) { mDeviceName = name; }
     QString getDeviceName() { return mDeviceName; }
 
+    void setDeviceId(int id) { mDeviceId = id; }
+    int getDeviceId() { return mDeviceId; }
+
     void setPortName(QString name);
     QString getPortName() { return mPortName; }
 
@@ -62,7 +70,7 @@ public:
     PspcomMsg getLastMessage() { return mLastMessage; };
 
     explicit Device(QObject *parent = 0);
-    Device(QString deviceName, QString portName, qint32 baudRate);
+    Device(QString deviceName, QString portName, int deviceId, qint32 baudRate);
 
 public slots:
     Q_INVOKABLE void connect();
@@ -73,6 +81,7 @@ public slots:
 
 signals:
     void deviceNameChanged();
+    void deviceIdChanged();
     void portNameChanged();
     void baudRateChanged();
     void newDataArrived();
@@ -84,6 +93,7 @@ private:
     QSerialPort port;
     QString mDeviceName;
     QString mPortName;
+    int mDeviceId;
     qint32 mBaudRate;
     QTimer timer;
     qint64 lastBytesAvail;

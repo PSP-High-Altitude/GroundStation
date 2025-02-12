@@ -59,7 +59,7 @@ RowLayout {
                     // If the device is connected, display it
                     append({ text: dev.deviceName, device: dev })
                 }
-                dev.isConnectedChanged.connect(updateModel(dev))
+                dev.isConnectedChanged.connect(() => updateModel(dev))
             }
 
             // Update a specific device in the model

@@ -40,7 +40,7 @@ ApplicationWindow {
     // Popups/Dialogs
     DeviceDialog {
         id: device_dialog
-        deviceList: app_settings.deviceList
+        settings: app_settings
     }
 
     ColumnLayout {
@@ -91,6 +91,7 @@ ApplicationWindow {
 
                 AttitudeView {
                     id: attitude_view
+                    settings: app_settings
                     Layout.fillHeight: true
                     Layout.fillWidth: true
                     visible: (main_swipe_view.currentItem === this)

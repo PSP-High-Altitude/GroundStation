@@ -5,6 +5,7 @@
 #include <QList>
 #include <QObject>
 #include <QMetaObject>
+#include <QSettings>
 
 // Class to retrieve settings save on the local machine
 class AppSettings : public QObject
@@ -29,6 +30,8 @@ public:
     Device* getActiveDevice() { return mActiveDevice; };
     void setActiveDevice(Device* device);
 
+    Q_INVOKABLE void addNewDevice();
+
 signals:
     void deviceListChanged();
     void activeDeviceChanged();
@@ -39,6 +42,13 @@ private:
     QList<Device*> mDeviceList;
     Device* mActiveDevice;
     QMetaObject::Connection activeDeviceConnection;
+    QSettings* settings;
+
+    // Load all settings
+    void loadSettings();
+
+    // Save a device's settings
+    void saveDevice(Device *device);
 };
 
 #endif // SETTINGS_H

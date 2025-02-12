@@ -1,11 +1,12 @@
 #include "device.h"
 
-Device::Device(QObject *parent) : Device("", "", 115200) {}
+Device::Device(QObject *parent) : Device("New Device", "COM1", 1, 115200) {}
 
-Device::Device(QString deviceName, QString portName, qint32 baudRate)
+Device::Device(QString deviceName, QString portName, int deviceId, qint32 baudRate)
 {
     mDeviceName = deviceName;
     mPortName = portName;
+    mDeviceId = deviceId;
     port.setPortName(portName);
     mBaudRate = baudRate;
     port.setBaudRate(baudRate);
