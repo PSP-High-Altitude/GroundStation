@@ -7,8 +7,10 @@ import Device 1.0
 
 Window {
     id: device_dialog_window
-    width: 480
-    height: 320
+    width: 720
+    height: 480
+    minimumHeight: 240
+    minimumWidth: 720
     modality: Qt.ApplicationModal
     title: "Devices..."
     property AppSettings settings
@@ -29,6 +31,9 @@ Window {
                 delegate: DeviceDialogSelect {
                     width: device_dialog_list.width
                     device: settings.deviceList[index]
+                    onDeviceRemoved: {
+                        settings.removeDevice(index)
+                    }
                 }
             }
             Rectangle {
@@ -38,24 +43,26 @@ Window {
                 Layout.minimumHeight: 40
                 Layout.maximumHeight: 40
                 radius: 5
-                color: AppStyle.light
+                color: add_area.pressed ? AppStyle.light_shadow : (add_area.containsMouse ? AppStyle.light_highlight : AppStyle.light)
                 Rectangle {
                     x: (parent.width/2) - (width/2)
                     y: (parent.height/2) - (height/2)
-                    width: 5
-                    height: 20
+                    width: 6
+                    height: 24
                     radius: 1
                     color: "lightgray"
                 }
                 Rectangle {
                     x: (parent.width/2) - (width/2)
                     y: (parent.height/2) - (height/2)
-                    width: 20
-                    height: 5
+                    width: 24
+                    height: 6
                     radius: 1
                     color: "lightgray"
                 }
                 MouseArea {
+                    id: add_area
+                    hoverEnabled: true
                     anchors.fill: parent
                     onClicked: settings.addNewDevice()
                 }

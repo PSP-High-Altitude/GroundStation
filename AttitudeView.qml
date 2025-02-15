@@ -53,7 +53,9 @@ ColumnLayout {
                 id: pyro_repeater
                 property list<string> pyro_name_arr: ["Main", "Drogue", "A1", "A2", "A3", "A4"]
                 model: 6
-                delegate: PyroIndicator {
+                delegate: Indicator {
+                    off_state: "OPEN"
+                    on_state: "CLOSED"
                     pyro_name: "Pyro " + pyro_repeater.pyro_name_arr[index]
                 }
             }

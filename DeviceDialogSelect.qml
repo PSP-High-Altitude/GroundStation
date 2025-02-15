@@ -13,6 +13,7 @@ Rectangle {
     color: AppStyle.light
     height: 40
     radius: 5
+    signal deviceRemoved()
 
     HoverHandler {
         id: hover_handler
@@ -21,14 +22,36 @@ Rectangle {
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 10
-        Text {
-            id: device_name
+
+        TextInput {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            text: device.deviceName
+            id: device_name
             font.pointSize: 16
             verticalAlignment: Text.AlignVCenter
             color: "white"
+            wrapMode: TextInput.NoWrap
+            maximumLength: 16
+
+            text: device.deviceName
+
+            onEditingFinished: {
+                device.deviceName = text
+            }
+
+            Rectangle {
+                height: parent.contentHeight + 5
+                width: parent.contentWidth + 10
+                x: -5
+                y: (parent.height/2)-(height/2)
+                z: -1
+                radius: 3
+                color: device_name_hover.hovered ? AppStyle.light_highlight : AppStyle.light
+            }
+
+            HoverHandler {
+                id: device_name_hover
+            }
         }
 
         SerialList {
@@ -87,15 +110,19 @@ Rectangle {
                 anchors.fill: parent
                 id: del_area
                 hoverEnabled: true
+                onClicked: {
+                    deviceRemoved()
+                }
+
                 z: 1
             }
-            radius: 3
+            radius: 5
             Layout.margins: 5
             Layout.minimumHeight: 25
             Layout.maximumHeight: 25
             Layout.minimumWidth: 25
             Layout.maximumWidth: 25
-            color: del_area.containsMouse ? AppStyle.light_highlight : "transparent"
+            color: del_area.pressed ? AppStyle.light_shadow : (del_area.containsMouse ? AppStyle.light_highlight : "transparent")
             Repeater {
                 model: 2
                 delegate: Rectangle {
@@ -109,20 +136,30 @@ Rectangle {
         }
     }
 
+    function switchOn() {
+        device_on.state = "ON"
+    }
+
+    function switchOff() {
+        device_on.state = "OFF"
+    }
+
     // Connect device signals
     function setDevice() {
-        device.portClosed.connect(() => {
-            device_on.state = "OFF"
-        })
+        device.portClosed.connect(switchOff)
 
-        device.portOpened.connect(() => {
-            device_on.state = "ON"
-        })
+        device.portOpened.connect(switchOn)
     }
 
     // Set device on creation
     Component.onCompleted: {
         setDevice();
+    }
+
+    // Remove connections on destruction
+    Component.onDestruction: {
+        device.portClosed.disconnect(switchOff)
+        device.portOpened.disconnect(switchOn)
     }
 
     // Set device if property is changed

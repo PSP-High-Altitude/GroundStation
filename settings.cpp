@@ -81,11 +81,50 @@ void AppSettings::saveDevice(Device* device) {
     settings->endArray();
 }
 
+void AppSettings::unsaveDevice(int index) {
+    // This requires just rewriting the entire array
+    mDeviceList.remove(index);
+    settings->remove("devices");
+    settings->beginWriteArray("devices");
+    for(int i = 0; i < mDeviceList.size(); i++) {
+        Device* device = mDeviceList.at(0);
+        // Set index
+        settings->setArrayIndex(i);
+        // Set device name
+        settings->setValue("name", device->getDeviceName());
+        // Set device id
+        settings->setValue("id", device->getDeviceId());
+        // Get device port
+        settings->setValue("port", device->getPortName().split("COM").at(1).toInt());
+    }
+
+    settings->endArray();
+
+    emit deviceListChanged();
+    emit deviceRemoved();
+}
+
 void AppSettings::addNewDevice() {
     // Add a new device with default constructor
     Device *new_dev = new Device();
     mDeviceList.append(new_dev);
+
+    // Connect modification signals to saveDevice
+    connect(new_dev, &Device::deviceNameChanged, this, [this, new_dev]{
+        this->saveDevice(new_dev);
+    });
+    connect(new_dev, &Device::deviceIdChanged, this, [this, new_dev]{
+        this->saveDevice(new_dev);
+    });
+    connect(new_dev, &Device::portNameChanged, this, [this, new_dev]{
+        this->saveDevice(new_dev);
+    });
+
     emit deviceListChanged();
     emit deviceAdded(new_dev);
     saveDevice(new_dev);
+}
+
+void AppSettings::removeDevice(int idx) {
+    this->unsaveDevice(idx);
 }

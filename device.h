@@ -47,10 +47,10 @@ public:
     Q_PROPERTY(PSPCOMDecoder *pspcomDecoder
                    READ getPspcomDecoder)
 
-    void setDeviceName(QString name) { mDeviceName = name; }
+    void setDeviceName(QString name) { mDeviceName = name; emit deviceNameChanged(); }
     QString getDeviceName() { return mDeviceName; }
 
-    void setDeviceId(int id) { mDeviceId = id; }
+    void setDeviceId(int id) { mDeviceId = id; emit deviceIdChanged(); }
     int getDeviceId() { return mDeviceId; }
 
     void setPortName(QString name);

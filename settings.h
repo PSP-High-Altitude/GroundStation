@@ -31,6 +31,7 @@ public:
     void setActiveDevice(Device* device);
 
     Q_INVOKABLE void addNewDevice();
+    Q_INVOKABLE void removeDevice(int idx);
 
 signals:
     void deviceListChanged();
@@ -48,6 +49,7 @@ private:
     void loadSettings();
 
     // Save a device's settings
+    void unsaveDevice(int index);
     void saveDevice(Device *device);
 };
 
