@@ -1,0 +1,2 @@
+E:\Programs\Qt\6.8.1\mingw_64\bin\windeployqt --qmldir ..\..\..\..\display GroundStation.exe
+E:\Programs\Qt\QtIFW-4.6.1\bin\binarycreator.exe -c config\config.xml -p packages GroundStation-win64.exe
