@@ -10,8 +10,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS SerialPort)
 find_package(Qt6 REQUIRED COMPONENTS Qml)
 find_package(Qt6 REQUIRED COMPONENTS Quick)
@@ -48,37 +47,18 @@ set(PROJECT_SOURCES
     display/data_table_row.h display/data_table_row.cpp
     display/datatableconfig.h display/datatableconfig.cpp display/datatableconfig.ui
     display/data_table.h display/data_table.cpp
+    utils/comboboxdelegate.h utils/comboboxdelegate.cpp
+    display/pyro_status.h display/pyro_status.cpp
+    menus/pyro_menu.h menus/pyro_menu.cpp menus/pyro_menu.ui
+    utils/misc.h utils/misc.cpp
+    menus/resetdevice.ui menus/resetdevice.h menus/resetdevice.cpp
 )
 
 # set(CMAKE_EXE_LINKER_FLAGS "/MANIFEST:NO")
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(GroundStation
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        utils/comboboxdelegate.h utils/comboboxdelegate.cpp
-        display/pyro_status.h display/pyro_status.cpp
-        menus/pyro_menu.h menus/pyro_menu.cpp menus/pyro_menu.ui
-        utils/misc.h utils/misc.cpp
-
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET GroundStation APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(GroundStation SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(GroundStation
-            ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
+qt_add_executable(GroundStation
+    MANUAL_FINALIZATION
+    ${PROJECT_SOURCES}
+)
 
 target_link_libraries(GroundStation PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(GroundStation PRIVATE Qt6::SerialPort)

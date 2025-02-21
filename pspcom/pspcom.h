@@ -47,7 +47,7 @@ private:
     QMetaObject::Connection thread_looper;
     PspcomState state;
     PspcomConnState conn_state;
-    PspcomWorker *worker= nullptr;;
+    PspcomWorker *worker= nullptr;
     QThread thread;
     SerialDevice* bus;
 };
@@ -58,7 +58,7 @@ const QString message_name_lut[] = {
     "", "SETFREQ", "ARMMAIN", "ARMDRG", "ARMAUX", "DISARMMAIN", "DISARMMAIN", "DISARMMAIN",     // 0x10-0x17
     "", "", "", "", "", "", "", "",                                                             // 0x18-0x1F
 
-    "", "", "", "", "", "", "", "",                                                             // 0x20-0x27
+    "RESETDEVICE", "", "", "", "", "", "", "",                                                  // 0x20-0x27
     "", "", "", "", "", "", "", "",                                                             // 0x28-0x2F
     "", "", "", "", "", "", "", "",                                                             // 0x30-0x37
     "", "", "", "", "", "", "", "",                                                             // 0x38-0x3F

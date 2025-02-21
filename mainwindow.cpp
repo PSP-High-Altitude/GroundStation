@@ -15,6 +15,7 @@
 #include "menus/createdevice.h"
 #include "menus/createpspcom.h"
 #include "menus/pyro_menu.h"
+#include "menus/resetdevice.h"
 #include "menus/selectmenu.h"
 #include "menus/editdevice.h"
 #include "serial/udp_port.h"
@@ -51,6 +52,7 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
     EditDevice *edit_dev = new EditDevice(this, dev_menu);
     CreatePspcom *cat_pspcom = new CreatePspcom(this, edit_dev);
     DataTableConfig *table_conf = new DataTableConfig(this, dev_menu);
+    ResetDevice *reset_dev = new ResetDevice(this);
 
     // Pyros
     pyro_stat = new PyroStatus(this);
@@ -104,7 +106,7 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
         bool success = false;
         int freq_hz = (int)(freq_line_edit->text().toDouble(&success) * 1e6);
         if(success && this->active_device && this->active_device->get_tx_bus()) {
-            //// Set frequency
+            // Set frequency
             pspcommsg msg = {
                 .payload_len = 5,
                 .device_id = this->active_device->get_id(),
