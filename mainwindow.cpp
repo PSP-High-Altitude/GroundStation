@@ -124,6 +124,18 @@ MainWindow::MainWindow(QQmlApplicationEngine* map_engine, QQmlApplicationEngine*
         }
     });
 
+    // Trigger Camera
+    QPushButton *trigger_camera = this->findChild<QPushButton*>("trigger_camera");
+    connect(trigger_camera, &QPushButton::clicked, this, [this]{
+        pspcommsg tx_msg = {
+            .payload_len = 1,
+            .device_id = this->get_active_device()->get_id(),
+            .msg_id = 0x21,
+        };
+        tx_msg.payload[0] = 0x2A;
+        this->get_active_device()->get_tx_bus()->send(tx_msg);
+    });
+
     Q_UNUSED(dev_menu);
     Q_UNUSED(cat_dev);
     Q_UNUSED(edit_dev);

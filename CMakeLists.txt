@@ -58,6 +58,7 @@ set(PROJECT_SOURCES
 qt_add_executable(GroundStation
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
+
 )
 
 target_link_libraries(GroundStation PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)

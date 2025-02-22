@@ -1565,7 +1565,7 @@ background: #434343;
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="layout_altitude" stretch="0,5,0">
+         <layout class="QVBoxLayout" name="layout_altitude" stretch="0,0,5,0">
           <property name="spacing">
            <number>0</number>
           </property>
@@ -1575,6 +1575,49 @@ background: #434343;
           <property name="rightMargin">
            <number>10</number>
           </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <property name="topMargin">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>10</number>
+            </property>
+            <item>
+             <spacer name="horizontalSpacer_22">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="trigger_camera">
+              <property name="text">
+               <string>Trigger Camera</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_23">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_8">
             <property name="topMargin">
